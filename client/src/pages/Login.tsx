@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import api from '../api';
 import { useAuthStore } from '../store/useAuthStore';
-import { LoginForm, AuthResponse } from '../types/index.ts';
+import type { LoginForm, AuthResponse } from "../types";
 
 export default function Login() {
   const navigate = useNavigate();

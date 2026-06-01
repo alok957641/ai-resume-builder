@@ -43,14 +43,11 @@ const UserSchema = new Schema<IUser>(
 );
 
 // Password save karne se PEHLE encrypt karo
-UserSchema.pre('save', async function (next) {
-  // agar password change nahi hua toh skip karo
-  if (!this.isModified('password')) return next();
+UserSchema.pre('save', async function () {
+  if (!this.isModified('password')) return;
 
-  // password ko encrypt karo
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
-  next();
 });
 
 // Password check karne ka function

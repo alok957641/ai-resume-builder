@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import api from '../api';
 import { useAuthStore } from '../store/useAuthStore';
-import { RegisterForm, AuthResponse } from '../types';
+import type { RegisterForm, AuthResponse } from '../types';
 
 export default function Register() {
   const navigate = useNavigate();
