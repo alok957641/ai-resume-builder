@@ -5,9 +5,9 @@ import User from '../models/User';
 // Token banane ka function
 const generateToken = (id: string): string => {
   return jwt.sign(
-    { id },                              // token mein user id store karo
-    process.env.JWT_SECRET as string,    // secret key se sign karo
-    { expiresIn: '7d' }                  // 7 din baad expire hoga
+    { id },                             
+    process.env.JWT_SECRET as string,    
+    { expiresIn: '7d' }                
   );
 };
 

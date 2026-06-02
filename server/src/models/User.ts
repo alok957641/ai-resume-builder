@@ -16,25 +16,25 @@ const UserSchema = new Schema<IUser>(
   {
     name: {
       type: String,
-      required: [true, 'Naam daalna zaroori hai'],
-      trim: true,         // spaces hatao start/end se
+      required: [true, 'Name is Required '],
+      trim: true,         
     },
     email: {
       type: String,
-      required: [true, 'Email daalna zaroori hai'],
-      unique: true,       // ek email ek baar hi register ho
-      lowercase: true,    // hamesha lowercase save karo
+      required: [true, 'Email  is Required '],
+      unique: true,      
+      lowercase: true,    
       trim: true,
     },
     password: {
       type: String,
-      required: [true, 'Password daalna zaroori hai'],
-      minlength: [6, 'Password kam se kam 6 characters ka hona chahiye'],
+      required: [true, 'Password is Required'],
+      minlength: [6, 'Password min  to 6 charecter'],
     },
     plan: {
       type: String,
-      enum: ['free', 'pro'],  // sirf ye do values allowed
-      default: 'free',         // default free plan
+      enum: ['free', 'pro'],  
+      default: 'free',         
     },
   },
   {

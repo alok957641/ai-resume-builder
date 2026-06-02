@@ -5,7 +5,7 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import { connectDB } from './config/db';
 import authRoutes from './routes/authRoutes'; 
-
+import resumeRoutes from './routes/resumeRoutes';
 
 dotenv.config();
 
@@ -19,6 +19,8 @@ app.use(express.json());
 
 
 app.use('/api/auth', authRoutes);
+app.use('/api/resume', resumeRoutes);
+
 
 app.get('/api/health', (req, res) => {
   res.json({ message: '✅ Server chal raha hai bhai!' });
