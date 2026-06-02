@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Resume, PersonalInfo, Experience, Education, Skill } from '../types';
+import  type { Resume, PersonalInfo, Experience, Education, Skill } from '../types';
 
 interface ResumeStore {
   resumes: Resume[];

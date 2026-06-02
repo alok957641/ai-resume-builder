@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 import { connectDB } from './config/db';
 import authRoutes from './routes/authRoutes'; 
 import resumeRoutes from './routes/resumeRoutes';
-
+import aiRoutes from './routes/aiRoutes';
 dotenv.config();
 
 const app = express();
@@ -20,7 +20,7 @@ app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/resume', resumeRoutes);
-
+app.use('/api/ai', aiRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ message: '✅ Server chal raha hai bhai!' });
