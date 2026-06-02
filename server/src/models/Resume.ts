@@ -6,7 +6,7 @@ export interface IPersonalInfo {
   email: string;
   phone: string;
   location: string;
-  linkedin?: string;    // ? = optional hai
+  linkedin?: string;
   github?: string;
   website?: string;
   summary: string;
@@ -17,7 +17,7 @@ export interface IExperience {
   position: string;
   startDate: string;
   endDate: string;
-  current: boolean;     // abhi bhi kaam kar raha hai?
+  current: boolean;
   description: string;
 }
 
@@ -43,6 +43,11 @@ export interface IResume extends Document {
   education: IEducation[];
   skills: ISkill[];
   template: 'modern' | 'classic' | 'minimal';
+
+  // 🔥 NEW FIELDS
+  publicSlug?: string;
+  isPublic: boolean;
+
   createdAt: Date;
   updatedAt: Date;
 }
@@ -51,7 +56,7 @@ const ResumeSchema = new Schema<IResume>(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',          // User model se connected hai
+      ref: 'User',
       required: true,
     },
     title: {
@@ -103,6 +108,17 @@ const ResumeSchema = new Schema<IResume>(
       type: String,
       enum: ['modern', 'classic', 'minimal'],
       default: 'modern',
+    },
+
+    // 🔥 NEW: Public Resume Feature
+    publicSlug: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
+    isPublic: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

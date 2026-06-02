@@ -116,3 +116,46 @@ React, Node.js, MongoDB, Docker`;
     res.status(500).json({ message: 'AI error' });
   }
 };
+
+
+
+
+
+export const generateInterviewQuestions = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { position, skills, experience } = req.body;
+
+    const prompt = `You are an expert interviewer.
+
+Candidate profile:
+Position: ${position}
+Skills: ${skills.join(', ')}
+Experience: ${experience}
+
+Generate 10 interview questions:
+- 3 Technical
+- 3 Behavioral
+- 2 Situational
+- 2 HR
+
+Return ONLY JSON array:
+[{"type":"Technical","question":"..."}]`;
+
+    const completion = await groq.chat.completions.create({
+      model: 'llama-3.3-70b-versatile',
+      messages: [{ role: 'user', content: prompt }],
+    });
+
+    const text = completion.choices[0]?.message?.content || '';
+
+    const cleaned = text.replace(/```json|```/g, '').trim();
+
+    const questions = JSON.parse(cleaned);
+
+    res.json({ questions });
+
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({ message: 'AI error', error: error?.message });
+  }
+};

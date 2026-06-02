@@ -1,5 +1,6 @@
 // src/components/resume/ResumePreview.tsx
 import { useRef, useState, useEffect } from "react";
+import { exportToPDF } from '../../utils/exportPDF';
 import { useResumeStore } from "../../store/useResumeStore";
 import {
   Mail,
@@ -10,8 +11,8 @@ import {
   Eye,
   X,
 } from "lucide-react";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
+
+
 import { toast } from "react-hot-toast";
 
 export default function ResumePreview() {
@@ -36,40 +37,23 @@ export default function ResumePreview() {
   const { personalInfo: p, experience, education, skills } = currentResume;
 
   const downloadPDF = async () => {
-    if (!resumeRef.current) return;
-
-    setIsDownloading(true);
-    const toastId = toast.loading("PDF ban raha hai... ⏳");
-
-    try {
-      const canvas = await html2canvas(resumeRef.current, {
-        scale: 2.5,
-        useCORS: true,
-        logging: false,
-        backgroundColor: "#ffffff",
-      });
-
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4",
-      });
-
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`${p.fullName || "Resume"}_Resume.pdf`);
-
-      toast.success("PDF Download Ho Gaya 🎉", { id: toastId });
-    } catch (error) {
-      console.error("PDF Error:", error);
-      toast.error("PDF Generate Nahi Hua ❌", { id: toastId });
-    } finally {
-      setIsDownloading(false);
-    }
-  };
+  if (!resumeRef.current) return;
+  setIsDownloading(true);
+  const toastId = toast.loading('PDF ban raha hai... ⏳');
+  try {
+    await exportToPDF(
+      resumeRef.current,
+      currentResume?.personalInfo?.fullName || 'Resume'
+    );
+    toast.dismiss(toastId);
+    toast.success('PDF download ho gaya! 🎉');
+  } catch {
+    toast.dismiss(toastId);
+    toast.error('PDF nahi bana!');
+  } finally {
+    setIsDownloading(false);
+  }
+};
 
   const ResumeContent = () => (
     <div ref={resumeRef} className="bg-white w-full max-w-2xl mx-auto">
