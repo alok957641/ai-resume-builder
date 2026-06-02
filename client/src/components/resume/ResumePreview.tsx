@@ -170,7 +170,7 @@ export default function ResumePreview() {
     </div>
   );
 
-  // Agar mobile nahi hai toh normal preview dikhao
+  // Desktop view - Normal preview
   if (!isMobile) {
     return (
       <div className="space-y-4">
@@ -186,31 +186,19 @@ export default function ResumePreview() {
     );
   }
 
-  // Mobile view - Sirf button aur popup
+  // Mobile view - Button FORM KE UPAR and Popup
   return (
     <>
-      {/* Preview Button - Fixed at bottom right with high z-index */}
-      <button
-        onClick={() => setShowPreview(true)}
-        style={{
-          position: 'fixed',
-          bottom: '20px',
-          right: '20px',
-          zIndex: 9999,
-          backgroundColor: '#2563eb',
-          color: 'white',
-          padding: '16px',
-          borderRadius: '9999px',
-          boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-          border: 'none',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}
-      >
-        <Eye size={24} />
-      </button>
+      {/* Mobile: Preview Button - Form ke top par */}
+      <div className="mb-4">
+        <button
+          onClick={() => setShowPreview(true)}
+          className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition-all"
+        >
+          <Eye size={18} />
+          Resume Preview Dekho
+        </button>
+      </div>
 
       {/* Full Screen Popup Modal */}
       {showPreview && (
@@ -267,8 +255,6 @@ export default function ResumePreview() {
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
               >
                 <X size={22} color="#6b7280" />
               </button>
@@ -298,8 +284,6 @@ export default function ResumePreview() {
                   cursor: 'pointer',
                   marginBottom: '16px'
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#15803d'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#16a34a'}
               >
                 {isDownloading ? (
                   <><Loader size={18} className="animate-spin" /> PDF Ban Raha Hai...</>
