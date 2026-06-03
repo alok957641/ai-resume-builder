@@ -5,7 +5,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  plan: 'free' | 'pro';
+  plan: "free" | "pro";
 }
 
 // ✅ Auth response type
@@ -33,9 +33,9 @@ export interface PersonalInfo {
   email: string;
   phone: string;
   location: string;
-  linkedin?: string;      // Optional
-  github?: string;        // Optional
-  website?: string;       // Optional
+  linkedin?: string; // Optional
+  github?: string; // Optional
+  website?: string; // Optional
   summary: string;
 }
 
@@ -45,7 +45,7 @@ export interface Experience {
   company: string;
   position: string;
   startDate: string;
-  endDate?: string;       // Optional (if current job)
+  endDate?: string; // Optional (if current job)
   current: boolean;
   description: string;
 }
@@ -58,29 +58,66 @@ export interface Education {
   field: string;
   startDate: string;
   endDate: string;
-  grade?: string;         // Optional
+  grade?: string; // Optional
 }
 
 // ✅ Skill (level optional)
 export interface Skill {
   _id?: string;
   name: string;
-  level?: 'beginner' | 'intermediate' | 'expert';  // Optional
+  level?: "beginner" | "intermediate" | "expert"; // Optional
+}
+
+// ✅ Project (NEW)
+export interface Project {
+  _id?: string;
+  name: string;
+  technologies: string;
+  description: string;
+  link?: string; // Optional - GitHub or Live link
+  startDate: string;
+  endDate: string;
+}
+
+// ✅ Certificate (Optional - extra mile)
+export interface Certificate {
+  _id?: string;
+  name: string;
+  issuer: string;
+  date: string;
+  link?: string;
 }
 
 // ✅ Template types
-export type TemplateType = 'modern' | 'classic' | 'minimal' | 'creative' | 'executive';
+// ✅ Template types - UPDATE KARO (saare 11 templates ke liye)
+export type TemplateType =
+  | "modern-blue"
+  | "emerald"
+  | "minimal"
+  | "ats"
+  | "dark"
+  | "rose"
+  | "violet"
+  | "amber"
+  | "cyan"
+  | "pink"
+  | "navy";
 
+// ✅ Resume (main type) - ADDED projects
 // ✅ Resume (main type)
 export interface Resume {
   _id: string;
-  userId?: string;        // Optional for new resumes
+  userId?: string;
   title: string;
   personalInfo: PersonalInfo;
   experience: Experience[];
   education: Education[];
   skills: Skill[];
-  template: TemplateType;
+  projects?: Project[];
+  certificates?: Certificate[];
+  template: TemplateType; // ab sahi type hai
+  isPublic: boolean;
+  publicSlug?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -98,6 +135,8 @@ export interface UpdateResumeDTO {
   experience?: Experience[];
   education?: Education[];
   skills?: Skill[];
+  projects?: Project[]; // 👈 ADDED
+  certificates?: Certificate[]; // 👈 ADDED
   template?: TemplateType;
 }
 
@@ -115,9 +154,9 @@ export interface ResumesResponse {
     name: string;
     isPro: boolean;
     limits: {
-      maxResumes: number | 'unlimited';
+      maxResumes: number | "unlimited";
       currentCount: number;
-      remainingSlots: number | 'unlimited';
+      remainingSlots: number | "unlimited";
       canCreateMore: boolean;
     };
   };
@@ -130,48 +169,69 @@ export interface SingleResumeResponse {
 
 // ✅ Default values (for initial state)
 export const defaultPersonalInfo: PersonalInfo = {
-  fullName: '',
-  email: '',
-  phone: '',
-  location: '',
-  linkedin: '',
-  github: '',
-  website: '',
-  summary: '',
+  fullName: "",
+  email: "",
+  phone: "",
+  location: "",
+  linkedin: "",
+  github: "",
+  website: "",
+  summary: "",
 };
 
 export const defaultExperience: Experience = {
-  company: '',
-  position: '',
-  startDate: '',
-  endDate: '',
+  company: "",
+  position: "",
+  startDate: "",
+  endDate: "",
   current: false,
-  description: '',
+  description: "",
 };
 
 export const defaultEducation: Education = {
-  school: '',
-  degree: '',
-  field: '',
-  startDate: '',
-  endDate: '',
-  grade: '',
+  school: "",
+  degree: "",
+  field: "",
+  startDate: "",
+  endDate: "",
+  grade: "",
 };
 
 export const defaultSkill: Skill = {
-  name: '',
-  level: 'beginner',
+  name: "",
+  level: "beginner",
+};
+
+// ✅ Default Project (NEW)
+export const defaultProject: Project = {
+  name: "",
+  technologies: "",
+  description: "",
+  link: "",
+  startDate: "",
+  endDate: "",
+};
+
+// ✅ Default Certificate (NEW)
+export const defaultCertificate: Certificate = {
+  name: "",
+  issuer: "",
+  date: "",
+  link: "",
 };
 
 // ✅ Helper function for empty resume
 export const getEmptyResume = (): Resume => ({
-  _id: '',
-  title: 'Mera Resume',
+  _id: "",
+  title: "Mera Resume",
   personalInfo: { ...defaultPersonalInfo },
   experience: [],
   education: [],
   skills: [],
-  template: 'modern',
+  projects: [], // 👈 ADDED
+  certificates: [], // 👈 ADDED
+  template: "modern-blue", // 👈 CHANGE YAHAN
+  isPublic: false,
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
 });

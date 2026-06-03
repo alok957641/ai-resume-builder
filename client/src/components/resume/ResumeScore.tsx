@@ -17,6 +17,39 @@ export default function ResumeScore() {
 
   const scoreColor = total >= 85 ? '#22C55E' : total >= 70 ? '#3B82F6' : total >= 50 ? '#F59E0B' : '#EF4444';
 
+  const getMessage = () => {
+    if (total >= 85) return '🎉 Excellent resume! Ready for applications.';
+    if (total >= 70) return '👍 Good resume! A few improvements will make it great.';
+    if (total >= 50) return '⚠️ Need more work! Follow the tips below.';
+    return '❌ Resume incomplete! Please add more details.';
+  };
+
+  // English tips for each category
+  const getTipForLabel = (label: string): string => {
+    const tips: Record<string, string> = {
+      'Keywords Match': 'Add more relevant keywords from the job description',
+      'Format & Structure': 'Use clear section headers and consistent formatting',
+      'Action Words': 'Start bullet points with strong action verbs like "Led", "Developed", "Created"',
+      'Contact Information': 'Include LinkedIn profile, professional email, and phone number',
+      'Quantified Results': 'Add numbers, percentages, and metrics to showcase your impact',
+      'Skills Section': 'List relevant technical and soft skills with proficiency levels',
+    };
+    return tips[label] || 'Improve this section for better score';
+  };
+
+  // English labels
+  const getEnglishLabel = (label: string): string => {
+    const labels: Record<string, string> = {
+      'Keywords Match': 'Keywords Match',
+      'Format & Structure': 'Format & Structure',
+      'Action Words': 'Action Words',
+      'Contact Information': 'Contact Information',
+      'Quantified Results': 'Quantified Results',
+      'Skills Section': 'Skills Section',
+    };
+    return labels[label] || label;
+  };
+
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
@@ -48,10 +81,7 @@ export default function ResumeScore() {
         </div>
 
         <p className="text-gray-500 text-sm mt-2">
-          {total >= 85 ? '🎉 Bahut acha resume hai!' :
-           total >= 70 ? '👍 Acha hai, thoda aur improve karo!' :
-           total >= 50 ? '⚠️ Aur kaam karna hai!' :
-           '❌ Resume incomplete hai!'}
+          {getMessage()}
         </p>
       </div>
 
@@ -60,7 +90,7 @@ export default function ResumeScore() {
         {breakdown.map((b, i) => (
           <div key={i} className="bg-white border border-gray-100 rounded-xl p-4">
             <div className="flex justify-between items-center mb-2">
-              <span className="text-sm font-semibold text-gray-700">{b.label}</span>
+              <span className="text-sm font-semibold text-gray-700">{getEnglishLabel(b.label)}</span>
               <span className="text-sm font-bold text-gray-900">{b.score}/{b.max}</span>
             </div>
             <div className="h-2 bg-gray-100 rounded-full overflow-hidden mb-1">
@@ -72,7 +102,7 @@ export default function ResumeScore() {
                 }}
               />
             </div>
-            <p className="text-xs text-gray-400">{b.tip}</p>
+            <p className="text-xs text-gray-400">{getTipForLabel(b.label)}</p>
           </div>
         ))}
       </div>

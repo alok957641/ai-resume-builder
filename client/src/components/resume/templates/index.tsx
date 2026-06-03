@@ -1,43 +1,53 @@
-
+import { useState, useEffect } from 'react';
 import type { Resume } from '../../../types';
-import ModernBlue from './ModernBlue';
-import EmeraldPro from './EmeraldPro';
-import SlateDark from './SlateDark';
-import RoseElegant from './RoseElegant';
-import VioletBold from './VioletBold';
-import AmberWarm from './AmberWarm';
-import MinimalClean from './MinimalClean';
-import ExecutivePro from './ExecutivePro';
-import CreativeSplit from './CreativeSplit';
-import TechModern from './TechModern';
+import {
+  TemplateModernBlue, TemplateEmerald, TemplateMinimal,
+  TemplateATS, TemplateDark, TemplateRose, TemplateViolet,
+  TemplateAmber, TemplateCyan, TemplatePink, TemplateNavy
+} from './AllTemplates';
 
-// Sab templates ka list
-export const TEMPLATES = [
-  { id: 'modern-blue',    name: 'Modern Blue',    color: '#3B82F6', free: true  },
-  { id: 'emerald-pro',    name: 'Emerald Pro',    color: '#10B981', free: true  },
-  { id: 'minimal-clean',  name: 'Minimal Clean',  color: '#6B7280', free: true  },
-  { id: 'slate-dark',     name: 'Slate Dark',     color: '#334155', free: false },
-  { id: 'rose-elegant',   name: 'Rose Elegant',   color: '#F43F5E', free: false },
-  { id: 'violet-bold',    name: 'Violet Bold',    color: '#8B5CF6', free: false },
-  { id: 'amber-warm',     name: 'Amber Warm',     color: '#F59E0B', free: false },
-  { id: 'executive-pro',  name: 'Executive Pro',  color: '#1E293B', free: false },
-  { id: 'creative-split', name: 'Creative Split', color: '#EC4899', free: false },
-  { id: 'tech-modern',    name: 'Tech Modern',    color: '#06B6D4', free: false },
+export const TEMPLATES_LIST = [
+  { id:'modern-blue',   name:'Modern Blue',    free:true,  ats:true,  tag:'Popular', Component: TemplateModernBlue },
+  { id:'minimal-clean', name:'Minimal Clean',  free:true,  ats:true,  tag:null,      Component: TemplateMinimal    },
+  { id:'ats-classic',   name:'ATS Classic',    free:true,  ats:true,  tag:'ATS ✓',   Component: TemplateATS        },
+  { id:'emerald-pro',   name:'Emerald Pro',    free:true,  ats:false, tag:'New',     Component: TemplateEmerald    },
+  { id:'slate-dark',    name:'Slate Dark',     free:false, ats:false, tag:'PRO',     Component: TemplateDark       },
+  { id:'rose-elegant',  name:'Rose Elegant',   free:false, ats:false, tag:'PRO',     Component: TemplateRose       },
+  { id:'violet-bold',   name:'Violet Bold',    free:false, ats:false, tag:'PRO',     Component: TemplateViolet     },
+  { id:'amber-warm',    name:'Amber Warm',     free:false, ats:false, tag:'PRO',     Component: TemplateAmber      },
+  { id:'tech-modern',   name:'Tech Modern',    free:false, ats:false, tag:'PRO',     Component: TemplateCyan       },
+  { id:'creative-pink', name:'Creative Pink',  free:false, ats:false, tag:'PRO',     Component: TemplatePink       },
+  { id:'navy-exec',     name:'Navy Executive', free:false, ats:true,  tag:'PRO',     Component: TemplateNavy       },
 ];
 
-// Template renderer
-export const TemplateRenderer = ({ resume }: { resume: Resume }) => {
-  switch (resume.template) {
-    case 'modern-blue':    return <ModernBlue resume={resume} />;
-    case 'emerald-pro':    return <EmeraldPro resume={resume} />;
-    case 'slate-dark':     return <SlateDark resume={resume} />;
-    case 'rose-elegant':   return <RoseElegant resume={resume} />;
-    case 'violet-bold':    return <VioletBold resume={resume} />;
-    case 'amber-warm':     return <AmberWarm resume={resume} />;
-    case 'minimal-clean':  return <MinimalClean resume={resume} />;
-    case 'executive-pro':  return <ExecutivePro resume={resume} />;
-    case 'creative-split': return <CreativeSplit resume={resume} />;
-    case 'tech-modern':    return <TechModern resume={resume} />;
-    default:               return <ModernBlue resume={resume} />;
+export function TemplateRenderer({ resume }: { resume: Resume }) {
+  const [renderCount, setRenderCount] = useState(0);
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+  
+  // Force re-render when template changes
+  useEffect(() => {
+    if (mounted && resume?.template) {
+      setRenderCount(prev => prev + 1);
+    }
+  }, [resume?.template, mounted]);
+  
+  // Add null check for resume
+  if (!resume) {
+    return (
+      <div className="p-8 text-center text-gray-400">
+        Loading template...
+      </div>
+    );
   }
-};
+  
+  const found = TEMPLATES_LIST.find(t => t.id === resume.template);
+  const Comp = found?.Component || TemplateModernBlue;
+  const templateKey = `${resume.template}-${renderCount}`;
+  
+  return <Comp key={templateKey} resume={resume} />;
+}

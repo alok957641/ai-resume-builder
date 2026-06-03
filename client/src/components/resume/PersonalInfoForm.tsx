@@ -41,7 +41,7 @@ export default function PersonalInfoForm() {
     const summary = watch('summary');
 
     if (!summary || !summary.trim()) {
-      toast.error('Pehle kuch summary likho!');
+      toast.error('Please write a summary first!');
       return;
     }
 
@@ -60,10 +60,10 @@ export default function PersonalInfoForm() {
         summary: res.data.improved,
       });
 
-      toast.success('AI ne improve kar diya! ✨');
+      toast.success('AI improved your summary! ✨');
     } catch (error) {
       console.error(error);
-      toast.error('AI error aaya!');
+      toast.error('AI improvement failed!');
     } finally {
       setIsImproving(false);
     }
@@ -78,11 +78,11 @@ export default function PersonalInfoForm() {
       {/* Full Name */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Full Name *
+          Full Name <span className="text-red-500">*</span>
         </label>
         <input
           {...register('fullName')}
-          placeholder="Rahul Kumar"
+          placeholder="e.g., Rahul Kumar"
           className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
@@ -91,22 +91,22 @@ export default function PersonalInfoForm() {
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Email *
+            Email Address <span className="text-red-500">*</span>
           </label>
           <input
             {...register('email')}
-            placeholder="rahul@gmail.com"
+            placeholder="e.g., rahul@gmail.com"
             className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Phone *
+            Phone Number <span className="text-red-500">*</span>
           </label>
           <input
             {...register('phone')}
-            placeholder="+91 98765 43210"
+            placeholder="e.g., +91 98765 43210"
             className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -115,11 +115,11 @@ export default function PersonalInfoForm() {
       {/* Location */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Location
+            Location
         </label>
         <input
           {...register('location')}
-          placeholder="Delhi, India"
+          placeholder="e.g., Delhi, India"
           className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
@@ -128,22 +128,22 @@ export default function PersonalInfoForm() {
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            LinkedIn
+            LinkedIn Profile
           </label>
           <input
             {...register('linkedin')}
-            placeholder="linkedin.com/in/rahul"
+            placeholder="e.g., linkedin.com/in/rahul"
             className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            GitHub
+            GitHub Profile
           </label>
           <input
             {...register('github')}
-            placeholder="github.com/rahul"
+            placeholder="e.g., github.com/rahul"
             className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -159,7 +159,7 @@ export default function PersonalInfoForm() {
           <button
             onClick={improveSummary}
             disabled={isImproving}
-            className="flex items-center gap-1.5 text-xs bg-purple-600 text-white px-3 py-1.5 rounded-lg hover:bg-purple-700 disabled:opacity-50 transition"
+            className="flex items-center gap-1.5 text-xs bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-3 py-1.5 rounded-lg hover:from-purple-700 hover:to-indigo-700 disabled:opacity-50 transition"
           >
             {isImproving ? (
               <>
@@ -169,7 +169,7 @@ export default function PersonalInfoForm() {
             ) : (
               <>
                 <Sparkles size={12} />
-                AI se Improve Karo
+                AI Improve
               </>
             )}
           </button>
@@ -178,9 +178,12 @@ export default function PersonalInfoForm() {
         <textarea
           {...register('summary')}
           rows={4}
-          placeholder="Apne baare mein likho..."
+          placeholder="Write about your professional background, skills, and career goals..."
           className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
         />
+        <p className="text-xs text-gray-400 mt-1">
+          💡 Tip: A strong summary helps you stand out to recruiters
+        </p>
       </div>
     </div>
   );

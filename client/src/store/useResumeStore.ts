@@ -7,6 +7,8 @@ import type {
   Experience, 
   Education, 
   Skill,
+  Project,
+  Certificate,
   TemplateType,
 } from '../types';
 
@@ -43,7 +45,29 @@ interface ResumeStore {
   addSkill: (skill: Skill) => void;
   updateSkill: (index: number, skill: Partial<Skill>) => void;
   removeSkill: (index: number) => void;
+  
+  // Projects
+  addProject: (project: Project) => void;
+  updateProject: (index: number, project: Partial<Project>) => void;
+  removeProject: (index: number) => void;
+  
+  // Certificates
+  addCertificate: (cert: Certificate) => void;
+  updateCertificate: (index: number, cert: Partial<Certificate>) => void;
+  removeCertificate: (index: number) => void;
 }
+
+// Helper function to ensure projects and certificates arrays exist
+const ensureArrays = (resume: Resume): Resume => {
+  return {
+    ...resume,
+    projects: resume.projects || [],
+    certificates: resume.certificates || [],
+    experience: resume.experience || [],
+    education: resume.education || [],
+    skills: resume.skills || [],
+  };
+};
 
 export const useResumeStore = create<ResumeStore>()(
   persist(
@@ -52,9 +76,15 @@ export const useResumeStore = create<ResumeStore>()(
       currentResume: null,
       isLoading: false,
 
-      setResumes: (resumes) => set({ resumes: Array.isArray(resumes) ? resumes : [] }),
+      setResumes: (resumes) => set({ 
+        resumes: resumes?.map(r => ensureArrays(r)) || [] 
+      }),
       
-      setCurrentResume: (resume) => set({ currentResume: resume }),
+      setCurrentResume: (resume) => {
+        set({ 
+          currentResume: resume ? ensureArrays(resume) : null 
+        });
+      },
       
       setIsLoading: (isLoading) => set({ isLoading }),
       
@@ -166,6 +196,62 @@ export const useResumeStore = create<ResumeStore>()(
           const updated = (state.currentResume.skills || []).filter((_, i) => i !== index);
           return { currentResume: { ...state.currentResume, skills: updated } };
         }),
+
+      // PROJECTS FUNCTIONS
+      addProject: (project) =>
+        set((state) => ({
+          currentResume: state.currentResume
+            ? {
+                ...state.currentResume,
+                projects: [...(state.currentResume.projects || []), project],
+              }
+            : null,
+        })),
+
+      updateProject: (index, project) =>
+        set((state) => {
+          if (!state.currentResume) return {};
+          const updated = [...(state.currentResume.projects || [])];
+          if (updated[index]) {
+            updated[index] = { ...updated[index], ...project };
+          }
+          return { currentResume: { ...state.currentResume, projects: updated } };
+        }),
+
+      removeProject: (index) =>
+        set((state) => {
+          if (!state.currentResume) return {};
+          const updated = (state.currentResume.projects || []).filter((_, i) => i !== index);
+          return { currentResume: { ...state.currentResume, projects: updated } };
+        }),
+
+      // CERTIFICATES FUNCTIONS
+      addCertificate: (cert) =>
+        set((state) => ({
+          currentResume: state.currentResume
+            ? {
+                ...state.currentResume,
+                certificates: [...(state.currentResume.certificates || []), cert],
+              }
+            : null,
+        })),
+
+      updateCertificate: (index, cert) =>
+        set((state) => {
+          if (!state.currentResume) return {};
+          const updated = [...(state.currentResume.certificates || [])];
+          if (updated[index]) {
+            updated[index] = { ...updated[index], ...cert };
+          }
+          return { currentResume: { ...state.currentResume, certificates: updated } };
+        }),
+
+      removeCertificate: (index) =>
+        set((state) => {
+          if (!state.currentResume) return {};
+          const updated = (state.currentResume.certificates || []).filter((_, i) => i !== index);
+          return { currentResume: { ...state.currentResume, certificates: updated } };
+        }),
     }),
     {
       name: 'resume-storage',
@@ -173,6 +259,17 @@ export const useResumeStore = create<ResumeStore>()(
         resumes: state.resumes,
         currentResume: state.currentResume 
       }),
+      // On storage load, ensure arrays exist
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          if (state.currentResume) {
+            state.currentResume = ensureArrays(state.currentResume);
+          }
+          if (state.resumes) {
+            state.resumes = state.resumes.map(r => ensureArrays(r));
+          }
+        }
+      },
     }
   )
 );

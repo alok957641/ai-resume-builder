@@ -10,14 +10,14 @@ declare global {
 }
 
 const PRO_FEATURES = [
-  'Unlimited Resumes banao',
-  'Saare 10 Premium Templates',
-  'Advanced AI — full rewrite',
-  'PDF Download bina watermark',
+  'Unlimited Resume Creation',
+  'Access to All 10 Premium Templates',
+  'Advanced AI — Full Content Rewrite',
+  'PDF Download Without Watermark',
   'Public Resume Link (yourapp/r/username)',
   'AI Interview Questions Generator',
   'Resume Score Checker',
-  'Priority Support',
+  'Priority Customer Support',
 ];
 
 export default function Upgrade() {
@@ -28,11 +28,11 @@ export default function Upgrade() {
   const handleUpgrade = async () => {
     setLoading(true);
     try {
-      // Step 1: Order banao backend se
+      // Step 1: Create order from backend
       const orderRes = await api.post('/payment/create-order');
       const { orderId, amount, currency, keyId } = orderRes.data;
 
-      // Step 2: Razorpay script load karo
+      // Step 2: Load Razorpay script
       const script = document.createElement('script');
       script.src = 'https://checkout.razorpay.com/v1/checkout.js';
       document.body.appendChild(script);
@@ -43,11 +43,11 @@ export default function Upgrade() {
           amount,
           currency,
           name: 'ResumeAI Pro',
-          description: 'Pro Plan — 1 Month',
+          description: 'Pro Plan — 1 Month Subscription',
           order_id: orderId,
           handler: async (response: any) => {
             try {
-              // Step 3: Payment verify karo
+              // Step 3: Verify payment
               const verifyRes = await api.post('/payment/verify', {
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
@@ -55,14 +55,14 @@ export default function Upgrade() {
               });
 
               if (verifyRes.data.success) {
-                // User store update karo
+                // Update user store
                 const token = localStorage.getItem('token') || '';
                 setAuth({ ...user!, plan: 'pro' }, token);
-                toast.success('🎉 Pro plan active ho gaya!');
+                toast.success('🎉 Pro plan activated successfully!');
                 navigate('/dashboard');
               }
             } catch {
-              toast.error('Payment verify nahi hua!');
+              toast.error('Payment verification failed!');
             }
           },
           prefill: {
@@ -73,7 +73,7 @@ export default function Upgrade() {
           modal: {
             ondismiss: () => {
               setLoading(false);
-              toast.error('Payment cancel ho gaya!');
+              toast.error('Payment was cancelled!');
             },
           },
         };
@@ -83,7 +83,7 @@ export default function Upgrade() {
         setLoading(false);
       };
     } catch {
-      toast.error('Kuch galat hua!');
+      toast.error('Something went wrong!');
       setLoading(false);
     }
   };
@@ -97,7 +97,7 @@ export default function Upgrade() {
           onClick={() => navigate('/dashboard')}
           className="flex items-center gap-2 text-gray-500 hover:text-gray-700 mb-8 transition"
         >
-          <ArrowLeft size={18} /> Dashboard pe wapas
+          <ArrowLeft size={18} /> Back to Dashboard
         </button>
 
         {/* Card */}
@@ -114,14 +114,14 @@ export default function Upgrade() {
               <span className="text-indigo-200 mb-2">/month</span>
             </div>
             <p className="text-indigo-200 text-sm mt-2">
-              Credit card nahi chahiye • Cancel anytime
+              No credit card required • Cancel anytime
             </p>
           </div>
 
           {/* Features */}
           <div className="p-8">
             <h3 className="font-bold text-gray-700 mb-4 text-sm uppercase tracking-wider">
-              Kya milega Pro mein:
+              What's included in Pro:
             </h3>
             <ul className="space-y-3 mb-8">
               {PRO_FEATURES.map((f, i) => (
@@ -153,11 +153,11 @@ export default function Upgrade() {
               disabled={loading}
               className="w-full bg-gradient-to-r from-indigo-600 to-violet-600 text-white py-4 rounded-2xl font-bold text-lg hover:opacity-90 disabled:opacity-50 transition shadow-lg shadow-indigo-200"
             >
-              {loading ? 'Loading...' : '💳 Abhi Upgrade Karo — ₹299'}
+              {loading ? 'Processing...' : '💳 Upgrade Now — ₹299'}
             </button>
 
             <p className="text-center text-gray-400 text-xs mt-4">
-              UPI, Cards, NetBanking — sab accepted
+              UPI, Cards, NetBanking — all accepted
             </p>
           </div>
         </div>

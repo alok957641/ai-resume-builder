@@ -1,127 +1,93 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose from 'mongoose';
 
-// Resume ke andar kya kya hoga — TypeScript types
-export interface IPersonalInfo {
-  fullName: string;
-  email: string;
-  phone: string;
-  location: string;
-  linkedin?: string;
-  github?: string;
-  website?: string;
-  summary: string;
-}
-
-export interface IExperience {
-  company: string;
-  position: string;
-  startDate: string;
-  endDate: string;
-  current: boolean;
-  description: string;
-}
-
-export interface IEducation {
-  school: string;
-  degree: string;
-  field: string;
-  startDate: string;
-  endDate: string;
-  grade?: string;
-}
-
-export interface ISkill {
-  name: string;
-  level: 'beginner' | 'intermediate' | 'expert';
-}
-
-export interface IResume extends Document {
-  userId: mongoose.Types.ObjectId;
-  title: string;
-  personalInfo: IPersonalInfo;
-  experience: IExperience[];
-  education: IEducation[];
-  skills: ISkill[];
-  template: 'modern' | 'classic' | 'minimal';
-
-  // 🔥 NEW FIELDS
-  publicSlug?: string;
-  isPublic: boolean;
-
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-const ResumeSchema = new Schema<IResume>(
-  {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
-    title: {
-      type: String,
-      required: [true, 'Resume ka title daalo'],
-      default: 'Mera Resume',
-    },
-    personalInfo: {
-      fullName: { type: String, default: '' },
-      email: { type: String, default: '' },
-      phone: { type: String, default: '' },
-      location: { type: String, default: '' },
-      linkedin: { type: String, default: '' },
-      github: { type: String, default: '' },
-      website: { type: String, default: '' },
-      summary: { type: String, default: '' },
-    },
-    experience: [
-      {
-        company: { type: String, default: '' },
-        position: { type: String, default: '' },
-        startDate: { type: String, default: '' },
-        endDate: { type: String, default: '' },
-        current: { type: Boolean, default: false },
-        description: { type: String, default: '' },
-      },
-    ],
-    education: [
-      {
-        school: { type: String, default: '' },
-        degree: { type: String, default: '' },
-        field: { type: String, default: '' },
-        startDate: { type: String, default: '' },
-        endDate: { type: String, default: '' },
-        grade: { type: String, default: '' },
-      },
-    ],
-    skills: [
-      {
-        name: { type: String, default: '' },
-        level: {
-          type: String,
-          enum: ['beginner', 'intermediate', 'expert'],
-          default: 'intermediate',
-        },
-      },
-    ],
-    template: {
-      type: String,
-      enum: ['modern', 'classic', 'minimal'],
-      default: 'modern',
-    },
-
-    // 🔥 NEW: Public Resume Feature
-    publicSlug: {
-      type: String,
-      unique: true,
-      sparse: true,
-    },
-    isPublic: {
-      type: Boolean,
-      default: false,
-    },
+const resumeSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   },
-  { timestamps: true }
-);
+  title: {
+    type: String,
+    default: 'Naya Resume'
+  },
+template: {
+  type: String,
 
-export default mongoose.model<IResume>('Resume', ResumeSchema);
+    default: 'modern-blue'
+  },
+  // ✅ PUBLIC SLUG FIELD - For public sharing
+  publicSlug: {
+    type: String,
+    unique: true,
+    sparse: true,
+    index: true
+  },
+  isPublic: {
+    type: Boolean,
+    default: false
+  },
+  personalInfo: {
+    fullName: { type: String, default: '' },
+    email: { type: String, default: '' },
+    phone: { type: String, default: '' },
+    location: { type: String, default: '' },
+    linkedin: { type: String, default: '' },
+    github: { type: String, default: '' },
+    website: { type: String, default: '' },
+    summary: { type: String, default: '' }
+  },
+  experience: [{
+    title: String,
+    company: String,
+    location: String,
+    startDate: String,
+    endDate: String,
+    current: Boolean,
+    description: String
+  }],
+  education: [{
+    degree: String,
+    institution: String,
+    location: String,
+    startDate: String,
+    endDate: String,
+    current: Boolean,
+    description: String
+  }],
+  skills: [{
+    name: String,
+    level: String
+  }],
+  projects: [{
+    name: String,
+    technologies: String,
+    link: String,
+    description: String
+  }],
+  certificates: [{
+    name: String,
+    issuer: String,
+    date: String,
+    link: String
+  }],
+  // ✅ YAHAN PAR YEH FIELDS ADD KARO (schema ke ANDAR)
+  views: {
+    type: Number,
+    default: 0
+  },
+  downloads: {
+    type: Number,
+    default: 0
+  },
+  atsScore: {
+    type: Number,
+    default: 0
+  }
+}, {
+  timestamps: true
+});
+
+// ✅ Create unique index for publicSlug
+resumeSchema.index({ publicSlug: 1 }, { unique: true, sparse: true });
+
+export default mongoose.model('Resume', resumeSchema);

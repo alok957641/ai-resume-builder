@@ -19,7 +19,7 @@ export default function InterviewQuestions() {
 
   const generate = async () => {
     if (!currentResume?.experience[0]?.position) {
-      toast.error('Pehle experience mein position daalo!');
+      toast.error('Please add a job position in experience first!');
       return;
     }
     setLoading(true);
@@ -32,8 +32,10 @@ export default function InterviewQuestions() {
       });
       setQuestions(res.data.questions);
       setShow(true);
-      toast.success('Questions ready hain! 🎯');
-    } catch { toast.error('AI error!'); }
+      toast.success('Questions generated successfully! 🎯');
+    } catch { 
+      toast.error('AI failed to generate questions!'); 
+    }
     finally { setLoading(false); }
   };
 
@@ -45,8 +47,8 @@ export default function InterviewQuestions() {
         className="w-full flex items-center justify-center gap-2 border border-indigo-200 text-indigo-600 py-3 rounded-xl font-semibold hover:bg-indigo-50 disabled:opacity-50 transition text-sm"
       >
         {loading
-          ? <><Loader size={16} className="animate-spin" /> Generating...</>
-          : <><Sparkles size={16} /> AI Interview Questions Generate Karo</>
+          ? <><Loader size={16} className="animate-spin" /> Generating Questions...</>
+          : <><Sparkles size={16} /> Generate AI Interview Questions</>
         }
       </button>
 
@@ -62,7 +64,7 @@ export default function InterviewQuestions() {
                   🎯 Interview Questions
                 </h3>
                 <p className="text-sm text-gray-500 mt-1">
-                  {currentResume?.experience[0]?.position} ke liye
+                  For {currentResume?.experience[0]?.position} position
                 </p>
               </div>
               <button onClick={() => setShow(false)}
@@ -98,7 +100,7 @@ export default function InterviewQuestions() {
                 disabled={loading}
                 className="w-full bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 transition text-sm flex items-center justify-center gap-2"
               >
-                <Sparkles size={16} /> Naye Questions Generate Karo
+                <Sparkles size={16} /> Generate New Questions
               </button>
             </div>
           </div>

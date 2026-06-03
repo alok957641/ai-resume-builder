@@ -21,7 +21,9 @@ export default function ShareResume() {
       const res = await api.put(`/resume/${currentResume._id}/toggle-public`);
       setCurrentResume(res.data.resume);
       toast.success(res.data.message);
-    } catch { toast.error('Kuch galat hua!'); }
+    } catch { 
+      toast.error('Something went wrong!'); 
+    }
     finally { setLoading(false); }
   };
 
@@ -29,7 +31,7 @@ export default function ShareResume() {
     if (!publicUrl) return;
     navigator.clipboard.writeText(publicUrl);
     setCopied(true);
-    toast.success('Link copy ho gaya!');
+    toast.success('Link copied!');
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -45,7 +47,7 @@ export default function ShareResume() {
           <div>
             <p className="font-semibold text-gray-800">Public Link</p>
             <p className="text-sm text-gray-400">
-              {currentResume.isPublic ? 'Koi bhi dekh sakta hai' : 'Sirf tum dekh sakte ho'}
+              {currentResume.isPublic ? 'Anyone can view your resume' : 'Only you can view this resume'}
             </p>
           </div>
           <button
@@ -77,7 +79,7 @@ export default function ShareResume() {
         {!currentResume.isPublic && (
           <div className="flex items-center gap-2 text-gray-400 text-sm mt-3">
             <Lock size={14} />
-            Toggle karo public link banane ke liye
+            Toggle to generate a public shareable link
           </div>
         )}
       </div>

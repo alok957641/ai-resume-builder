@@ -1,71 +1,59 @@
-import html2canvas from 'html2canvas';
+import { toPng } from 'html-to-image';
 import jsPDF from 'jspdf';
 
-export const exportToPDF = async (
-  element: HTMLElement,
-  fileName: string = 'Resume'
-): Promise<void> => {
-  // A4 dimensions in px at 96dpi
-  const A4_WIDTH_PX = 794;
-
-  // Element ko A4 width pe set karo temporarily
-  const originalWidth = element.style.width;
-  element.style.width = `${A4_WIDTH_PX}px`;
-  element.style.minHeight = 'auto';
-
+export const exportToPDF = async (element: HTMLElement, filename: string) => {
   try {
-    const canvas = await html2canvas(element, {
-      scale: 3,                    // High quality
-      useCORS: true,
-      allowTaint: true,
+    if (!element) {
+      throw new Error("Element not found");
+    }
+    
+    // Save original styles
+    const originalWidth = element.style.width;
+    const originalOverflow = element.style.overflow;
+    
+    // Set temporary styles for better capture
+    element.style.width = '800px';
+    element.style.overflow = 'visible';
+    
+    // High quality capture
+    const dataUrl = await toPng(element, {
+      quality: 1,
+      pixelRatio: 3,
       backgroundColor: '#ffffff',
-      logging: false,
-      imageTimeout: 15000,
-      onclone: (doc) => {
-        // Fonts load hone ka wait karo
-        const el = doc.getElementById('resume-preview');
-        if (el) {
-          el.style.width = `${A4_WIDTH_PX}px`;
-          el.style.fontFamily = 'Arial, sans-serif';
-        }
-      },
+      cacheBust: true,
+      skipFonts: false,
+      preferredFontFormat: 'woff2',
     });
-
-    // A4 size setup
-    const A4_WIDTH_MM = 210;
-    const A4_HEIGHT_MM = 297;
-
+    
+    // Restore original styles
+    element.style.width = originalWidth;
+    element.style.overflow = originalOverflow;
+    
+    // Create PDF with better dimensions
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
       format: 'a4',
-      compress: true,
+      compress: false,
     });
-
-    const imgData = canvas.toDataURL('image/jpeg', 1.0);
-    const imgWidth = A4_WIDTH_MM;
-    const imgHeight = (canvas.height * A4_WIDTH_MM) / canvas.width;
-
-    // Multiple pages support
-    let heightLeft = imgHeight;
-    let position = 0;
-    let page = 1;
-
-    pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
-    heightLeft -= A4_HEIGHT_MM;
-
-    // Agar content zyada hai toh naya page add karo
-    while (heightLeft > 0) {
-      position = heightLeft - imgHeight;
-      pdf.addPage();
-      pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
-      heightLeft -= A4_HEIGHT_MM;
-      page++;
-    }
-
-    pdf.save(`${fileName}_Resume.pdf`);
-  } finally {
-    // Original width restore karo
-    element.style.width = originalWidth;
+    
+    const imgWidth = 210;
+    const img = new Image();
+    img.src = dataUrl;
+    
+    await new Promise((resolve) => {
+      img.onload = () => {
+        const imgHeight = (img.height * imgWidth) / img.width;
+        pdf.addImage(dataUrl, 'PNG', 0, 0, imgWidth, imgHeight, undefined, 'FAST');
+        pdf.save(`${filename}.pdf`);
+        resolve(true);
+      };
+    });
+    
+    return true;
+    
+  } catch (error) {
+    console.error("PDF export error:", error);
+    throw error;
   }
 };
