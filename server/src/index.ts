@@ -55,13 +55,13 @@ app.get('/', (req, res) => {
 });
 
 // ✅ API routes
-// ✅ API routes with /api prefix
-app.use('/api/auth', authRoutes);
-app.use('/api/resume', resumeRoutes);
-app.use('/api/ai', aiRoutes);
-app.use('/api/payment', paymentRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/ats', atsRoutes);
+app.use('/auth', authRoutes);
+app.use('/resume', resumeRoutes);
+app.use('/ai', aiRoutes);
+app.use('/payment', paymentRoutes);
+app.use('/admin', adminRoutes);
+app.use('/ats', atsRoutes);
+
 
 // ✅ Health check
 app.get('/health', (req, res) => {
