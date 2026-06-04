@@ -16,7 +16,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// ✅ FIXED CORS - Allow multiple origins
+// ✅ CORS setup
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:3000',
@@ -27,10 +27,8 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function(origin, callback) {
-    // Allow requests with no origin (like mobile apps, curl)
     if (!origin) return callback(null, true);
-    
-    if (allowedOrigins.indexOf(origin) !== -1) {
+    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV !== 'production') {
       callback(null, true);
     } else {
       console.log('❌ Blocked origin:', origin);
@@ -56,7 +54,7 @@ app.get('/', (req, res) => {
   });
 });
 
-// ✅ API routes (note: /api prefix is missing)
+// ✅ API routes
 app.use('/auth', authRoutes);
 app.use('/resume', resumeRoutes);
 app.use('/ai', aiRoutes);
@@ -69,8 +67,8 @@ app.get('/health', (req, res) => {
   res.json({ message: '✅ Server running!', status: 'ok' });
 });
 
-// ✅ 404 handler
-app.use('*', (req, res) => {
+// ✅ 404 handler - NO wildcard '*' here
+app.use((req, res) => {
   res.status(404).json({ 
     message: 'Route not found', 
     path: req.originalUrl 
