@@ -1,14 +1,16 @@
 // src/store/useResumeStore.tsx
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type {
-  Resume,
-  PersonalInfo,
-  Experience,
-  Education,
+import type { 
+  Resume, 
+  PersonalInfo, 
+  Experience, 
+  Education, 
   Skill,
-} from "../types";
-
+  Project,
+  Certificate,
+  TemplateType,
+} from '../types';
 
 interface ResumeStore {
   resumes: Resume[];
