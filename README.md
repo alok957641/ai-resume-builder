@@ -1,344 +1,407 @@
-# 🚀 ResumeAI - AI-Powered Resume Builder
-
 <div align="center">
 
-![ResumeAI Banner](https://img.shields.io/badge/ResumeAI-AI%20Powered-blue)
-[![Website](https://img.shields.io/badge/Website-Live-green)](https://ai-resume-builder-bice-three.vercel.app)
-[![API](https://img.shields.io/badge/API-Render-orange)](https://ai-resume-builder-t8of.onrender.com)
-[![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
+<img src="https://img.shields.io/badge/AI%20Resume%20Builder-SaaS-4F46E5?style=for-the-badge&logo=react&logoColor=white" alt="AI Resume Builder" />
 
-**Create professional resumes with AI assistance in minutes!**
+# 🚀 AI Resume Builder — SaaS Platform
 
-[Live Demo](https://ai-resume-builder-bice-three.vercel.app) • [Report Bug](https://github.com/alok957641/ai-resume-builder/issues) • [Request Feature](https://github.com/alok957641/ai-resume-builder/issues)
+### Build professional resumes in minutes with the power of AI
+
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Visit_Now-4F46E5?style=for-the-badge)](https://ai-resume-builder-bice-three.vercel.app)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/alok957641/ai-resume-builder)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](./LICENSE)
+
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB)
+![Node.js](https://img.shields.io/badge/Node.js-43853D?style=flat-square&logo=node.js&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=flat-square&logo=mongodb&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)
 
 </div>
 
 ---
 
-## 📋 Table of Contents
-- [✨ Features](#-features)
-- [🛠️ Tech Stack](#️-tech-stack)
-- [🚀 Live Demo](#-live-demo)
-- [📸 Screenshots](#-screenshots)
-- [🏗️ Architecture](#️-architecture)
-- [📦 Installation](#-installation)
-- [🔧 Configuration](#-configuration)
-- [📡 API Endpoints](#-api-endpoints)
-- [🤝 Contributing](#-contributing)
-- [📄 License](#-license)
-- [👨‍💻 Author](#-author)
+## 📌 Table of Contents
+
+- [About](#-about)
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Project Structure](#-project-structure)
+- [Getting Started](#-getting-started)
+- [Environment Variables](#-environment-variables)
+- [API Documentation](#-api-documentation)
+- [Screenshots](#-screenshots)
+- [Deployment](#-deployment)
+- [Contributing](#-contributing)
+
+---
+
+## 🎯 About
+
+**AI Resume Builder** is a full-stack SaaS application that helps users create professional, ATS-friendly resumes in minutes using the power of AI (Google Gemini). The platform features 11+ beautiful templates, real-time preview, PDF export, and a complete subscription system.
+
+> Built as a portfolio project to demonstrate full-stack development skills including React, Node.js, MongoDB, AI integration, and payment processing.
 
 ---
 
 ## ✨ Features
 
-### 🎨 Resume Builder
-- **11 Professional Templates** - Modern, Classic, ATS-friendly designs
-- **Live Preview** - See changes in real-time as you type
-- **Drag & Drop Sections** - Easy to rearrange content
-- **PDF Download** - One-click professional PDF export
+### 🆓 Free Plan
+| Feature | Status |
+|---------|--------|
+| Create up to 2 resumes | ✅ |
+| 4 resume templates | ✅ |
+| AI content suggestions | ✅ |
+| PDF download | ✅ |
+| ATS score checker | ✅ |
+| Real-time live preview | ✅ |
 
-### 🤖 AI-Powered Features
-- **AI Summary Improvement** - Enhance your professional summary
-- **AI Experience Description** - Improve job descriptions with AI
-- **AI Project Descriptions** - Make project details impactful
-- **AI Skill Suggestions** - Get relevant skill recommendations
-- **AI Interview Questions** - Generate practice questions for your role
-- **ATS Score Checker** - Get AI-powered ATS compatibility score
+### 👑 Pro Plan (₹299/month)
+| Feature | Status |
+|---------|--------|
+| Unlimited resumes | ✅ |
+| 11+ premium templates | ✅ |
+| Advanced AI rewriting | ✅ |
+| PDF without watermark | ✅ |
+| Public resume link | ✅ |
+| AI interview questions | ✅ |
+| Resume score analyzer | ✅ |
+| Custom resume URL | ✅ |
 
-### 👥 User Features
-- **Authentication System** - Secure JWT-based auth
-- **Resume Management** - Create, edit, delete multiple resumes
-- **Public Resume Links** - Share your resume with anyone
-- **Resume Score** - Detailed breakdown of resume quality
-
-### 💳 Monetization
-- **Free Plan** - 2 resumes, 4 templates, basic AI
-- **Pro Plan** - Unlimited resumes, 11 templates, advanced AI (₹299/month)
-- **Razorpay Integration** - Secure payment processing
-
-### 🛡️ Admin Panel
-- **User Management** - View all users, upgrade/downgrade plans
-- **Analytics Dashboard** - Track users, revenue, templates usage
-- **Revenue Reports** - Monthly and annual revenue tracking
+### 🛠️ Technical Features
+- 🔐 JWT Authentication (Register/Login)
+- 🤖 AI-Powered content improvement (Google Gemini API)
+- 📊 Resume score with grade (A/B/C/D)
+- 🎯 ATS Score Checker (PDF upload)
+- 📄 Pixel-perfect PDF export (A4, multi-page)
+- 💳 Razorpay payment integration (UPI, Cards, NetBanking)
+- 🌐 Public resume sharing link
+- 🔒 Admin panel (role-based access)
+- 📱 Fully responsive design
 
 ---
 
-## 🛠️ Tech Stack
+## 🧱 Tech Stack
 
 ### Frontend
-| Technology | Purpose |
-|------------|---------|
-| React 19 | UI Framework |
-| TypeScript | Type Safety |
-| Vite | Build Tool |
-| Tailwind CSS | Styling |
-| Framer Motion | Animations |
-| Zustand | State Management |
-| React Hook Form | Form Handling |
-| Axios | API Calls |
+```
+React 18 + TypeScript     — UI Framework
+Vite                      — Build Tool
+Tailwind CSS              — Styling
+React Router DOM          — Client-side Routing
+Zustand                   — State Management
+React Hook Form           — Form Handling
+TanStack Query            — Server State
+Axios                     — HTTP Client
+jsPDF + html2canvas       — PDF Generation
+Lucide React              — Icons
+React Hot Toast           — Notifications
+```
 
 ### Backend
-| Technology | Purpose |
-|------------|---------|
-| Node.js | Runtime |
-| Express.js | Web Framework |
-| MongoDB | Database |
-| Mongoose | ODM |
-| JWT | Authentication |
-| Groq API | AI Features |
-| Razorpay | Payments |
+```
+Node.js + Express         — Server Framework
+TypeScript                — Type Safety
+MongoDB + Mongoose        — Database
+JWT (jsonwebtoken)        — Authentication
+bcryptjs                  — Password Encryption
+Razorpay                  — Payment Gateway
+Google Gemini API         — AI Features
+Multer                    — File Uploads
+Helmet + CORS             — Security
+```
 
-### Deployment
-| Service | Purpose |
-|---------|---------|
-| Vercel | Frontend Hosting |
-| Render | Backend Hosting |
-| MongoDB Atlas | Database |
-
----
-
-## 🚀 Live Demo
-
-| Environment | URL |
-|-------------|-----|
-| **Frontend** | [https://ai-resume-builder-bice-three.vercel.app](https://ai-resume-builder-bice-three.vercel.app) |
-| **Backend API** | [https://ai-resume-builder-t8of.onrender.com](https://ai-resume-builder-t8of.onrender.com) |
-| **API Health** | [https://ai-resume-builder-t8of.onrender.com/health](https://ai-resume-builder-t8of.onrender.com/health) |
-
-### Test Credentials
-
-Email: test@example.com
-Password: test123456
-
-text
+### Infrastructure
+```
+Vercel                    — Frontend Hosting
+Railway / Render          — Backend Hosting
+MongoDB Atlas             — Cloud Database
+```
 
 ---
 
-## 📸 Screenshots
+## 📁 Project Structure
 
-
-<div align="center">
-<img alt="Landing Page" width="45%" src="https://github.com/user-attachments/assets/66f79fb9-389c-4283-95f9-44804bd963d7" /><img  alt="Dashboard" width="45%" src="https://github.com/user-attachments/assets/a4635811-0785-4c2e-8fe4-a9e292d83b4f" />
-  <br/>
-  <img src="https://github.com/user-attachments/assets/c1b1d4ca-71fb-46d8-ad22-b854573c0571" alt="Resume Builder" width="45%">
-  <img src="https://github.com/user-attachments/assets/c4488c1e-c7e1-46cc-bb99-85c28eef7ec3"  alt="Templates" width="45%">
-</div>
-
-
-
----
-
-## 🏗️ Architecture
-┌─────────────────────────────────────────────────────────────┐
-│ Client (Vercel) │
-│ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────────────┐ │
-│ │ React │ │Tailwind │ │Framer │ │ Zustand Store │ │
-│ │ 19 │ │ CSS │ │ Motion │ │ │ │
-│ └────┬────┘ └────┬────┘ └────┬────┘ └────────┬────────┘ │
-│ │ │ │ │ │
-│ └───────────┴───────────┴───────────────┘ │
-│ │ │
-│ Axios API Calls │
-└─────────────────────────┼────────────────────────────────────┘
+```
+ai-resume-builder/
 │
-▼
-┌─────────────────────────────────────────────────────────────┐
-│ Backend (Render) │
-│ ┌─────────────────────────────────────────────────────┐ │
-│ │ Express.js Server │ │
-│ │ ┌──────────┐ ┌──────────┐ ┌──────────┐ │ │
-│ │ │ Auth │ │ Resume │ │ AI │ │ │
-│ │ │ Routes │ │ Routes │ │ Routes │ │ │
-│ │ └────┬─────┘ └────┬─────┘ └────┬─────┘ │ │
-│ │ │ │ │ │ │
-│ │ └────────────┼────────────┘ │ │
-│ │ ▼ │ │
-│ │ ┌─────────────┐ │ │
-│ │ │ MongoDB │ │ │
-│ │ │ (Atlas) │ │ │
-│ │ └─────────────┘ │ │
-│ └─────────────────────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────────┘
-
-text
+├── 📁 client/                      # React Frontend
+│   ├── public/
+│   │   └── _redirects              # Vercel SPA routing
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── resume/
+│   │   │   │   ├── templates/
+│   │   │   │   │   ├── AllTemplates.tsx    # 11 template components
+│   │   │   │   │   └── index.tsx           # Template renderer
+│   │   │   │   ├── PersonalInfoForm.tsx
+│   │   │   │   ├── ExperienceForm.tsx
+│   │   │   │   ├── EducationForm.tsx
+│   │   │   │   ├── SkillsForm.tsx
+│   │   │   │   ├── ResumePreview.tsx
+│   │   │   │   ├── ResumeScore.tsx
+│   │   │   │   ├── ShareResume.tsx
+│   │   │   │   └── InterviewQuestions.tsx
+│   │   │   └── ATSChecker.tsx
+│   │   ├── pages/
+│   │   │   ├── Landing.tsx         # Home page
+│   │   │   ├── Login.tsx
+│   │   │   ├── Register.tsx
+│   │   │   ├── Dashboard.tsx       # Main dashboard
+│   │   │   ├── ResumeBuilder.tsx   # Resume editor
+│   │   │   ├── TemplateChooser.tsx # Template selection
+│   │   │   ├── Upgrade.tsx         # Pro plan page
+│   │   │   ├── AdminPanel.tsx      # Admin only
+│   │   │   └── PublicResume.tsx    # Public resume view
+│   │   ├── store/
+│   │   │   ├── useAuthStore.ts     # Zustand auth state
+│   │   │   └── useResumeStore.ts   # Zustand resume state
+│   │   ├── api/
+│   │   │   └── index.ts            # Axios instance
+│   │   ├── types/
+│   │   │   └── index.ts            # TypeScript interfaces
+│   │   ├── utils/
+│   │   │   ├── exportPDF.ts        # PDF generation
+│   │   │   └── resumeScore.ts      # ATS scoring
+│   │   └── hooks/
+│   │       └── useDebounce.ts
+│   ├── vercel.json                 # Vercel config
+│   └── package.json
+│
+├── 📁 server/                      # Node.js Backend
+│   ├── src/
+│   │   ├── config/
+│   │   │   └── db.ts               # MongoDB connection
+│   │   ├── controllers/
+│   │   │   ├── authController.ts
+│   │   │   ├── resumeController.ts
+│   │   │   ├── aiController.ts
+│   │   │   ├── paymentController.ts
+│   │   │   └── atsController.ts
+│   │   ├── models/
+│   │   │   ├── User.ts
+│   │   │   └── Resume.ts
+│   │   ├── routes/
+│   │   │   ├── authRoutes.ts
+│   │   │   ├── resumeRoutes.ts
+│   │   │   ├── aiRoutes.ts
+│   │   │   ├── paymentRoutes.ts
+│   │   │   ├── atsRoutes.ts
+│   │   │   └── adminRoutes.ts
+│   │   ├── middleware/
+│   │   │   ├── authMiddleware.ts   # JWT verification
+│   │   │   └── planMiddleware.ts   # Free/Pro limits
+│   │   └── index.ts               # Express app entry
+│   ├── .env                        # Environment variables
+│   └── package.json
+│
+├── vercel.json                     # Root Vercel config
+├── .gitignore
+└── README.md
+```
 
 ---
 
-## 📦 Installation
+## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js (v18 or higher)
-- MongoDB Atlas account
-- Groq API key
-- Razorpay account (for payments)
+```bash
+node --version   # v18+ required
+npm --version    # v9+ required
+```
 
-### Clone Repository
+### 1. Clone the Repository
 ```bash
 git clone https://github.com/alok957641/ai-resume-builder.git
 cd ai-resume-builder
-Backend Setup
-bash
+```
+
+### 2. Setup Backend
+```bash
 cd server
 npm install
-cp .env.example .env
-# Edit .env with your credentials
+cp .env.example .env    # Fill in your environment variables
 npm run dev
-Frontend Setup
-bash
+# ✅ Server running on http://localhost:5000
+```
+
+### 3. Setup Frontend
+```bash
 cd client
 npm install
-cp .env.example .env
-# Edit .env with backend URL
 npm run dev
-Environment Variables
-Backend (.env)
-env
+# ✅ App running on http://localhost:5173
+```
+
+---
+
+## 🔐 Environment Variables
+
+### `server/.env`
+```env
+# Server
 PORT=5000
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/dbname
-JWT_SECRET=your_super_secret_key
-ADMIN_EMAIL=admin@example.com
-GROQ_API_KEY=your_groq_api_key
-RAZORPAY_KEY_ID=your_razorpay_key
-RAZORPAY_KEY_SECRET=your_razorpay_secret
-Frontend (.env)
-env
+NODE_ENV=development
+
+# Database
+MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/ai-resume-builder
+
+# Authentication
+JWT_SECRET=your_super_secret_jwt_key_minimum_32_chars
+
+# AI
+GEMINI_API_KEY=your_google_gemini_api_key
+
+# Payment
+RAZORPAY_KEY_ID=rzp_test_xxxxxxxxxx
+RAZORPAY_KEY_SECRET=xxxxxxxxxxxxxxxx
+
+# Admin
+ADMIN_EMAIL=your_admin_email@gmail.com
+```
+
+### `client/.env`
+```env
 VITE_API_URL=http://localhost:5000/api
-VITE_RAZORPAY_KEY=your_razorpay_key
-🔧 Configuration
-MongoDB Setup
-Create account on MongoDB Atlas
+```
 
-Create new cluster
+### `client/.env.production`
+```env
+VITE_API_URL=https://your-backend-url.render.com/api
+```
 
-Create database user
+---
 
-Whitelist IP address (0.0.0.0/0 for production)
+## 📡 API Documentation
 
-Get connection string
+### Authentication
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| POST | `/api/auth/register` | Register new user | ❌ |
+| POST | `/api/auth/login` | Login user | ❌ |
+| GET | `/api/auth/me` | Get current user | ✅ |
 
-Groq API Setup
-Sign up at Groq Console
+### Resume
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| POST | `/api/resume` | Create resume | ✅ |
+| GET | `/api/resume` | Get all resumes | ✅ |
+| GET | `/api/resume/:id` | Get single resume | ✅ |
+| PUT | `/api/resume/:id` | Update resume | ✅ |
+| DELETE | `/api/resume/:id` | Delete resume | ✅ |
+| PUT | `/api/resume/:id/toggle-public` | Toggle public link | ✅ |
+| GET | `/api/resume/public/:slug` | View public resume | ❌ |
 
-Generate API key
+### AI Features
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| POST | `/api/ai/improve-summary` | AI improve summary | ✅ |
+| POST | `/api/ai/improve-experience` | AI improve experience | ✅ |
+| POST | `/api/ai/suggest-skills` | AI suggest skills | ✅ |
+| POST | `/api/ai/interview-questions` | Generate interview Qs | ✅ |
 
-Add to .env file
+### Payment
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| POST | `/api/payment/create-order` | Create Razorpay order | ✅ |
+| POST | `/api/payment/verify` | Verify payment | ✅ |
 
-Razorpay Setup
-Create account on Razorpay
+### ATS
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| POST | `/api/ats/check` | Check ATS score | ✅ |
 
-Get API keys from dashboard
+### Admin (Admin only)
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/admin/stats` | Dashboard stats | 🔐 |
+| GET | `/api/admin/users` | All users | 🔐 |
+| PUT | `/api/admin/users/:id/plan` | Update user plan | 🔐 |
 
-Add to .env file
+---
 
-📡 API Endpoints
-Authentication
-Method	Endpoint	Description
-POST	/api/auth/register	Register new user
-POST	/api/auth/login	Login user
-Resume
-Method	Endpoint	Description
-GET	/api/resume	Get all resumes
-POST	/api/resume	Create resume
-GET	/api/resume/:id	Get single resume
-PUT	/api/resume/:id	Update resume
-DELETE	/api/resume/:id	Delete resume
-AI Features
-Method	Endpoint	Description
-POST	/api/ai/improve-summary	Improve summary
-POST	/api/ai/improve-experience	Improve experience
-POST	/api/ai/suggest-skills	Get skill suggestions
-POST	/api/ai/interview-questions	Generate questions
-ATS Checker
-Method	Endpoint	Description
-POST	/api/ats/check	Check ATS score
-Admin
-Method	Endpoint	Description
-GET	/api/admin/stats	Get platform stats
-GET	/api/admin/users	Get all users
-PUT	/api/admin/users/:id/plan	Update user plan
-Payment
-Method	Endpoint	Description
-POST	/api/payment/create-order	Create Razorpay order
-POST	/api/payment/verify	Verify payment
-🗂️ Project Structure
-text
-ai-resume-builder/
-├── client/                      # React Frontend
-│   ├── src/
-│   │   ├── components/          # Reusable components
-│   │   │   ├── resume/          # Resume builder components
-│   │   │   │   ├── templates/   # 11 resume templates
-│   │   │   │   └── ...
-│   │   │   └── ATSChecker.tsx   # ATS score checker
-│   │   ├── pages/               # Page components
-│   │   │   ├── Landing.tsx      # Landing page
-│   │   │   ├── Dashboard.tsx    # User dashboard
-│   │   │   ├── ResumeBuilder.tsx # Resume editor
-│   │   │   ├── TemplateChooser.tsx # Template selector
-│   │   │   ├── Upgrade.tsx      # Payment page
-│   │   │   └── AdminPanel.tsx   # Admin dashboard
-│   │   ├── store/               # Zustand stores
-│   │   ├── utils/               # Helper functions
-│   │   └── api.ts               # API configuration
-│   ├── public/                  # Static files
-│   ├── index.html
-│   └── package.json
-│
-├── server/                      # Express Backend
-│   ├── src/
-│   │   ├── controllers/         # Route controllers
-│   │   ├── models/              # Mongoose models
-│   │   ├── routes/              # API routes
-│   │   ├── middleware/          # Auth middleware
-│   │   ├── config/              # Configuration
-│   │   └── index.ts             # Entry point
-│   ├── .env.example
-│   └── package.json
-│
-├── .gitignore
-└── README.md
-🤝 Contributing
-Contributions are welcome! Please follow these steps:
+## 🎨 Resume Templates
 
-Fork the repository
+| # | Template | Plan | ATS Friendly |
+|---|----------|------|--------------|
+| 1 | Modern Blue | Free | ✅ |
+| 2 | Minimal Clean | Free | ✅ |
+| 3 | ATS Classic | Free | ✅ |
+| 4 | Emerald Pro | Free | ❌ |
+| 5 | Slate Dark | Pro | ❌ |
+| 6 | Rose Elegant | Pro | ❌ |
+| 7 | Violet Bold | Pro | ❌ |
+| 8 | Amber Warm | Pro | ❌ |
+| 9 | Tech Modern | Pro | ❌ |
+| 10 | Creative Pink | Pro | ❌ |
+| 11 | Navy Executive | Pro | ✅ |
 
-Create your feature branch (git checkout -b feature/AmazingFeature)
+---
 
-Commit your changes (git commit -m 'Add some AmazingFeature')
+## 🚢 Deployment
 
-Push to the branch (git push origin feature/AmazingFeature)
+### Frontend → Vercel
+```bash
+# Vercel Dashboard Settings:
+# Framework:        Vite
+# Root Directory:   client
+# Build Command:    npx vite build
+# Output Dir:       dist
+# Node Version:     20.x
+```
 
-Open a Pull Request
+### Backend → Render / Railway
+```bash
+# Build Command:    npm install && npm run build
+# Start Command:    npm start
+# Add all .env variables in dashboard
+```
 
-📄 License
-This project is licensed under the MIT License - see the LICENSE file for details.
+### Database → MongoDB Atlas
+```bash
+# 1. Create free M0 cluster
+# 2. Get connection string
+# 3. Add to MONGO_URI in .env
+```
 
-👨‍💻 Author
-Rajalok
+---
 
-GitHub: @alok957641
+## 🤝 Contributing
 
-Email: rajalok957641@gmail.com
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-Phone: +91 75418 40606
+```bash
+# Fork karo → Clone karo → Branch banao
+git checkout -b feature/amazing-feature
 
-🙏 Acknowledgments
-Groq for AI API
+# Changes karo → Commit karo
+git commit -m 'feat: add amazing feature'
 
-Razorpay for payment gateway
+# Push karo → PR banao
+git push origin feature/amazing-feature
+```
 
-MongoDB for database
+---
 
-Vercel for frontend hosting
+## 📝 License
 
-Render for backend hosting
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 👨‍💻 Author
+
+**Alok Raj**
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=flat-square&logo=linkedin)](https://linkedin.com/in/your-profile)
+[![GitHub](https://img.shields.io/badge/GitHub-Follow-181717?style=flat-square&logo=github)](https://github.com/alok957641)
+[![Email](https://img.shields.io/badge/Email-Contact-D14836?style=flat-square&logo=gmail)](mailto:rajalok957641@gmail.com)
+
+---
 
 <div align="center">
-Built with ❤️ by Rajalok
 
-⭐ Star this repository if you like it! ⭐
+**⭐ Agar ye project helpful laga toh star zaroor do!**
 
-</div> ```
-📝 Instructions to Add:
-Save this content as README.md in your project root folder
+Made with ❤️ in India 🇮🇳
+
+</div>
