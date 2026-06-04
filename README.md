@@ -116,15 +116,16 @@ text
 ---
 
 ## 📸 Screenshots
-<img alt="Landing Page" width="45%" src="https://github.com/user-attachments/assets/66f79fb9-389c-4283-95f9-44804bd963d7" />
+
 
 <div align="center">
-  <img src="https://via.placeholder.com/800x400?text=Landing+Page" alt="Landing Page" width="45%">
-  <img src="https://via.placeholder.com/800x400?text=Dashboard" alt="Dashboard" width="45%">
+<img alt="Landing Page" width="45%" src="https://github.com/user-attachments/assets/66f79fb9-389c-4283-95f9-44804bd963d7" /><img  alt="Dashboard" width="45%" src="https://github.com/user-attachments/assets/a4635811-0785-4c2e-8fe4-a9e292d83b4f" />
   <br/>
-  <img src="https://via.placeholder.com/800x400?text=Resume+Builder" alt="Resume Builder" width="45%">
-  <img src="https://via.placeholder.com/800x400?text=Templates" alt="Templates" width="45%">
+  <img src="https://github.com/user-attachments/assets/c1b1d4ca-71fb-46d8-ad22-b854573c0571" alt="Resume Builder" width="45%">
+  <img src="https://github.com/user-attachments/assets/c4488c1e-c7e1-46cc-bb99-85c28eef7ec3"  alt="Templates" width="45%">
 </div>
+
+
 
 ---
 
