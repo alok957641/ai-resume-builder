@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Axios ka ek instance banao apne backend ke liye
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api',  // backend ka address
+  baseURL: 'https://ai-resume-builder-t8of.onrender.com',  // backend ka address
   headers: {
     'Content-Type': 'application/json',
   },
