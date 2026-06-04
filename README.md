@@ -403,7 +403,7 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 ## 👨‍💻 Author
 
-**Alok Raj**
+**Alok Kumar**
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=flat-square&logo=linkedin)](https://linkedin.com/in/your-profile)
 [![GitHub](https://img.shields.io/badge/GitHub-Follow-181717?style=flat-square&logo=github)](https://github.com/alok957641)
@@ -413,7 +413,7 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 <div align="center">
 
-**⭐ Agar ye project helpful laga toh star zaroor do!**
+⭐ Star this repository if you like it! ⭐
 
 Made with ❤️ in India 🇮🇳
 
