@@ -337,6 +337,19 @@ VITE_API_URL=https://your-backend-url.render.com/api
 
 ---
 
+## 📸 Screenshots
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/66f79fb9-389c-4283-95f9-44804bd963d7" alt="Landing Page" width="45%">
+  <img src="https://github.com/user-attachments/assets/a4635811-0785-4c2e-8fe4-a9e292d83b4f" alt="Dashboard" width="45%">
+  <br/>
+  <img src="https://github.com/user-attachments/assets/c1b1d4ca-71fb-46d8-ad22-b854573c0571" alt="Resume Builder" width="45%">
+  <img src="https://github.com/user-attachments/assets/c4488c1e-c7e1-46cc-bb99-85c28eef7ec3" alt="Templates" width="45%">
+</div>
+
+---
+
+
 ## 🚢 Deployment
 
 ### Frontend → Vercel
