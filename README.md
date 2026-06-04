@@ -116,6 +116,7 @@ text
 ---
 
 ## 📸 Screenshots
+<img alt="Landing Page" width="45%" src="https://github.com/user-attachments/assets/66f79fb9-389c-4283-95f9-44804bd963d7" />
 
 <div align="center">
   <img src="https://via.placeholder.com/800x400?text=Landing+Page" alt="Landing Page" width="45%">
