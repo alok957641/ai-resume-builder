@@ -25,7 +25,7 @@ function GitHubIcon({ size = 10 }: { size?: number }) {
 // ============================================================
 // TEMPLATE 1: CLASSIC PROFESSIONAL
 // ============================================================
-export function TemplateClassic({ resume }: { resume: Resume }) {
+export function TemplateModernBlue({ resume }: { resume: Resume }) {
   const { personalInfo: p, experience, education, skills, projects, certificates } = resume;
   return (
     <div id="resume-preview" className="bg-white w-full min-h-[297mm] font-sans text-[11px] leading-relaxed">
@@ -111,7 +111,7 @@ export function TemplateClassic({ resume }: { resume: Resume }) {
 // ============================================================
 // TEMPLATE 2: MODERN CLEAN
 // ============================================================
-export function TemplateModernClean({ resume }: { resume: Resume }) {
+export function TemplateEmerald({ resume }: { resume: Resume }) {
   const { personalInfo: p, experience, education, skills, projects, certificates } = resume;
   return (
     <div id="resume-preview" className="bg-white w-full min-h-[297mm] font-sans text-[11px]">
@@ -177,7 +177,7 @@ export function TemplateModernClean({ resume }: { resume: Resume }) {
 // ============================================================
 // TEMPLATE 3: MINIMALIST
 // ============================================================
-export function TemplateMinimalist({ resume }: { resume: Resume }) {
+export function TemplateMinimal({ resume }: { resume: Resume }) {
   const { personalInfo: p, experience, education, skills, projects, certificates } = resume;
   return (
     <div id="resume-preview" className="bg-white w-full min-h-[297mm] px-10 py-8 font-sans text-[11px]">
@@ -238,7 +238,7 @@ export function TemplateMinimalist({ resume }: { resume: Resume }) {
 // ============================================================
 // TEMPLATE 4: EXECUTIVE
 // ============================================================
-export function TemplateExecutive({ resume }: { resume: Resume }) {
+export function TemplateATS({ resume }: { resume: Resume }) {
   const { personalInfo: p, experience, education, skills, projects, certificates } = resume;
   return (
     <div id="resume-preview" className="bg-white w-full min-h-[297mm] px-10 py-8 font-serif text-[11px] leading-relaxed">
@@ -299,7 +299,7 @@ export function TemplateExecutive({ resume }: { resume: Resume }) {
 // ============================================================
 // TEMPLATE 5: ATS OPTIMIZED
 // ============================================================
-export function TemplateATSOptimized({ resume }: { resume: Resume }) {
+export function TemplateDark({ resume }: { resume: Resume }) {
   const { personalInfo: p, experience, education, skills, projects, certificates } = resume;
   return (
     <div id="resume-preview" className="bg-white w-full min-h-[297mm] px-10 py-8 text-[11px] font-sans leading-relaxed">
@@ -365,7 +365,7 @@ export function TemplateATSOptimized({ resume }: { resume: Resume }) {
 // ============================================================
 // TEMPLATE 6: BOLD HEADER
 // ============================================================
-export function TemplateBoldHeader({ resume }: { resume: Resume }) {
+export function TemplateRose({ resume }: { resume: Resume }) {
   const { personalInfo: p, experience, education, skills, projects, certificates } = resume;
   return (
     <div id="resume-preview" className="bg-white w-full min-h-[297mm] font-sans text-[11px]">
@@ -423,7 +423,7 @@ export function TemplateBoldHeader({ resume }: { resume: Resume }) {
 // ============================================================
 // TEMPLATE 7: TWO COLUMN (ATS Friendly)
 // ============================================================
-export function TemplateTwoColumn({ resume }: { resume: Resume }) {
+export function  TemplateViolet({ resume }: { resume: Resume }) {
   const { personalInfo: p, experience, education, skills, projects, certificates } = resume;
   return (
     <div id="resume-preview" className="bg-white w-full min-h-[297mm] font-sans text-[11px] flex">
@@ -445,7 +445,7 @@ export function TemplateTwoColumn({ resume }: { resume: Resume }) {
 // ============================================================
 // TEMPLATE 8: CLEAN SERIF
 // ============================================================
-export function TemplateCleanSerif({ resume }: { resume: Resume }) {
+export function TemplateAmber({ resume }: { resume: Resume }) {
   const { personalInfo: p, experience, education, skills, projects, certificates } = resume;
   return (
     <div id="resume-preview" className="bg-white w-full min-h-[297mm] px-10 py-8 font-serif text-[11px]">
@@ -463,7 +463,7 @@ export function TemplateCleanSerif({ resume }: { resume: Resume }) {
 // ============================================================
 // TEMPLATE 9: COMPACT
 // ============================================================
-export function TemplateCompact({ resume }: { resume: Resume }) {
+export function TemplateCyan({ resume }: { resume: Resume }) {
   const { personalInfo: p, experience, education, skills, projects, certificates } = resume;
   return (
     <div id="resume-preview" className="bg-white w-full min-h-[297mm] px-6 py-6 font-sans text-[10px] leading-tight">
@@ -481,7 +481,7 @@ export function TemplateCompact({ resume }: { resume: Resume }) {
 // ============================================================
 // TEMPLATE 10: DARK SIDEBAR (ATS Friendly)
 // ============================================================
-export function TemplateDarkSidebar({ resume }: { resume: Resume }) {
+export function TemplatePink({ resume }: { resume: Resume }) {
   const { personalInfo: p, experience, education, skills, projects, certificates } = resume;
   return (
     <div id="resume-preview" className="bg-white w-full min-h-[297mm] font-sans text-[11px] flex">
@@ -504,7 +504,7 @@ export function TemplateDarkSidebar({ resume }: { resume: Resume }) {
 // ============================================================
 // TEMPLATE 11: EUROPEAN
 // ============================================================
-export function TemplateEuropean({ resume }: { resume: Resume }) {
+export function TemplateNavy({ resume }: { resume: Resume }) {
   const { personalInfo: p, experience, education, skills, projects, certificates } = resume;
   return (
     <div id="resume-preview" className="bg-white w-full min-h-[297mm] px-8 py-8 font-sans text-[10px]">
