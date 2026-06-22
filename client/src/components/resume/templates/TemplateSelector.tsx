@@ -1,22 +1,117 @@
 import { useState, useEffect } from 'react';
-import { Lock, Check, Crown, Sparkles, Star } from 'lucide-react';
+import { Lock, Check, Crown, Sparkles, Star, ArrowRight } from 'lucide-react';
 import { useResumeStore } from '../../../store/useResumeStore';
 import { useAuthStore } from '../../../store/useAuthStore';
 import api from '../../../api';
 import { toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 
+// ============================================================
+// ALL 11 TEMPLATES - ATS Friendly, Black & White
+// ============================================================
 const ALL_TEMPLATES = [
-  { id: 'modern-blue',    name: 'Modern Blue',    color: '#3B82F6', free: true,  icon: '🎨', description: 'Clean & Professional' },
-  { id: 'emerald-pro',    name: 'Emerald Pro',    color: '#10B981', free: true,  icon: '💎', description: 'Premium Design' },
-  { id: 'minimal-clean',  name: 'Minimal Clean',  color: '#6B7280', free: true,  icon: '✨', description: 'Simple & Elegant' },
-  { id: 'slate-dark',     name: 'Slate Dark',     color: '#334155', free: false, icon: '🌙', description: 'Dark Modern Theme' },
-  { id: 'rose-elegant',   name: 'Rose Elegant',   color: '#F43F5E', free: false, icon: '🌹', description: 'Elegant Pink Theme' },
-  { id: 'violet-bold',    name: 'Violet Bold',    color: '#8B5CF6', free: false, icon: '💜', description: 'Bold Purple Design' },
-  { id: 'amber-warm',     name: 'Amber Warm',     color: '#F59E0B', free: false, icon: '☀️', description: 'Warm Orange Theme' },
-  { id: 'executive-pro',  name: 'Executive Pro',  color: '#1E293B', free: false, icon: '👔', description: 'Corporate Style' },
-  { id: 'creative-split', name: 'Creative Split', color: '#EC4899', free: false, icon: '🎭', description: 'Creative Layout' },
-  { id: 'tech-modern',    name: 'Tech Modern',    color: '#06B6D4', free: false, icon: '⚡', description: 'Tech Focused' },
+  // FREE TEMPLATES (5)
+  { 
+    id: 'classic', 
+    name: 'Classic Pro', 
+    color: '#1a1a1a', 
+    free: true, 
+    icon: '📄', 
+    description: 'Timeless professional design',
+    category: 'Free'
+  },
+  { 
+    id: 'modern-clean', 
+    name: 'Modern Clean', 
+    color: '#2d2d2d', 
+    free: true, 
+    icon: '✨', 
+    description: 'Clean & contemporary',
+    category: 'Free'
+  },
+  { 
+    id: 'minimalist', 
+    name: 'Minimalist', 
+    color: '#404040', 
+    free: true, 
+    icon: '⬜', 
+    description: 'Ultra minimal & elegant',
+    category: 'Free'
+  },
+  { 
+    id: 'executive', 
+    name: 'Executive', 
+    color: '#1a1a2e', 
+    free: true, 
+    icon: '👔', 
+    description: 'Corporate & sophisticated',
+    category: 'Free'
+  },
+  { 
+    id: 'ats-optimized', 
+    name: 'ATS Optimized', 
+    color: '#2d3748', 
+    free: true, 
+    icon: '🤖', 
+    description: 'Best for ATS parsing',
+    category: 'Free'
+  },
+  
+  // PRO TEMPLATES (6)
+  { 
+    id: 'bold-header', 
+    name: 'Bold Header', 
+    color: '#000000', 
+    free: false, 
+    icon: '⚡', 
+    description: 'Strong visual impact',
+    category: 'Pro'
+  },
+  { 
+    id: 'two-column', 
+    name: 'Two Column', 
+    color: '#2c3e50', 
+    free: false, 
+    icon: '📊', 
+    description: 'Modern split layout',
+    category: 'Pro'
+  },
+  { 
+    id: 'clean-serif', 
+    name: 'Clean Serif', 
+    color: '#3d3d3d', 
+    free: false, 
+    icon: '✒️', 
+    description: 'Elegant serif font',
+    category: 'Pro'
+  },
+  { 
+    id: 'compact', 
+    name: 'Compact', 
+    color: '#2d2d2d', 
+    free: false, 
+    icon: '📋', 
+    description: 'Space-efficient design',
+    category: 'Pro'
+  },
+  { 
+    id: 'dark-sidebar', 
+    name: 'Dark Sidebar', 
+    color: '#1a202c', 
+    free: false, 
+    icon: '🌙', 
+    description: 'Sleek dark accent',
+    category: 'Pro'
+  },
+  { 
+    id: 'european', 
+    name: 'European', 
+    color: '#2c3e50', 
+    free: false, 
+    icon: '🇪🇺', 
+    description: 'Two-column grid layout',
+    category: 'Pro'
+  },
 ];
 
 interface TemplateSelectorProps {
@@ -30,21 +125,25 @@ export default function TemplateSelector({ resumeId, onTemplateChange }: Templat
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [loading, setLoading] = useState<string | null>(null);
   const [hoveredTemplate, setHoveredTemplate] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<'all' | 'free' | 'pro'>('all');
   
   const isPro = user?.plan === 'pro';
   const freeCount = ALL_TEMPLATES.filter(t => t.free).length;
   const proCount = ALL_TEMPLATES.filter(t => !t.free).length;
 
-  // ✅ Remove or comment this useEffect if it's causing error
+  // Filter templates based on category
+  const filteredTemplates = selectedCategory === 'all' 
+    ? ALL_TEMPLATES 
+    : selectedCategory === 'free' 
+      ? ALL_TEMPLATES.filter(t => t.free) 
+      : ALL_TEMPLATES.filter(t => !t.free);
+
+  // ✅ Fix: Empty useEffect with no errors
   useEffect(() => {
-    // Optional: Do something on mount
-    console.log("TemplateSelector mounted");
-  }, []); // ✅ Empty dependency array
+    // Component mounted
+  }, []);
 
   const selectTemplate = async (templateId: string, isFree: boolean) => {
-    console.log("🟡 1. Template clicked:", templateId);
-    console.log("🟡 2. Current resume before update:", currentResume?.template);
-    
     if (!isFree && !isPro) {
       setShowUpgrade(true);
       return;
@@ -58,23 +157,17 @@ export default function TemplateSelector({ resumeId, onTemplateChange }: Templat
         template: templateId,
       });
       
-      console.log("🟢 3. API response:", res.data);
-      console.log("🟢 4. New template from API:", res.data.resume?.template);
-      
       setCurrentResume(res.data.resume);
       
-      console.log("🟢 5. Store updated with template:", res.data.resume?.template);
+      const templateName = ALL_TEMPLATES.find(t => t.id === templateId)?.name || templateId;
+      toast.success(`✅ "${templateName}" template applied successfully!`);
       
-      toast.success(`✨ ${ALL_TEMPLATES.find(t => t.id === templateId)?.name} template applied!`);
-      
-      // Call the callback if provided
       if (onTemplateChange) {
         onTemplateChange();
       }
       
     } catch (error: any) {
-      console.log("🔴 Error:", error);
-      toast.error(error.response?.data?.message || "Template change nahi hua!");
+      toast.error(error.response?.data?.message || "Failed to change template");
     } finally {
       setLoading(null);
     }
@@ -83,31 +176,48 @@ export default function TemplateSelector({ resumeId, onTemplateChange }: Templat
   return (
     <div className="space-y-5">
       {/* Header with Stats */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <div>
-          <h2 className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-            🎨 Resume Templates
+          <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+            <span>📄</span> Resume Templates
           </h2>
-          <p className="text-xs text-gray-400 mt-1">
-            Choose a design that fits your style
+          <p className="text-xs text-gray-500 mt-0.5">
+            Choose from {ALL_TEMPLATES.length} ATS-friendly designs
           </p>
         </div>
         {!isPro && (
-          <motion.div 
-            whileHover={{ scale: 1.05 }}
-            className="text-xs bg-gradient-to-r from-yellow-50 to-orange-50 px-3 py-1.5 rounded-full"
-          >
-            <span className="text-yellow-700 font-semibold">
-              {freeCount} Free • {proCount} Pro 👑
+          <div className="flex items-center gap-2 text-xs bg-gray-100 px-3 py-1.5 rounded-full">
+            <span className="text-gray-600 font-medium">
+              {freeCount} Free • {proCount} Pro
             </span>
-          </motion.div>
+            <Crown size={12} className="text-yellow-500" />
+          </div>
         )}
       </div>
 
+      {/* Category Filter */}
+      <div className="flex gap-2 border-b border-gray-200 pb-2">
+        {['all', 'free', 'pro'].map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setSelectedCategory(cat as any)}
+            className={`px-4 py-1.5 text-xs font-medium rounded-full transition-all ${
+              selectedCategory === cat
+                ? 'bg-gray-900 text-white'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+          >
+            {cat === 'all' && 'All Templates'}
+            {cat === 'free' && '🆓 Free'}
+            {cat === 'pro' && '👑 Pro'}
+          </button>
+        ))}
+      </div>
+
       {/* Templates Grid */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
         <AnimatePresence>
-          {ALL_TEMPLATES.map((t, idx) => {
+          {filteredTemplates.map((t, idx) => {
             const isLocked = !t.free && !isPro;
             const isActive = currentResume?.template === t.id;
             const isLoading = loading === t.id;
@@ -116,143 +226,134 @@ export default function TemplateSelector({ resumeId, onTemplateChange }: Templat
             return (
               <motion.div
                 key={t.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.05 }}
-                whileHover={{ y: -4 }}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: idx * 0.03 }}
+                whileHover={{ y: -2 }}
                 onClick={() => selectTemplate(t.id, t.free)}
-                className={`relative cursor-pointer rounded-xl overflow-hidden border-2 transition-all duration-300 ${
+                className={`relative cursor-pointer rounded-lg border-2 transition-all duration-200 ${
                   isActive
-                    ? 'border-indigo-500 shadow-lg shadow-indigo-100'
-                    : 'border-gray-100 hover:border-gray-300 hover:shadow-md'
-                } ${isLocked ? 'opacity-90' : ''}`}
+                    ? 'border-gray-900 shadow-lg shadow-gray-200'
+                    : 'border-gray-200 hover:border-gray-400 hover:shadow-md'
+                } ${isLocked ? 'opacity-75' : ''}`}
                 onMouseEnter={() => setHoveredTemplate(t.id)}
                 onMouseLeave={() => setHoveredTemplate(null)}
               >
-                {/* Template Preview */}
-                <div className="h-28 relative overflow-hidden" style={{ background: `${t.color}10` }}>
+                {/* Template Preview Card */}
+                <div className="h-24 relative overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
                   <motion.div 
                     className="absolute inset-0 p-3"
-                    animate={isHovered ? { scale: 1.05 } : { scale: 1 }}
-                    transition={{ duration: 0.3 }}
+                    animate={isHovered ? { scale: 1.03 } : { scale: 1 }}
+                    transition={{ duration: 0.2 }}
                   >
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="text-2xl">{t.icon}</div>
-                      {!t.free && isPro && (
-                        <div className="bg-yellow-400 text-yellow-900 text-[8px] font-bold px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+                    <div className="flex items-start justify-between">
+                      <span className="text-xl">{t.icon}</span>
+                      {!t.free && (
+                        <span className="text-[8px] font-bold bg-yellow-400 text-yellow-900 px-1.5 py-0.5 rounded flex items-center gap-0.5">
                           <Star size={8} /> PRO
-                        </div>
+                        </span>
                       )}
                     </div>
-                    <div className="h-1.5 rounded w-2/3 mb-1.5" style={{ background: t.color }} />
-                    <div className="h-1 rounded w-1/2 opacity-60" style={{ background: t.color }} />
+                    {/* Preview lines */}
                     <div className="mt-2 space-y-1">
-                      <div className="h-0.5 rounded bg-gray-200 w-full" />
-                      <div className="h-0.5 rounded bg-gray-200 w-3/4" />
+                      <div className="h-1.5 rounded w-3/4" style={{ background: t.color }} />
+                      <div className="h-1 rounded w-1/2" style={{ background: t.color, opacity: 0.5 }} />
+                      <div className="h-0.5 rounded bg-gray-300 w-full" />
+                      <div className="h-0.5 rounded bg-gray-300 w-2/3" />
                     </div>
                   </motion.div>
                   
+                  {/* Lock Overlay */}
                   {isLocked && (
-                    <motion.div 
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center"
-                    >
-                      <div className="bg-white rounded-xl p-2 flex flex-col items-center shadow-lg">
-                        <Lock size={16} className="text-indigo-600" />
-                        <span className="text-[10px] font-bold text-indigo-600 mt-0.5">PRO</span>
+                    <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px] flex items-center justify-center">
+                      <div className="bg-white rounded-lg p-2 shadow-lg">
+                        <Lock size={14} className="text-gray-700" />
                       </div>
-                    </motion.div>
-                  )}
-                  
-                  {isLoading && (
-                    <div className="absolute inset-0 bg-white/80 flex items-center justify-center">
-                      <div className="w-6 h-6 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin" />
                     </div>
                   )}
                   
+                  {/* Loading Spinner */}
+                  {isLoading && (
+                    <div className="absolute inset-0 bg-white/80 flex items-center justify-center">
+                      <div className="w-5 h-5 border-2 border-gray-900 border-t-transparent rounded-full animate-spin" />
+                    </div>
+                  )}
+                  
+                  {/* Active Badge */}
                   {isActive && (
                     <motion.div 
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      className="absolute top-2 right-2 bg-indigo-500 rounded-full p-1 shadow-lg"
+                      className="absolute top-1.5 right-1.5 bg-gray-900 rounded-full p-0.5 shadow-lg"
                     >
-                      <Check size={12} className="text-white" />
+                      <Check size={10} className="text-white" />
                     </motion.div>
                   )}
                 </div>
 
-                <div className="p-3 bg-white">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-semibold text-gray-800">{t.name}</span>
-                    {!t.free && !isPro && <Crown size={12} className="text-yellow-500" />}
-                    {!t.free && isPro && <Sparkles size={10} className="text-purple-500" />}
+                {/* Template Info */}
+                <div className="p-2.5 bg-white">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-gray-800">{t.name}</span>
+                    {!t.free && isPro && (
+                      <Sparkles size={10} className="text-purple-500" />
+                    )}
                   </div>
-                  <p className="text-[10px] text-gray-400">{t.description}</p>
-                  <div className="mt-2 flex gap-2 text-[8px] text-gray-400">
-                    <span>✓ ATS Friendly</span>
-                    <span>✓ PDF Ready</span>
+                  <p className="text-[8px] text-gray-400 mt-0.5 truncate">{t.description}</p>
+                  <div className="mt-1 flex gap-1.5">
+                    <span className="text-[7px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">ATS</span>
+                    <span className="text-[7px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">PDF</span>
                   </div>
                 </div>
-
-                {isHovered && !isActive && (
-                  <motion.div
-                    layoutId="hoverBorder"
-                    className="absolute inset-0 border-2 border-indigo-300 rounded-xl pointer-events-none"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                  />
-                )}
               </motion.div>
             );
           })}
         </AnimatePresence>
       </div>
 
-      {/* Current Template Badge */}
+      {/* Current Template Status */}
       {currentResume?.template && (
         <motion.div 
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-3 border border-indigo-100"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="flex items-center justify-between bg-gray-50 rounded-lg px-4 py-2.5 border border-gray-200"
         >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
-                <Check size={14} className="text-indigo-600" />
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">Active Template</p>
-                <p className="text-sm font-semibold text-gray-800">
-                  {ALL_TEMPLATES.find(t => t.id === currentResume.template)?.name || currentResume.template}
-                </p>
-              </div>
+          <div className="flex items-center gap-3">
+            <div className="w-7 h-7 bg-gray-900 rounded-lg flex items-center justify-center">
+              <Check size={12} className="text-white" />
             </div>
-            <div className="text-[10px] text-gray-400">Applied ✓</div>
+            <div>
+              <p className="text-[10px] text-gray-500">Active Template</p>
+              <p className="text-sm font-semibold text-gray-800">
+                {ALL_TEMPLATES.find(t => t.id === currentResume.template)?.name || currentResume.template}
+              </p>
+            </div>
           </div>
+          <span className="text-[10px] text-gray-400">✓ Applied</span>
         </motion.div>
       )}
 
-      {/* Pro Features List */}
+      {/* Pro Upgrade Banner */}
       {!isPro && (
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg p-3 border border-yellow-100"
+          className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg p-3 border border-gray-200"
         >
-          <div className="flex items-start gap-2">
-            <Crown size={14} className="text-yellow-600 mt-0.5" />
-            <div className="flex-1">
-              <p className="text-xs font-semibold text-yellow-800">Pro Templates Include:</p>
-              <p className="text-[10px] text-yellow-700 mt-1">
-                ✨ 7 Premium Designs • 🎨 Creative Layouts • 📄 Unlimited Downloads
+          <div className="flex items-start gap-2.5">
+            <div className="w-8 h-8 bg-yellow-400 rounded-lg flex items-center justify-center flex-shrink-0">
+              <Crown size={14} className="text-yellow-900" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-semibold text-gray-800">Upgrade to Pro</p>
+              <p className="text-[10px] text-gray-500 mt-0.5">
+                Unlock {proCount} premium templates + unlimited resumes
               </p>
               <button
                 onClick={() => window.location.href = '/upgrade'}
-                className="mt-2 text-[10px] font-semibold text-indigo-600 hover:text-indigo-700"
+                className="mt-1.5 text-[10px] font-medium text-gray-900 hover:text-gray-700 flex items-center gap-1"
               >
-                Upgrade to Pro →
+                Upgrade Now <ArrowRight size={10} />
               </button>
             </div>
           </div>
@@ -273,26 +374,22 @@ export default function TemplateSelector({ resumeId, onTemplateChange }: Templat
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl"
+              className="bg-white rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
-              <motion.div 
-                animate={{ rotate: [0, 10, -10, 0] }}
-                transition={{ duration: 0.5 }}
-                className="w-20 h-20 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg"
-              >
-                <Crown size={40} className="text-white" />
-              </motion.div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">Unlock Pro Templates! 👑</h3>
-              <p className="text-gray-500 mb-6 text-sm">
-                Get access to all 10 premium templates, unlimited resumes, and AI-powered suggestions.
+              <div className="w-16 h-16 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Crown size={32} className="text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Unlock Pro Templates 👑</h3>
+              <p className="text-gray-500 text-sm mb-6">
+                Get access to {proCount} premium templates, unlimited resumes, and AI-powered suggestions.
               </p>
               <div className="space-y-3">
                 <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => { setShowUpgrade(false); window.location.href = '/upgrade'; }}
-                  className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-xl font-semibold shadow-lg"
+                  className="w-full bg-gray-900 text-white py-3 rounded-xl font-semibold shadow-lg text-sm"
                 >
                   🚀 Upgrade Now — ₹299/month
                 </motion.button>
