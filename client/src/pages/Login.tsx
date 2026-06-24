@@ -1,21 +1,21 @@
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import { motion } from 'framer-motion';
-import { Mail, Lock, ArrowRight, LogIn } from 'lucide-react';
+import { Mail, Lock, ArrowLeft, ArrowRight, ShieldCheck, Eye, EyeOff, LogIn } from 'lucide-react';
 import api from '../api';
 import { useAuthStore } from '../store/useAuthStore';
-import type { LoginForm, AuthResponse } from "../types";
-import { useEffect } from 'react';
+import type { LoginForm, AuthResponse } from '../types';
 
 export default function Login() {
   const navigate = useNavigate();
   const { setAuth, isLoggedIn } = useAuthStore();
+  const [showPass, setShowPass] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (isLoggedIn) {
-      navigate('/dashboard', { replace: true });
-    }
+    setMounted(true);
+    if (isLoggedIn) navigate('/dashboard', { replace: true });
   }, [isLoggedIn, navigate]);
 
   const {
@@ -36,159 +36,185 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center px-4">
-      <div className="max-w-md w-full">
-        {/* Back to Home Button */}
-        <motion.button
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          onClick={() => navigate('/')}
-          className="flex items-center gap-2 text-gray-500 hover:text-indigo-600 mb-6 transition group"
-        >
-          <ArrowRight size={16} className="group-hover:-translate-x-1 transition" />
-          <span className="text-sm">Back to Home</span>
-        </motion.button>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-10">
+      <div
+        className={`w-full max-w-md transition-all duration-500 ${
+          mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+        }`}
+      >
+        {/* Card */}
+        <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
 
-        {/* Main Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 30, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden border border-white/50"
-        >
-          {/* Decorative Header */}
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-8 text-white text-center relative overflow-hidden">
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2, type: 'spring' }}
-              className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4 relative z-10"
+          {/* Top Section */}
+          <div className="relative overflow-hidden px-8 pt-8 pb-7 border-b border-gray-100">
+            {/* Background blobs */}
+            <div className="absolute w-44 h-44 rounded-full bg-violet-400 opacity-[0.06] -top-16 -right-14 pointer-events-none" />
+            <div className="absolute w-56 h-56 rounded-full bg-violet-400 opacity-[0.06] -bottom-24 -left-20 pointer-events-none" />
+
+            {/* Back button */}
+            <button
+              onClick={() => navigate('/')}
+              className="relative z-10 flex items-center gap-1.5 text-sm text-gray-400 hover:text-violet-600 mb-6 transition-colors group"
             >
-              <LogIn size={32} className="text-white" />
-            </motion.div>
-            <motion.h1
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="text-3xl font-bold mb-2 relative z-10"
-            >
-              Welcome Back! 👋
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="text-indigo-200 text-sm relative z-10"
-            >
-              Login to your account
-            </motion.p>
-            {/* Floating circles */}
-            <div className="absolute top-0 left-0 w-32 h-32 bg-white/10 rounded-full -translate-x-16 -translate-y-16" />
-            <div className="absolute bottom-0 right-0 w-40 h-40 bg-white/10 rounded-full translate-x-20 translate-y-20" />
+              <ArrowLeft
+                size={15}
+                className="transition-transform group-hover:-translate-x-0.5"
+              />
+              Back to home
+            </button>
+
+            {/* Icon */}
+            <div className="relative z-10 w-12 h-12 rounded-xl border border-gray-100 bg-gray-50 flex items-center justify-center mb-5">
+              <LogIn size={20} className="text-violet-500" />
+            </div>
+
+            {/* Heading */}
+            <div className="relative z-10">
+              <h1 className="text-xl font-medium text-gray-900 flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-violet-500 inline-block" />
+                Welcome back
+              </h1>
+              <p className="text-sm text-gray-400 mt-1">Login to your account to continue</p>
+
+              {/* Security badge */}
+              <span className="inline-flex items-center gap-1.5 mt-3 text-xs text-violet-700 bg-violet-50 rounded-full px-3 py-1">
+                <ShieldCheck size={12} />
+                256-bit encrypted
+              </span>
+            </div>
           </div>
 
           {/* Form */}
-          <div className="p-6 sm:p-8">
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-              {/* Email Field */}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.5 }}
+          <div className="px-8 py-7">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
+
+              {/* Email */}
+              <div
+                className={`transition-all duration-500 delay-100 ${
+                  mounted ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'
+                }`}
               >
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Email Address
+                <label className="block text-xs font-medium text-gray-500 mb-1.5">
+                  Email address
                 </label>
                 <div className="relative">
-                  <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <Mail
+                    size={15}
+                    className={`absolute left-3 top-1/2 -translate-y-1/2 transition-colors ${
+                      errors.email ? 'text-red-400' : 'text-gray-300'
+                    }`}
+                  />
                   <input
-                    {...register('email', { required: 'Email is required!' })}
+                    {...register('email', {
+                      required: 'Email is required',
+                      pattern: { value: /^\S+@\S+$/i, message: 'Enter a valid email' },
+                    })}
                     type="email"
                     placeholder="john@example.com"
-                    className="w-full border border-gray-200 rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition bg-gray-50/50"
+                    className={`w-full pl-9 pr-4 py-2.5 text-sm rounded-lg border bg-gray-50 text-gray-900 placeholder-gray-300 outline-none transition-all
+                      focus:bg-white focus:border-violet-400 focus:ring-2 focus:ring-violet-100
+                      ${errors.email ? 'border-red-300 bg-red-50' : 'border-gray-200'}`}
                   />
                 </div>
                 {errors.email && (
-                  <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-500 text-xs mt-1">
-                    {errors.email.message}
-                  </motion.p>
+                  <p className="text-xs text-red-400 mt-1">{errors.email.message}</p>
                 )}
-              </motion.div>
+              </div>
 
-              {/* Password Field */}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.6 }}
+              {/* Password */}
+              <div
+                className={`transition-all duration-500 delay-150 ${
+                  mounted ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'
+                }`}
               >
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="block text-xs font-medium text-gray-500 mb-1.5">
                   Password
                 </label>
                 <div className="relative">
-                  <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                  <input
-                    {...register('password', { required: 'Password is required!' })}
-                    type="password"
-                    placeholder="••••••••"
-                    className="w-full border border-gray-200 rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition bg-gray-50/50"
+                  <Lock
+                    size={15}
+                    className={`absolute left-3 top-1/2 -translate-y-1/2 transition-colors ${
+                      errors.password ? 'text-red-400' : 'text-gray-300'
+                    }`}
                   />
+                  <input
+                    {...register('password', { required: 'Password is required' })}
+                    type={showPass ? 'text' : 'password'}
+                    placeholder="Your password"
+                    className={`w-full pl-9 pr-10 py-2.5 text-sm rounded-lg border bg-gray-50 text-gray-900 placeholder-gray-300 outline-none transition-all
+                      focus:bg-white focus:border-violet-400 focus:ring-2 focus:ring-violet-100
+                      ${errors.password ? 'border-red-300 bg-red-50' : 'border-gray-200'}`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPass(!showPass)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 hover:text-violet-500 transition-colors"
+                    aria-label="Toggle password visibility"
+                  >
+                    {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
+                  </button>
                 </div>
                 {errors.password && (
-                  <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-500 text-xs mt-1">
-                    {errors.password.message}
-                  </motion.p>
+                  <p className="text-xs text-red-400 mt-1">{errors.password.message}</p>
                 )}
-              </motion.div>
+                <div className="text-right mt-1.5">
+                  <Link
+                    to="/forgot-password"
+                    className="text-xs text-violet-600 hover:underline"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
+              </div>
 
-              {/* Submit Button */}
-              <motion.button
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7 }}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3.5 rounded-xl font-bold text-base hover:from-indigo-700 hover:to-purple-700 disabled:opacity-50 transition-all duration-200 shadow-lg shadow-indigo-200 flex items-center justify-center gap-2"
+              {/* Submit */}
+              <div
+                className={`transition-all duration-500 delay-200 ${
+                  mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                }`}
               >
-                {isSubmitting ? (
-                  <>
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Logging in...
-                  </>
-                ) : (
-                  <>
-                    Login 🚀
-                    <ArrowRight size={16} />
-                  </>
-                )}
-              </motion.button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full flex items-center justify-center gap-2 bg-violet-500 hover:bg-violet-600 active:scale-[0.99] disabled:opacity-50 text-white text-sm font-medium py-2.5 rounded-lg transition-all mt-2"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Logging in...
+                    </>
+                  ) : (
+                    <>
+                      Login
+                      <ArrowRight size={15} />
+                    </>
+                  )}
+                </button>
+              </div>
             </form>
 
-            {/* Register Link */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8 }}
-              className="text-center text-gray-500 mt-6 text-sm"
-            >
-              Don't have an account?{' '}
-              <Link to="/register" className="text-indigo-600 font-semibold hover:underline">
-                Create Account
-              </Link>
-            </motion.p>
+            {/* Divider */}
+            <div className="flex items-center gap-3 my-5">
+              <div className="flex-1 h-px bg-gray-100" />
+              <span className="text-xs text-gray-300">new here?</span>
+              <div className="flex-1 h-px bg-gray-100" />
+            </div>
 
-            {/* Footer Note */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.9 }}
-              className="text-center text-gray-400 text-xs mt-4"
-            >
-              Secure login with 256-bit encryption
-            </motion.p>
+            <p className="text-center text-sm text-gray-400">
+              <Link
+                to="/register"
+                className="text-violet-600 font-medium hover:underline"
+              >
+                Create an account
+              </Link>
+            </p>
+
+            <p className="text-center text-xs text-gray-300 flex items-center justify-center gap-1.5 mt-4">
+              <ShieldCheck size={12} />
+              Secure login with end-to-end encryption
+            </p>
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );
