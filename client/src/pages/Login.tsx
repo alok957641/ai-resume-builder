@@ -7,9 +7,9 @@ import api from '../api';
 import { useAuthStore } from '../store/useAuthStore';
 import type { LoginForm, AuthResponse } from '../types';
 
-// ── Replace with any property image you like ──
+// ── AI Resume Builder Theme ──
 const HERO_IMAGE =
-  'https://i.pinimg.com/736x/7e/84/cb/7e84cb0169b6dd9d9501e58a06106d09.jpg';
+  'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800'; // Professional resume image
 
 export default function Login() {
   const navigate = useNavigate();
@@ -52,7 +52,7 @@ export default function Login() {
           {/* Background image */}
           <img
             src={HERO_IMAGE}
-            alt="Luxury modern home"
+            alt="AI Resume Builder"
             className="absolute inset-0 w-full h-full object-cover"
           />
 
@@ -72,20 +72,23 @@ export default function Login() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
-                <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z" />
-                <path d="M9 21V12h6v9" />
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="16" y1="13" x2="8" y2="13" />
+                <line x1="16" y1="17" x2="8" y2="17" />
+                <polyline points="10 9 9 9 8 9" />
               </svg>
             </div>
-            <span className="text-white font-medium text-[15px] tracking-wide">Realnest</span>
+            <span className="text-white font-medium text-[15px] tracking-wide">ResumeAI</span>
           </div>
 
           {/* Bottom tagline */}
           <div className="relative z-10 mt-auto p-7 pb-9">
             <h2 className="text-white text-[26px] font-medium leading-snug mb-2">
-              Find your<br />sweet home
+              Build Your<br />Dream Resume
             </h2>
             <p className="text-white/60 text-[13px] leading-relaxed max-w-xs">
-              Schedule a visit in just a few clicks
+              AI-powered resume builder for your dream job
             </p>
             {/* Slide dots */}
             <div className="flex items-center gap-1.5 mt-5">
@@ -104,16 +107,16 @@ export default function Login() {
               to="/register"
               className="bg-gray-900 text-white text-[13px] font-medium px-4 py-2 rounded-full hover:bg-gray-700 transition-colors"
             >
-              Sign in
+              Sign up
             </Link>
           </div>
 
           {/* Heading */}
           <div className="mb-7">
             <h1 className="text-[20px] font-medium text-gray-900 mb-1">
-              Welcome Back to Realnest!
+              Welcome Back!
             </h1>
-            <p className="text-[13px] text-gray-400">Sign in to your account</p>
+            <p className="text-[13px] text-gray-400">Sign in to continue building your resume</p>
           </div>
 
           {/* Form */}
@@ -199,7 +202,7 @@ export default function Login() {
                 </>
               ) : (
                 <>
-                  Login
+                  Continue
                   <ArrowRight size={14} />
                 </>
               )}
@@ -209,7 +212,7 @@ export default function Login() {
           {/* Divider */}
           <div className="flex items-center gap-3 my-5">
             <div className="flex-1 h-px bg-gray-100" />
-            <span className="text-[11px] text-gray-300 whitespace-nowrap">Instan Login</span>
+            <span className="text-[11px] text-gray-300 whitespace-nowrap">Quick Login</span>
             <div className="flex-1 h-px bg-gray-100" />
           </div>
 
@@ -226,7 +229,7 @@ export default function Login() {
                 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
                 <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
               </svg>
-              Continue with Google
+              Google
             </button>
 
             <button
@@ -237,15 +240,15 @@ export default function Login() {
               <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" fill="#1877F2"/>
               </svg>
-              Continue with Facebook
+              Facebook
             </button>
           </div>
 
           {/* Register link */}
           <p className="text-center text-[12px] text-gray-400 mt-6">
-            Don't have any account?{' '}
+            Don't have an account?{' '}
             <Link to="/register" className="text-violet-600 font-medium hover:underline">
-              Register
+              Create Account
             </Link>
           </p>
         </div>
