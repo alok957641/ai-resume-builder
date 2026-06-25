@@ -9,7 +9,7 @@ import type { LoginForm, AuthResponse } from '../types';
 
 // ── Replace with any property image you like ──
 const HERO_IMAGE =
-  'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=900&q=80';
+  'https://i.pinimg.com/736x/7e/84/cb/7e84cb0169b6dd9d9501e58a06106d09.jpg';
 
 export default function Login() {
   const navigate = useNavigate();
