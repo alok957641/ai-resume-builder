@@ -9,7 +9,7 @@ import type { RegisterForm, AuthResponse } from '../types';
 
 // ── Apni property image yahan daal do ──
 const HERO_IMAGE =
-  'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=900&q=80';
+  'https://i.pinimg.com/736x/c9/6a/22/c96a224fa0624eb2c8f5fd59ee979d03.jpg';
 
 function getStrength(password: string) {
   let score = 0;
