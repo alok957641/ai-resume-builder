@@ -7,9 +7,9 @@ import api from '../api';
 import { useAuthStore } from '../store/useAuthStore';
 import type { RegisterForm, AuthResponse } from '../types';
 
-// ── Apni property image yahan daal do ──
+// ── AI Resume Builder Theme ──
 const HERO_IMAGE =
-  'https://i.pinimg.com/736x/c9/6a/22/c96a224fa0624eb2c8f5fd59ee979d03.jpg';
+  'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800'; // Professional/education image
 
 function getStrength(password: string) {
   let score = 0;
@@ -72,7 +72,7 @@ export default function Register() {
         <div className="relative hidden md:flex flex-col flex-1 overflow-hidden min-h-[620px]">
           <img
             src={HERO_IMAGE}
-            alt="Modern luxury home"
+            alt="AI Resume Builder"
             className="absolute inset-0 w-full h-full object-cover"
           />
           {/* Gradient overlay */}
@@ -91,20 +91,23 @@ export default function Register() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
-                <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z" />
-                <path d="M9 21V12h6v9" />
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="16" y1="13" x2="8" y2="13" />
+                <line x1="16" y1="17" x2="8" y2="17" />
+                <polyline points="10 9 9 9 8 9" />
               </svg>
             </div>
-            <span className="text-white font-medium text-[15px] tracking-wide">Realnest</span>
+            <span className="text-white font-medium text-[15px] tracking-wide">ResumeAI</span>
           </div>
 
           {/* Bottom tagline */}
           <div className="relative z-10 mt-auto p-7 pb-9">
             <h2 className="text-white text-[25px] font-medium leading-snug mb-2">
-              Start your journey<br />to a new home
+              Start Your<br />Career Journey
             </h2>
             <p className="text-white/60 text-[13px] leading-relaxed max-w-[260px]">
-              Join thousands finding their dream property in just a few clicks
+              Create an AI-powered resume and land your dream job
             </p>
             {/* Slide dots */}
             <div className="flex items-center gap-1.5 mt-5">
@@ -126,14 +129,14 @@ export default function Register() {
               to="/login"
               className="bg-gray-900 text-white text-[13px] font-medium px-4 py-2 rounded-full hover:bg-gray-700 transition-colors"
             >
-              Sign in
+              Log in
             </Link>
           </div>
 
           {/* Heading */}
           <div className="mb-6">
             <h1 className="text-[19px] font-medium text-gray-900 mb-1">Create your account</h1>
-            <p className="text-[13px] text-gray-400">Start your professional journey today</p>
+            <p className="text-[13px] text-gray-400">Start building your professional resume today</p>
           </div>
 
           {/* ── Form ── */}
@@ -264,7 +267,7 @@ export default function Register() {
                   </>
                 ) : (
                   <>
-                    Create account
+                    Get Started
                     <ArrowRight size={14} />
                   </>
                 )}
@@ -275,7 +278,7 @@ export default function Register() {
           {/* Social login */}
           <div className="flex items-center gap-3 mt-4 mb-3">
             <div className="flex-1 h-px bg-gray-100" />
-            <span className="text-[11px] text-gray-300 whitespace-nowrap">or sign up with</span>
+            <span className="text-[11px] text-gray-300 whitespace-nowrap">or continue with</span>
             <div className="flex-1 h-px bg-gray-100" />
           </div>
 
@@ -330,7 +333,7 @@ export default function Register() {
           <p className="text-center text-[12.5px] text-gray-400 mt-4">
             Already have an account?{' '}
             <Link to="/login" className="text-violet-600 font-medium hover:underline">
-              Sign in
+              Log in
             </Link>
           </p>
 
