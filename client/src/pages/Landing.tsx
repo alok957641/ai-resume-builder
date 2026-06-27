@@ -1,885 +1,916 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-    CheckCircle,
-    ArrowRight,
-    Sparkles,
-    Shield,
-    Zap,
-    Star,
-    Menu,
-    X,
-    ChevronRight,
-    Globe,
-    Brain,
-    FolderKanban,
-    Share2,
-    TrendingUp,
-    FileText,
-    LayoutTemplate,
-    Mail,
-} from 'lucide-react';
+import { CheckCircle, ArrowRight, Sparkles, Shield, Star, Zap, FileText, TrendingUp, Users, Award } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 
-// ---------- Mini Resume Card Component (Hero Phone Mockup) ----------
 function MiniResumeCard() {
-    return (
-        <div className="bg-white rounded-3xl shadow-2xl p-6 w-72 border border-white/20 backdrop-blur-sm">
-            <div className="bg-gradient-to-r from-[#7C5CFF] to-[#A855F7] rounded-2xl p-5 mb-4 text-white relative overflow-hidden">
-                <div className="absolute -top-10 -right-10 w-24 h-24 bg-white/20 rounded-full blur-2xl" />
-                <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-white/20 rounded-full blur-2xl" />
-                <div className="text-lg font-bold">Alok Singh</div>
-                <div className="text-purple-200 text-xs mt-1">Senior Software Engineer</div>
-                <div className="text-purple-300 text-[10px] mt-2 flex items-center gap-1">
-                    <Mail size={10} /> rajalok957641@email.com • Mumbai, India
-                </div>
-            </div>
-            <div className="space-y-2">
-                <div className="text-[10px] font-bold text-[#7C5CFF] uppercase tracking-wider">Experience</div>
-                <div className="text-xs font-semibold text-gray-800">Senior Engineer — Google India</div>
-                <div className="text-[10px] text-gray-400">2022 – Present</div>
-                <div className="text-[10px] text-gray-600">• Led microservices migration, reduced latency by 40%</div>
-                <div className="flex flex-wrap gap-1.5 mt-2">
-                    {['React', 'Node.js', 'AWS', 'Docker'].map((s) => (
-                        <span
-                            key={s}
-                            className="text-[9px] bg-[#F0EDFF] text-[#7C5CFF] px-2 py-0.5 rounded-full font-medium"
-                        >
-                            {s}
-                        </span>
-                    ))}
-                </div>
-            </div>
+  return (
+    <div className="resume-card">
+      <div className="resume-header">
+        <div className="resume-avatar">AS</div>
+        <div>
+          <div className="resume-name">Alok Singh</div>
+          <div className="resume-title">Senior Software Engineer</div>
+          <div className="resume-contact">rajalok957641@email.com • Mumbai, India</div>
         </div>
-    );
+      </div>
+      <div className="resume-body">
+        <div className="resume-section-label">Experience</div>
+        <div className="resume-job">Senior Engineer — Google India</div>
+        <div className="resume-date">2022 – Present</div>
+        <div className="resume-bullet">• Led microservices migration, reduced latency by 40%</div>
+        <div className="resume-bullet">• Built real-time data pipeline serving 2M+ users daily</div>
+        <div className="resume-skills">
+          {['React', 'Node.js', 'AWS', 'Docker'].map(s => (
+            <span key={s} className="skill-tag">{s}</span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }
 
-// ---------- Feature Card Component (for Bento Grid) ----------
-function FeatureCard({
-    icon,
-    title,
-    desc,
-    bg,
-    colSpan = 1,
-    rowSpan = 1,
-}: {
-    icon: React.ReactNode;
-    title: string;
-    desc: string;
-    bg: string;
-    colSpan?: number;
-    rowSpan?: number;
-}) {
-    const colClass = colSpan === 2 ? 'md:col-span-2' : '';
-    const rowClass = rowSpan === 2 ? 'md:row-span-2' : '';
-    return (
-        <div
-            className={`group relative bg-white/70 backdrop-blur-xl border border-[#ECEBFF] rounded-3xl p-6 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 ${colClass} ${rowClass} overflow-hidden`}
-        >
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-50/30 to-indigo-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <div className="relative z-10">
-                <div className={`w-14 h-14 ${bg} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-105 transition`}>
-                    {icon}
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
-            </div>
-        </div>
-    );
-}
-
-// ---------- Main Landing Component ----------
 export default function Landing() {
-    const navigate = useNavigate();
-    const [loaded, setLoaded] = useState(false);
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const { user } = useAuthStore();
+  const navigate = useNavigate();
+  const [loaded, setLoaded] = useState(false);
+  const [activeTemplate, setActiveTemplate] = useState('All');
+  const { user } = useAuthStore();
 
-    useEffect(() => {
-        setTimeout(() => setLoaded(true), 100);
-    }, []);
+  useEffect(() => { setTimeout(() => setLoaded(true), 120); }, []);
 
-    const scrollToSection = (sectionId: string) => {
-        const element = document.getElementById(sectionId);
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-        }
-        setMobileMenuOpen(false);
-    };
+  const scrollTo = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  };
 
-    const isAdmin = user?.email === 'rajalok957641@gmail.com';
+  const isAdmin = user?.email === 'rajalok957641@gmail.com';
 
-    // ---------- Data (unchanged from original) ----------
-    const navItems = [
-        { label: 'Features', id: 'features' },
-        { label: 'Templates', id: 'templates' },
-        { label: 'Pricing', id: 'pricing' },
-        { label: 'Blog', id: 'blog' },
-    ];
+  const templates = [
+    { name: 'Modern Blue', color: '#4f46e5', tag: 'Popular', cat: 'Modern' },
+    { name: 'Emerald Pro', color: '#059669', tag: 'New', cat: 'Modern' },
+    { name: 'ATS Classic', color: '#374151', tag: 'ATS ✓', cat: 'ATS' },
+    { name: 'Rose Elegant', color: '#e11d48', tag: 'PRO', cat: 'Professional' },
+    { name: 'Tech Modern', color: '#0891b2', tag: 'PRO', cat: 'Modern' },
+    { name: 'Minimal Clean', color: '#7c3aed', tag: 'Simple', cat: 'Simple' },
+  ];
 
-    const features = [
-        {
-            icon: <Brain size={24} className="text-[#7C5CFF]" />,
-            title: 'AI Improvement',
-            desc: 'Improve summary and experience with AI. Professional language, action words, ATS friendly.',
-            bg: 'bg-[#F0EDFF]',
-        },
-        {
-            icon: <Zap size={24} className="text-amber-600" />,
-            title: 'Live Preview',
-            desc: 'Type and see your resume update in real-time. No waiting.',
-            bg: 'bg-amber-50',
-        },
-        {
-            icon: <FileText size={24} className="text-rose-600" />,
-            title: 'PDF Download',
-            desc: 'Download professional PDF with one click. Print-ready format.',
-            bg: 'bg-rose-50',
-        },
-        {
-            icon: <TrendingUp size={24} className="text-cyan-600" />,
-            title: 'ATS Score Check',
-            desc: 'Get instant feedback on how well your resume matches job descriptions.',
-            bg: 'bg-cyan-50',
-        },
-        {
-            icon: <LayoutTemplate size={24} className="text-emerald-600" />,
-            title: 'Multiple Templates',
-            desc: 'Choose from 10+ professionally designed templates for any industry.',
-            bg: 'bg-emerald-50',
-        },
-        {
-            icon: <Share2 size={24} className="text-indigo-600" />,
-            title: 'Public Resume Link',
-            desc: 'Share your resume online with a unique link to impress recruiters.',
-            bg: 'bg-indigo-50',
-        },
-    ];
+  const tagColor: Record<string, string> = {
+    'Popular': '#f59e0b', 'New': '#db2777', 'ATS ✓': '#059669', 'PRO': '#4f46e5', 'Simple': '#7c3aed'
+  };
 
-    const stats = [
-        { number: '10K+', label: 'Resumes Created', color: '#7C5CFF' },
-        { number: '48%', label: 'More Interviews', color: '#16a34a' },
-        { number: '12%', label: 'Salary Increase', color: '#d97706' },
-    ];
+  return (
+    <div className="page-root">
 
-    const testimonials = [
-        {
-            name: 'Priya Sharma',
-            role: 'Software Engineer at Microsoft',
-            quote: 'ResumeAI helped me land my dream job! The AI suggestions were spot on.',
-            avatar: 'PS',
-            rating: 5,
-        },
-        {
-            name: 'Rahul Verma',
-            role: 'Product Manager at Amazon',
-            quote: 'I got 3 interview calls within a week of using this tool. Absolutely brilliant!',
-            avatar: 'RV',
-            rating: 5,
-        },
-        {
-            name: 'Ananya Patel',
-            role: 'Data Scientist at Google',
-            quote: 'The ATS score feature is a game-changer. My resume now gets past filters easily.',
-            avatar: 'AP',
-            rating: 5,
-        },
-    ];
+      {/* ── NAVBAR ── */}
+      <nav className="navbar">
+        <div className="nav-inner">
+          <div className="nav-logo" onClick={() => navigate('/')}>
+            <div className="logo-icon">R</div>
+            <span className="logo-text">Resume<span className="logo-accent">AI</span></span>
+          </div>
 
-    const howItWorks = [
-        {
-            step: '01',
-            title: 'Sign Up Free',
-            desc: 'Create your account in seconds. No credit card needed.',
-        },
-        {
-            step: '02',
-            title: 'Enter Your Details',
-            desc: 'Fill in your work experience, education, skills, and projects.',
-        },
-        {
-            step: '03',
-            title: 'Get AI-Powered Resume',
-            desc: 'Let our AI generate a professional, ATS-friendly resume instantly.',
-        },
-    ];
+          <div className="nav-links">
+            <button onClick={() => scrollTo('features')}>Features</button>
+            <button onClick={() => navigate('/templates')}>Templates</button>
+            <button onClick={() => scrollTo('pricing')}>Pricing</button>
+            <button onClick={() => scrollTo('blog')}>Blog</button>
+          </div>
 
-    const templates = [
-        { name: 'Modern Blue', color: '#7C5CFF', tag: 'Popular ⭐' },
-        { name: 'Emerald Pro', color: '#059669', tag: 'New' },
-        { name: 'ATS Classic', color: '#374151', tag: 'ATS ✓' },
-        { name: 'Rose Elegant', color: '#e11d48', tag: 'PRO' },
-        { name: 'Tech Modern', color: '#0891b2', tag: 'PRO' },
-    ];
+          <div className="nav-actions">
+            {isAdmin && (
+              <button onClick={() => navigate('/admin')} className="btn-admin">
+                <Shield size={15} /> Admin
+              </button>
+            )}
+            <button onClick={() => navigate('/login')} className="btn-ghost">Log in</button>
+            <button onClick={() => navigate('/register')} className="btn-primary-sm">Get Started Free</button>
+          </div>
+        </div>
+      </nav>
 
-    const blogPosts = [
-        {
-            title: 'How to Write an ATS-Friendly Resume',
-            date: 'Dec 15, 2024',
-            readTime: '5 min read',
-            image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=400&h=200&fit=crop',
-        },
-        {
-            title: 'Top 10 Resume Keywords for 2024',
-            date: 'Dec 10, 2024',
-            readTime: '4 min read',
-            image: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=200&fit=crop',
-        },
-        {
-            title: 'Remote Job Application Tips',
-            date: 'Dec 5, 2024',
-            readTime: '6 min read',
-            image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=400&h=200&fit=crop',
-        },
-    ];
+      {/* ── HERO ── */}
+      <section className="hero-section">
+        <div className="hero-bg-blob blob1" />
+        <div className="hero-bg-blob blob2" />
+        <div className="hero-bg-blob blob3" />
 
-    return (
-        <div
-            className="min-h-screen bg-[#FAFAFF] font-sans antialiased"
-            style={{ fontFamily: "'Inter', system-ui, sans-serif" }}
-        >
-            {/* ========== BACKGROUND DECORATIONS ========== */}
-            <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
-                <div className="absolute top-0 -left-40 w-96 h-96 bg-purple-300/30 rounded-full blur-3xl animate-pulse" />
-                <div className="absolute bottom-0 -right-40 w-96 h-96 bg-indigo-300/20 rounded-full blur-3xl animate-pulse delay-1000" />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-purple-200/10 rounded-full blur-3xl" />
-                <div className="absolute top-20 left-20 w-72 h-72 bg-purple-200/20 rounded-full blur-3xl" />
-                <div className="absolute bottom-20 right-20 w-72 h-72 bg-indigo-200/20 rounded-full blur-3xl" />
+        <div className={`hero-inner fade-up ${loaded ? 'in' : ''}`}>
+          {/* LEFT */}
+          <div className="hero-left">
+            <div className="hero-badge">
+              <span className="badge-dot" />
+              AI-Powered Resume Builder &nbsp;·&nbsp; 100% Free
             </div>
 
-            {/* ========== NAVBAR ========== */}
-            <nav className="sticky top-0 z-50 w-full px-4 sm:px-6 lg:px-8 py-4 bg-white/60 backdrop-blur-xl border-b border-[#ECEBFF]/50 shadow-sm">
-                <div className="max-w-7xl mx-auto flex justify-between items-center">
-                    {/* Logo */}
-                    <div
-                        className="flex items-center gap-2.5 cursor-pointer"
-                        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                    >
-                        <div className="w-10 h-10 bg-gradient-to-br from-[#7C5CFF] to-[#A855F7] rounded-2xl flex items-center justify-center text-white font-extrabold text-lg shadow-lg shadow-purple-200">
-                            R
-                        </div>
-                        <span className="font-bold text-2xl text-gray-900 tracking-tight">
-                            Resume<span className="text-[#7C5CFF]">AI</span>
-                        </span>
-                    </div>
+            <h1 className="hero-headline">
+              Build Your <span className="gradient-text">Dream Resume</span><br />
+              with AI — in Minutes
+            </h1>
 
-                    {/* Desktop Nav Links */}
-                    <div className="hidden md:flex items-center gap-8">
-                        {navItems.map((item) => (
-                            <button
-                                key={item.id}
-                                onClick={() => scrollToSection(item.id)}
-                                className="text-sm font-medium text-gray-600 hover:text-[#7C5CFF] transition relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#7C5CFF] after:scale-x-0 hover:after:scale-x-100 after:transition after:duration-200 pb-0.5"
-                            >
-                                {item.label}
-                            </button>
-                        ))}
-                    </div>
+            <p className="hero-sub">
+              Smart AI suggestions, ATS-friendly templates, and real-time preview.
+              Land more interviews with a resume that actually gets noticed.
+            </p>
 
-                    {/* Right side buttons */}
-                    <div className="flex items-center gap-3">
-                        {isAdmin && (
-                            <button
-                                onClick={() => navigate('/admin')}
-                                className="hidden md:flex items-center gap-2 text-sm font-semibold text-white bg-gradient-to-r from-purple-600 to-indigo-600 px-4 py-2 rounded-xl hover:shadow-lg hover:shadow-purple-200 transition shadow-md"
-                            >
-                                <Shield size={16} />
-                                Admin Panel
-                            </button>
-                        )}
-                        <button
-                            onClick={() => navigate('/login')}
-                            className="hidden md:block text-sm font-medium text-gray-600 hover:text-gray-900 px-4 py-2 rounded-xl hover:bg-gray-50 transition"
-                        >
-                            Log in
-                        </button>
-                        <button
-                            onClick={() => navigate('/register')}
-                            className="hidden md:flex items-center gap-2 text-sm font-semibold text-white bg-gradient-to-r from-[#7C5CFF] to-[#A855F7] px-5 py-2.5 rounded-xl hover:shadow-xl hover:shadow-purple-200 transition shadow-md"
-                        >
-                            Get Started Free <ArrowRight size={16} />
-                        </button>
-                        {/* Mobile menu toggle */}
-                        <button
-                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                            className="md:hidden p-2 rounded-xl hover:bg-gray-100 transition"
-                        >
-                            {mobileMenuOpen ? <X size={24} className="text-gray-700" /> : <Menu size={24} className="text-gray-700" />}
-                        </button>
-                    </div>
+            <div className="hero-btns">
+              <button onClick={() => navigate('/register')} className="btn-cta">
+                Create My Resume <ArrowRight size={18} />
+              </button>
+              <button onClick={() => navigate('/templates')} className="btn-outline">
+                Browse Templates
+              </button>
+            </div>
+
+            <div className="hero-stats">
+              {[
+                { val: '48%', label: 'More Interviews', color: '#10b981' },
+                { val: '10K+', label: 'Resumes Created', color: '#818cf8' },
+                { val: '4.9★', label: 'User Rating', color: '#f59e0b' },
+              ].map(s => (
+                <div key={s.label} className="stat-item">
+                  <span className="stat-val" style={{ color: s.color }}>{s.val}</span>
+                  <span className="stat-label">{s.label}</span>
                 </div>
+              ))}
+            </div>
+          </div>
 
-                {/* Mobile Menu */}
-                {mobileMenuOpen && (
-                    <div className="md:hidden mt-4 pt-4 border-t border-[#ECEBFF] bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg">
-                        <div className="flex flex-col space-y-3 p-4">
-                            {navItems.map((item) => (
-                                <button
-                                    key={item.id}
-                                    onClick={() => scrollToSection(item.id)}
-                                    className="text-left text-sm font-medium text-gray-700 py-2 px-3 rounded-xl hover:bg-purple-50 hover:text-[#7C5CFF] transition"
-                                >
-                                    {item.label}
-                                </button>
-                            ))}
-                            {isAdmin && (
-                                <button
-                                    onClick={() => { navigate('/admin'); setMobileMenuOpen(false); }}
-                                    className="flex items-center gap-2 text-sm font-semibold text-white bg-gradient-to-r from-purple-600 to-indigo-600 px-4 py-2 rounded-xl"
-                                >
-                                    <Shield size={16} /> Admin Panel
-                                </button>
-                            )}
-                            <button
-                                onClick={() => { navigate('/login'); setMobileMenuOpen(false); }}
-                                className="text-left text-sm font-medium text-gray-700 py-2 px-3 rounded-xl hover:bg-gray-50 transition"
-                            >
-                                Log in
-                            </button>
-                            <button
-                                onClick={() => { navigate('/register'); setMobileMenuOpen(false); }}
-                                className="flex items-center justify-center gap-2 text-sm font-semibold text-white bg-gradient-to-r from-[#7C5CFF] to-[#A855F7] px-5 py-3 rounded-xl"
-                            >
-                                Get Started Free <ArrowRight size={16} />
-                            </button>
-                        </div>
-                    </div>
-                )}
-            </nav>
+          {/* RIGHT – floating UI */}
+          <div className={`hero-right fade-up ${loaded ? 'in delay' : ''}`}>
+            <div className="float-stage">
+              <div className="stage-glow" />
+              <div className="card-tilt">
+                <MiniResumeCard />
+              </div>
 
-            {/* ========== HERO SECTION ========== */}
-            <section className="relative overflow-hidden px-4 sm:px-6 lg:px-8 py-16 md:py-24 lg:py-32">
-                <div className="max-w-7xl mx-auto">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-                        {/* Left Content */}
-                        <div className={`transition-all duration-1000 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                            <div className="inline-flex items-center gap-2 bg-[#F0EDFF] text-[#7C5CFF] px-4 py-2 rounded-full text-sm font-semibold mb-6 border border-[#ECEBFF]">
-                                <Sparkles size={16} className="text-[#A855F7]" />
-                                AI-Powered • 100% Free
-                            </div>
-                            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-gray-900 leading-[1.1] tracking-tight mb-6">
-                                Your <br />
-                                <span className="bg-gradient-to-r from-[#7C5CFF] to-[#A855F7] bg-clip-text text-transparent">
-                                    professional AI
-                                </span>
-                                <br />
-                                resume, ready in minutes
-                            </h1>
-                            <p className="text-lg text-gray-500 leading-relaxed mb-8 max-w-lg">
-                                Our AI resume builder saves your time with smart content suggestions and impactful summaries.
-                                Get hired faster, stress-free!
-                            </p>
-                            <div className="flex flex-col sm:flex-row gap-4 mb-10">
-                                <button
-                                    onClick={() => navigate('/register')}
-                                    className="flex items-center justify-center gap-2 bg-gradient-to-r from-[#7C5CFF] to-[#A855F7] text-white px-8 py-4 rounded-2xl text-base font-bold hover:shadow-2xl hover:shadow-purple-200 transition shadow-lg"
-                                >
-                                    Create AI Resume Now <ArrowRight size={18} />
-                                </button>
-                                <button
-                                    onClick={() => navigate('/templates')}
-                                    className="px-8 py-4 border-2 border-[#ECEBFF] rounded-2xl text-base font-semibold text-gray-600 hover:bg-white hover:border-[#7C5CFF] transition"
-                                >
-                                    Browse Templates
-                                </button>
-                            </div>
-                            <div className="flex flex-wrap gap-8">
-                                {stats.map((stat) => (
-                                    <div key={stat.label} className="text-center">
-                                        <div className="text-2xl font-extrabold" style={{ color: stat.color }}>
-                                            {stat.number}
-                                        </div>
-                                        <div className="text-xs text-gray-400 mt-1">{stat.label}</div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Right - Phone Mockup with Floating Cards */}
-                        <div className={`relative flex justify-center transition-all duration-1000 delay-200 ${loaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-                            <div className="relative">
-                                {/* Main phone mockup */}
-                                <div className="relative z-10 bg-white/70 backdrop-blur-xl border border-[#ECEBFF] rounded-[3rem] shadow-2xl p-4">
-                                    <div className="bg-gray-900/5 rounded-[2.5rem] p-1">
-                                        <div className="bg-white rounded-[2.5rem] overflow-hidden shadow-inner">
-                                            <div className="h-12 flex items-center justify-center relative">
-                                                <div className="w-28 h-6 bg-gray-200 rounded-full absolute top-2 left-1/2 -translate-x-1/2" />
-                                            </div>
-                                            <div className="px-4 pb-4">
-                                                <MiniResumeCard />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Floating Cards */}
-                                {/* ATS Score Card */}
-                                <div
-                                    className="absolute -top-6 -right-6 bg-white/80 backdrop-blur-xl border border-[#ECEBFF] rounded-2xl px-4 py-3 shadow-xl z-20 animate-float"
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
-                                            <CheckCircle size={20} className="text-emerald-600" />
-                                        </div>
-                                        <div>
-                                            <div className="text-xs text-gray-400 font-medium">ATS Score</div>
-                                            <div className="flex items-center gap-2">
-                                                <span className="text-xl font-extrabold text-emerald-600">95%</span>
-                                                <span className="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-semibold">Excellent</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* AI Suggestion Card */}
-                                <div
-                                    className="absolute -bottom-6 -left-6 bg-white/80 backdrop-blur-xl border border-[#ECEBFF] rounded-2xl px-4 py-3 shadow-xl z-20 max-w-44 animate-float-delayed"
-                                >
-                                    <div className="flex items-center gap-1.5 mb-1">
-                                        <Sparkles size={14} className="text-purple-500" />
-                                        <span className="text-xs font-bold text-gray-800">AI Suggestion</span>
-                                    </div>
-                                    <div className="text-[10px] text-gray-500 leading-relaxed">
-                                        Add metrics to your experience for 40% better response rate
-                                    </div>
-                                </div>
-
-                                {/* PDF Ready Card */}
-                                <div
-                                    className="absolute top-1/2 -left-8 -translate-y-1/2 bg-amber-100/80 backdrop-blur-sm border border-amber-200 rounded-xl px-3 py-2 shadow-md z-20 animate-float-slower"
-                                >
-                                    <div className="flex items-center gap-1.5">
-                                        <FileText size={14} className="text-amber-700" />
-                                        <span className="text-[10px] font-bold text-amber-800">PDF Ready!</span>
-                                    </div>
-                                </div>
-
-                                {/* Share Resume Card */}
-                                <div
-                                    className="absolute top-1/3 -right-8 bg-white/80 backdrop-blur-xl border border-[#ECEBFF] rounded-xl px-3 py-2 shadow-md z-20 animate-float-delayed"
-                                >
-                                    <div className="flex items-center gap-1.5">
-                                        <Share2 size={14} className="text-indigo-500" />
-                                        <span className="text-[10px] font-semibold text-gray-700">Share Resume</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+              {/* ATS badge */}
+              <div className="float-badge ats-badge" style={{ animationName: 'floatA' }}>
+                <div className="fb-label">ATS Score</div>
+                <div className="fb-row">
+                  <span className="fb-val green">95%</span>
+                  <span className="chip chip-green">Excellent</span>
                 </div>
-            </section>
+              </div>
 
-            {/* ========== TEMPLATES SECTION ========== */}
-            <section id="templates" className="py-20 px-4 sm:px-6 lg:px-8">
-                <div className="max-w-7xl mx-auto">
-                    <div className="text-center max-w-3xl mx-auto mb-14">
-                        <div className="inline-flex items-center gap-2 bg-[#F0EDFF] text-[#7C5CFF] px-4 py-1.5 rounded-full text-sm font-semibold mb-4">
-                            <LayoutTemplate size={14} /> Templates
-                        </div>
-                        <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-3 tracking-tight">
-                            Choose Your <span className="text-[#7C5CFF]">Perfect Design</span>
-                        </h2>
-                        <p className="text-gray-500 text-lg">Simple to use and ready in minutes — try it for free!</p>
-                    </div>
-
-                    <div className="flex flex-wrap justify-center gap-2 mb-8">
-                        {['All Templates', 'Simple', 'Modern', 'ATS', 'Professional'].map((c) => (
-                            <button
-                                key={c}
-                                className="px-4 py-2 rounded-full text-sm border border-[#ECEBFF] hover:border-[#7C5CFF] hover:text-[#7C5CFF] transition"
-                            >
-                                {c}
-                            </button>
-                        ))}
-                    </div>
-
-                    <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                        {templates.map((t) => (
-                            <div
-                                key={t.name}
-                                onClick={() => navigate('/templates')}
-                                className="group bg-white/70 backdrop-blur-sm rounded-2xl overflow-hidden border-2 border-[#ECEBFF] cursor-pointer hover:border-[#7C5CFF] hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-                            >
-                                <div className="h-40 p-3" style={{ background: t.color + '10' }}>
-                                    <div
-                                        className="h-4 rounded"
-                                        style={{ background: t.color, marginBottom: 6 }}
-                                    />
-                                    <div
-                                        className="h-2.5 rounded mb-2"
-                                        style={{ background: t.color + '60', width: '70%' }}
-                                    />
-                                    {[1, 2, 3, 4].map((i) => (
-                                        <div
-                                            key={i}
-                                            className="h-2 bg-gray-200 rounded mb-1.5"
-                                            style={{ width: `${60 + i * 8}%` }}
-                                        />
-                                    ))}
-                                </div>
-                                <div className="p-2.5 flex justify-between items-center">
-                                    <span className="text-xs font-semibold text-gray-800">{t.name}</span>
-                                    <span
-                                        className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full text-white`}
-                                        style={{
-                                            background:
-                                                t.tag === 'PRO' ? '#7C5CFF' :
-                                                t.tag === 'ATS ✓' ? '#059669' :
-                                                t.tag === 'New' ? '#db2777' : '#f59e0b',
-                                        }}
-                                    >
-                                        {t.tag}
-                                    </span>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="text-center mt-6">
-                        <button
-                            onClick={() => navigate('/templates')}
-                            className="px-6 py-3 border-2 border-[#7C5CFF] text-[#7C5CFF] rounded-xl font-semibold text-sm hover:bg-[#7C5CFF] hover:text-white transition"
-                        >
-                            View All Templates →
-                        </button>
-                    </div>
+              {/* AI suggestion */}
+              <div className="float-badge ai-badge" style={{ animationName: 'floatB' }}>
+                <div className="fb-row mb4">
+                  <Sparkles size={12} color="#a78bfa" />
+                  <span className="fb-title">AI Suggestion</span>
                 </div>
-            </section>
+                <div className="fb-body">Add metrics to boost response rate by 40%</div>
+              </div>
 
-            {/* ========== FEATURES SECTION (Bento Grid) ========== */}
-            <section id="features" className="py-20 px-4 sm:px-6 lg:px-8 bg-white/30 backdrop-blur-sm">
-                <div className="max-w-7xl mx-auto">
-                    <div className="text-center max-w-3xl mx-auto mb-14">
-                        <div className="inline-flex items-center gap-2 bg-[#F0EDFF] text-[#7C5CFF] px-4 py-1.5 rounded-full text-sm font-semibold mb-4">
-                            <Sparkles size={14} /> Features
-                        </div>
-                        <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-3 tracking-tight">
-                            Why <span className="text-[#7C5CFF]">ResumeAI</span>?
-                        </h2>
-                        <p className="text-gray-500 text-lg">Everything you need to create a standout resume in minutes.</p>
-                    </div>
+              {/* PDF ready */}
+              <div className="float-badge pdf-badge" style={{ animationName: 'floatC' }}>
+                <FileText size={13} color="#818cf8" />
+                <span className="fb-title">PDF Ready!</span>
+              </div>
 
-                    {/* Bento Grid: 3 columns, 2 rows, some spanning */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-auto">
-                        {/* Feature 1 - spans 2 columns */}
-                        <FeatureCard {...features[0]} colSpan={2} />
-                        {/* Feature 2 */}
-                        <FeatureCard {...features[1]} />
-                        {/* Feature 3 */}
-                        <FeatureCard {...features[2]} />
-                        {/* Feature 4 - spans 2 columns */}
-                        <FeatureCard {...features[3]} colSpan={2} />
-                        {/* Feature 5 */}
-                        <FeatureCard {...features[4]} />
-                        {/* Feature 6 */}
-                        <FeatureCard {...features[5]} />
-                    </div>
-                </div>
-            </section>
-
-            {/* ========== HOW IT WORKS ========== */}
-            <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white/20">
-                <div className="max-w-7xl mx-auto">
-                    <div className="text-center max-w-3xl mx-auto mb-14">
-                        <div className="inline-flex items-center gap-2 bg-[#F0EDFF] text-[#7C5CFF] px-4 py-1.5 rounded-full text-sm font-semibold mb-4">
-                            <Brain size={14} /> How it works
-                        </div>
-                        <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-3 tracking-tight">
-                            Get started in <span className="text-[#7C5CFF]">3 simple steps</span>
-                        </h2>
-                        <p className="text-gray-500 text-lg">From sign-up to your dream resume — it's that easy.</p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-                        {/* Connector line */}
-                        <div className="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-[#7C5CFF]/20 via-[#A855F7]/20 to-[#7C5CFF]/20 -translate-y-1/2" />
-
-                        {howItWorks.map((item, idx) => (
-                            <div key={idx} className="relative z-10">
-                                <div className="bg-white/70 backdrop-blur-xl border border-[#ECEBFF] rounded-3xl p-8 shadow-lg hover:shadow-2xl transition duration-300 text-center group">
-                                    <div className="w-16 h-16 bg-gradient-to-br from-[#7C5CFF] to-[#A855F7] rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg shadow-purple-200 group-hover:scale-105 transition">
-                                        <span className="text-white font-extrabold text-xl">{item.step}</span>
-                                    </div>
-                                    <h3 className="text-xl font-bold text-gray-900 mb-2">{item.title}</h3>
-                                    <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
-                                    <div className="mt-4 text-[#7C5CFF] font-semibold text-sm flex items-center justify-center gap-1 group-hover:gap-2 transition-all">
-                                        Learn more <ChevronRight size={14} />
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* ========== TESTIMONIALS ========== */}
-            <section className="py-20 px-4 sm:px-6 lg:px-8">
-                <div className="max-w-7xl mx-auto">
-                    <div className="text-center max-w-3xl mx-auto mb-14">
-                        <div className="inline-flex items-center gap-2 bg-[#F0EDFF] text-[#7C5CFF] px-4 py-1.5 rounded-full text-sm font-semibold mb-4">
-                            <Star size={14} fill="currentColor" /> Testimonials
-                        </div>
-                        <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-3 tracking-tight">
-                            Loved by <span className="text-[#7C5CFF]">thousands</span> of job seekers
-                        </h2>
-                        <p className="text-gray-500 text-lg">Real stories from real people who landed their dream jobs.</p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {testimonials.map((t, idx) => (
-                            <div
-                                key={idx}
-                                className="bg-white/60 backdrop-blur-xl border border-[#ECEBFF] rounded-3xl p-6 shadow-sm hover:shadow-xl transition duration-300 hover:-translate-y-1"
-                            >
-                                <div className="flex items-center gap-4 mb-4">
-                                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#7C5CFF] to-[#A855F7] flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-purple-200">
-                                        {t.avatar}
-                                    </div>
-                                    <div>
-                                        <div className="font-bold text-gray-900 text-sm">{t.name}</div>
-                                        <div className="text-xs text-gray-400">{t.role}</div>
-                                    </div>
-                                </div>
-                                <div className="flex gap-0.5 mb-3">
-                                    {[...Array(t.rating)].map((_, i) => (
-                                        <Star key={i} size={14} fill="#f59e0b" className="text-amber-400" />
-                                    ))}
-                                </div>
-                                <p className="text-sm text-gray-600 leading-relaxed">"{t.quote}"</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* ========== PRICING ========== */}
-            <section id="pricing" className="py-20 px-4 sm:px-6 lg:px-8 bg-white/30 backdrop-blur-sm">
-                <div className="max-w-4xl mx-auto">
-                    <div className="text-center mb-14">
-                        <div className="inline-flex items-center gap-2 bg-[#F0EDFF] text-[#7C5CFF] px-4 py-1.5 rounded-full text-sm font-semibold mb-4">
-                            <Star size={14} /> Pricing
-                        </div>
-                        <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-3 tracking-tight">
-                            Simple <span className="text-[#7C5CFF]">Pricing</span>
-                        </h2>
-                        <p className="text-gray-500 text-lg">Start for free!</p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Free Plan */}
-                        <div className="bg-white/70 backdrop-blur-xl border border-[#ECEBFF] rounded-3xl p-8 hover:shadow-2xl transition">
-                            <h3 className="text-2xl font-bold text-gray-800 mb-2">Free</h3>
-                            <p className="text-4xl font-extrabold text-gray-900 mb-1">₹0</p>
-                            <p className="text-gray-400 mb-7 text-sm">Forever free!</p>
-                            <ul className="space-y-3 mb-7">
-                                {['2 Resumes', '4 Templates', 'AI Suggestions', 'PDF Download', 'ATS Score Check'].map((f) => (
-                                    <li key={f} className="flex items-center gap-3 text-sm text-gray-600">
-                                        <CheckCircle size={16} className="text-emerald-500" />
-                                        {f}
-                                    </li>
-                                ))}
-                            </ul>
-                            <button
-                                onClick={() => navigate('/register')}
-                                className="w-full py-3 border-2 border-[#7C5CFF] text-[#7C5CFF] rounded-xl font-bold hover:bg-[#7C5CFF] hover:text-white transition"
-                            >
-                                Start Free
-                            </button>
-                        </div>
-
-                        {/* Pro Plan - Featured */}
-                        <div className="relative bg-gradient-to-br from-[#7C5CFF] to-[#A855F7] p-8 rounded-3xl shadow-2xl text-white overflow-hidden">
-                            <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/20 rounded-full blur-3xl" />
-                            <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-white/20 rounded-full blur-3xl" />
-                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-300 to-yellow-500" />
-                            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-yellow-400 text-yellow-900 text-xs font-bold px-4 py-1 rounded-full">
-                                ⭐ POPULAR
-                            </div>
-                            <h3 className="text-2xl font-bold mb-2">Pro</h3>
-                            <p className="text-4xl font-extrabold mb-1">₹299</p>
-                            <p className="text-purple-200 mb-7 text-sm">per month</p>
-                            <ul className="space-y-3 mb-7">
-                                {['Unlimited Resumes', '10+ Templates', 'Advanced AI', 'No Watermark', 'Public Resume Link', 'AI Interview Questions', 'Priority Support'].map((f) => (
-                                    <li key={f} className="flex items-center gap-3 text-sm text-white">
-                                        <CheckCircle size={16} className="text-purple-200" />
-                                        {f}
-                                    </li>
-                                ))}
-                            </ul>
-                            <button
-                                onClick={() => navigate('/register')}
-                                className="w-full py-3 bg-white text-[#7C5CFF] rounded-xl font-bold hover:bg-purple-50 transition"
-                            >
-                                Try Pro
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* ========== BLOG ========== */}
-            <section id="blog" className="py-20 px-4 sm:px-6 lg:px-8">
-                <div className="max-w-7xl mx-auto">
-                    <div className="text-center max-w-3xl mx-auto mb-14">
-                        <div className="inline-flex items-center gap-2 bg-[#F0EDFF] text-[#7C5CFF] px-4 py-1.5 rounded-full text-sm font-semibold mb-4">
-                            <FolderKanban size={14} /> Blog
-                        </div>
-                        <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-3 tracking-tight">
-                            Latest from <span className="text-[#7C5CFF]">Blog</span>
-                        </h2>
-                        <p className="text-gray-500 text-lg">Tips and tricks to land your dream job</p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {blogPosts.map((post) => (
-                            <div
-                                key={post.title}
-                                className="group bg-white/70 backdrop-blur-xl border border-[#ECEBFF] rounded-3xl overflow-hidden hover:shadow-2xl transition duration-300 cursor-pointer"
-                            >
-                                <img
-                                    src={post.image}
-                                    alt={post.title}
-                                    className="w-full h-48 object-cover group-hover:scale-105 transition duration-500"
-                                />
-                                <div className="p-5">
-                                    <h3 className="font-bold text-gray-800 mb-2">{post.title}</h3>
-                                    <div className="flex justify-between text-xs text-gray-400">
-                                        <span>{post.date}</span>
-                                        <span>{post.readTime}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* ========== FINAL CTA ========== */}
-            <section className="py-20 px-4 sm:px-6 lg:px-8">
-                <div className="max-w-5xl mx-auto">
-                    <div className="relative bg-gradient-to-br from-[#7C5CFF] via-[#A855F7] to-[#6366F1] rounded-[3rem] p-12 sm:p-16 text-center shadow-2xl overflow-hidden">
-                        <div className="absolute -top-20 -right-20 w-64 h-64 bg-white/20 rounded-full blur-3xl" />
-                        <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-white/20 rounded-full blur-3xl" />
-                        <div className="absolute top-10 left-10 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
-                        <div className="absolute bottom-10 right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
-
-                        <div className="relative z-10">
-                            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white px-5 py-2 rounded-full text-sm font-semibold mb-6 border border-white/20">
-                                <Sparkles size={16} /> Ready to start?
-                            </div>
-                            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">
-                                Ready to Start? <br className="hidden sm:block" />
-                                Build Now! 🚀
-                            </h2>
-                            <p className="text-purple-100 text-lg max-w-2xl mx-auto mb-8">
-                                Start for free — no credit card required!
-                            </p>
-                            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                                <button
-                                    onClick={() => navigate('/register')}
-                                    className="flex items-center justify-center gap-2 bg-white text-[#7C5CFF] px-8 py-4 rounded-2xl text-base font-bold hover:shadow-2xl hover:scale-105 transition shadow-lg"
-                                >
-                                    Start for Free <ArrowRight size={18} />
-                                </button>
-                                <button
-                                    onClick={() => scrollToSection('features')}
-                                    className="px-8 py-4 border-2 border-white/30 text-white rounded-2xl text-base font-semibold hover:bg-white/10 transition"
-                                >
-                                    Explore Features
-                                </button>
-                            </div>
-                            <div className="mt-6 text-purple-200/80 text-sm">
-                                🚀 No credit card required • Free forever plan
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* ========== FOOTER ========== */}
-            <footer className="bg-white/60 backdrop-blur-xl border-t border-[#ECEBFF] py-12 px-4 sm:px-6 lg:px-8">
-                <div className="max-w-7xl mx-auto">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pb-8 border-b border-[#ECEBFF]">
-                        <div className="col-span-2 md:col-span-1">
-                            <div className="flex items-center gap-2.5 mb-4">
-                                <div className="w-9 h-9 bg-gradient-to-br from-[#7C5CFF] to-[#A855F7] rounded-xl flex items-center justify-center text-white font-extrabold">
-                                    R
-                                </div>
-                                <span className="font-bold text-xl text-gray-900">
-                                    Resume<span className="text-[#7C5CFF]">AI</span>
-                                </span>
-                            </div>
-                            <p className="text-sm text-gray-500 max-w-xs leading-relaxed">
-                                Your AI-powered resume builder. Create professional resumes in minutes!
-                            </p>
-                        </div>
-                        <div>
-                            <h4 className="text-gray-900 font-semibold text-sm mb-4">Product</h4>
-                            <ul className="space-y-2.5 text-sm">
-                                <li><button onClick={() => scrollToSection('features')} className="text-gray-500 hover:text-[#7C5CFF] transition">Features</button></li>
-                                <li><button onClick={() => scrollToSection('templates')} className="text-gray-500 hover:text-[#7C5CFF] transition">Templates</button></li>
-                                <li><button onClick={() => scrollToSection('pricing')} className="text-gray-500 hover:text-[#7C5CFF] transition">Pricing</button></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 className="text-gray-900 font-semibold text-sm mb-4">Company</h4>
-                            <ul className="space-y-2.5 text-sm">
-                                <li><button className="text-gray-500 hover:text-[#7C5CFF] transition">About us</button></li>
-                                <li><button className="text-gray-500 hover:text-[#7C5CFF] transition">Blog</button></li>
-                                <li><button className="text-gray-500 hover:text-[#7C5CFF] transition">Contact</button></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 className="text-gray-900 font-semibold text-sm mb-4">Support</h4>
-                            <ul className="space-y-2.5 text-sm">
-                                <li><button className="text-gray-500 hover:text-[#7C5CFF] transition">Help Center</button></li>
-                                <li><button className="text-gray-500 hover:text-[#7C5CFF] transition">Privacy Policy</button></li>
-                                <li><button className="text-gray-500 hover:text-[#7C5CFF] transition">Terms of Service</button></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div className="pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-gray-500">
-                        <p>© 2025 ResumeAI — Made with ❤️ by Rajalok</p>
-                        <div className="flex items-center gap-6">
-                            <span className="hover:text-[#7C5CFF] cursor-pointer transition flex items-center gap-1.5">
-                                <Globe size={14} /> English
-                            </span>
-                            <span className="hover:text-[#7C5CFF] cursor-pointer transition">Twitter</span>
-                            <span className="hover:text-[#7C5CFF] cursor-pointer transition">LinkedIn</span>
-                            <span className="hover:text-[#7C5CFF] cursor-pointer transition">GitHub</span>
-                        </div>
-                        <div className="flex flex-col sm:flex-row items-center gap-4 text-sm">
-                            <span className="hover:text-[#7C5CFF] cursor-pointer transition">📞 +91 75418 40606</span>
-                            <span className="hover:text-[#7C5CFF] cursor-pointer transition">✉️ rajalok957641@gmail.com</span>
-                        </div>
-                    </div>
-                </div>
-            </footer>
-
-            {/* ========== GLOBAL ANIMATIONS ========== */}
-            <style>{`
-                @keyframes float {
-                    0%, 100% { transform: translateY(0px); }
-                    50% { transform: translateY(-10px); }
-                }
-                @keyframes float-delayed {
-                    0%, 100% { transform: translateY(0px); }
-                    50% { transform: translateY(-12px); }
-                }
-                @keyframes float-slower {
-                    0%, 100% { transform: translateY(0px); }
-                    50% { transform: translateY(-7px); }
-                }
-                .animate-float {
-                    animation: float 3s ease-in-out infinite;
-                }
-                .animate-float-delayed {
-                    animation: float-delayed 3.5s ease-in-out infinite;
-                }
-                .animate-float-slower {
-                    animation: float-slower 4s ease-in-out infinite;
-                }
-            `}</style>
+              {/* Hired chip */}
+              <div className="float-badge hired-badge" style={{ animationName: 'floatA' }}>
+                🎉 <span className="fb-title">Just got hired!</span>
+              </div>
+            </div>
+          </div>
         </div>
-    );
+
+        {/* Trusted by */}
+        <div className="trust-bar">
+          <span className="trust-label">Trusted by job seekers at</span>
+          {['Google', 'Microsoft', 'Amazon', 'Flipkart', 'Infosys', 'TCS'].map(c => (
+            <span key={c} className="trust-co">{c}</span>
+          ))}
+        </div>
+      </section>
+
+      {/* ── HOW IT WORKS ── */}
+      <section className="how-section">
+        <div className="section-inner">
+          <div className="section-tag">Simple Process</div>
+          <h2 className="section-title">Three steps to your perfect resume</h2>
+
+          <div className="steps-grid">
+            {[
+              { n: '01', icon: <FileText size={28} />, title: 'Fill Your Details', desc: 'Enter your work experience, skills, and education. Our smart form guides you every step.' },
+              { n: '02', icon: <Sparkles size={28} />, title: 'AI Enhances It', desc: 'Our AI rewrites your bullet points with impact, adds keywords, and optimizes for ATS systems.' },
+              { n: '03', icon: <Award size={28} />, title: 'Download & Apply', desc: 'Export a pixel-perfect PDF. Apply with confidence and track your interview rate go up.' },
+            ].map((s, i) => (
+              <div key={s.n} className="step-card">
+                <div className="step-number">{s.n}</div>
+                <div className="step-icon">{s.icon}</div>
+                <h3 className="step-title">{s.title}</h3>
+                <p className="step-desc">{s.desc}</p>
+                {i < 2 && <div className="step-arrow">→</div>}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── TEMPLATES ── */}
+      <section className="templates-section">
+        <div className="section-inner">
+          <div className="section-tag">Templates</div>
+          <h2 className="section-title">Resume templates that get interviews</h2>
+          <p className="section-sub">Simple to use and ready in minutes — try it for free!</p>
+
+          <div className="filter-row">
+            {['All', 'Simple', 'Modern', 'ATS', 'Professional'].map(c => (
+              <button key={c}
+                className={`filter-btn ${activeTemplate === c ? 'active' : ''}`}
+                onClick={() => setActiveTemplate(c)}>
+                {c}
+              </button>
+            ))}
+          </div>
+
+          <div className="templates-grid">
+            {templates.filter(t => activeTemplate === 'All' || t.cat === activeTemplate).map(t => (
+              <div key={t.name} className="template-card" onClick={() => navigate('/templates')}>
+                <div className="template-preview" style={{ background: t.color + '12' }}>
+                  <div className="tp-bar" style={{ background: t.color }} />
+                  <div className="tp-line" style={{ background: t.color + '55', width: '65%' }} />
+                  <div className="tp-line" style={{ background: '#e2e8f0', width: '80%' }} />
+                  <div className="tp-line" style={{ background: '#e2e8f0', width: '70%' }} />
+                  <div className="tp-line" style={{ background: '#e2e8f0', width: '85%' }} />
+                  <div className="tp-line" style={{ background: '#e2e8f0', width: '60%' }} />
+                </div>
+                <div className="template-foot">
+                  <span className="template-name">{t.name}</span>
+                  <span className="template-tag" style={{ background: tagColor[t.tag] }}>{t.tag}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="center-btn">
+            <button onClick={() => navigate('/templates')} className="btn-outline-purple">
+              View All Templates →
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ── FEATURES ── */}
+      <section id="features" className="features-section">
+        <div className="section-inner">
+          <div className="section-tag">Features</div>
+          <h2 className="section-title">Everything you need to land the job</h2>
+
+          <div className="features-grid">
+            {[
+              { icon: <Sparkles size={26} />, title: 'AI Writing Assistant', desc: 'Rewrites weak bullet points into compelling, metric-driven impact statements automatically.', color: '#818cf8' },
+              { icon: <Zap size={26} />, title: 'Live Preview', desc: 'Every keystroke updates your resume in real-time. What you see is exactly what you get.', color: '#34d399' },
+              { icon: <FileText size={26} />, title: 'One-Click PDF', desc: 'Professional, print-ready PDF export in seconds. No watermarks on free plan.', color: '#f472b6' },
+              { icon: <TrendingUp size={26} />, title: 'ATS Score Checker', desc: 'Know your resume's pass rate before applying. Beat the bots that filter candidates.', color: '#fb923c' },
+              { icon: <Users size={26} />, title: 'Multiple Resumes', desc: 'Create tailored resumes for different roles. Pro users get unlimited versions.', color: '#38bdf8' },
+              { icon: <Award size={26} />, title: 'AI Interview Prep', desc: 'Practice questions generated from your resume. Go into interviews fully prepared.', color: '#a78bfa' },
+            ].map(f => (
+              <div key={f.title} className="feature-card">
+                <div className="feat-icon" style={{ background: f.color + '18', color: f.color }}>{f.icon}</div>
+                <h3 className="feat-title">{f.title}</h3>
+                <p className="feat-desc">{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── SOCIAL PROOF ── */}
+      <section className="proof-section">
+        <div className="section-inner">
+          <div className="section-tag">Testimonials</div>
+          <h2 className="section-title">Job seekers love ResumeAI</h2>
+
+          <div className="reviews-grid">
+            {[
+              { name: 'Priya Sharma', role: 'Data Analyst @ Razorpay', text: 'The AI suggestions were spot-on. I rewrote my summary in 2 minutes and started getting calls within a week.' },
+              { name: 'Arjun Mehta', role: 'Frontend Dev @ Swiggy', text: 'Clean templates, super fast. I used the ATS checker and got my score from 60% to 94% before applying.' },
+              { name: 'Sneha Patel', role: 'Product Manager @ Meesho', text: 'Honestly the best free resume tool out there. The live preview alone saves so much time compared to Word.' },
+            ].map(r => (
+              <div key={r.name} className="review-card">
+                <div className="review-stars">{'★★★★★'}</div>
+                <p className="review-text">"{r.text}"</p>
+                <div className="reviewer">
+                  <div className="reviewer-avatar">{r.name[0]}</div>
+                  <div>
+                    <div className="reviewer-name">{r.name}</div>
+                    <div className="reviewer-role">{r.role}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── PRICING ── */}
+      <section id="pricing" className="pricing-section">
+        <div className="section-inner">
+          <div className="section-tag">Pricing</div>
+          <h2 className="section-title">Simple, honest pricing</h2>
+          <p className="section-sub">Start for free — upgrade when you're ready.</p>
+
+          <div className="pricing-grid">
+            {/* Free */}
+            <div className="plan-card">
+              <div className="plan-name">Free</div>
+              <div className="plan-price">₹0 <span className="plan-period">/ forever</span></div>
+              <ul className="plan-features">
+                {['2 Resumes', '4 Templates', 'AI Suggestions', 'PDF Download', 'ATS Score Check'].map(f => (
+                  <li key={f}><CheckCircle size={15} className="check-free" /> {f}</li>
+                ))}
+              </ul>
+              <button onClick={() => navigate('/register')} className="plan-btn-free">Start Free</button>
+            </div>
+
+            {/* Pro */}
+            <div className="plan-card plan-pro">
+              <div className="plan-popular">⭐ MOST POPULAR</div>
+              <div className="plan-name">Pro</div>
+              <div className="plan-price">₹299 <span className="plan-period">/ month</span></div>
+              <ul className="plan-features">
+                {['Unlimited Resumes', '10+ Premium Templates', 'Advanced AI Rewriting', 'No Watermark', 'Public Resume Link', 'AI Interview Questions', 'Priority Support'].map(f => (
+                  <li key={f}><CheckCircle size={15} className="check-pro" /> {f}</li>
+                ))}
+              </ul>
+              <button onClick={() => navigate('/register')} className="plan-btn-pro">Try Pro Free →</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── BLOG ── */}
+      <section id="blog" className="blog-section">
+        <div className="section-inner">
+          <div className="section-tag">Blog</div>
+          <h2 className="section-title">Tips to land your dream job</h2>
+
+          <div className="blog-grid">
+            {[
+              { title: 'How to Write an ATS-Friendly Resume in 2024', date: 'Dec 15, 2024', read: '5 min', cat: 'ATS Tips', color: '#818cf8' },
+              { title: 'Top 10 Resume Keywords That Get You Noticed', date: 'Dec 10, 2024', read: '4 min', cat: 'Keywords', color: '#34d399' },
+              { title: 'Remote Job Application Strategy That Works', date: 'Dec 5, 2024', read: '6 min', cat: 'Strategy', color: '#f472b6' },
+            ].map(b => (
+              <div key={b.title} className="blog-card">
+                <div className="blog-thumb" style={{ background: `linear-gradient(135deg, ${b.color}22, ${b.color}44)` }}>
+                  <span className="blog-cat" style={{ background: b.color }}>{b.cat}</span>
+                </div>
+                <div className="blog-body">
+                  <h3 className="blog-title">{b.title}</h3>
+                  <div className="blog-meta">
+                    <span>{b.date}</span>
+                    <span>{b.read} read</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA ── */}
+      <section className="cta-section">
+        <div className="cta-glow" />
+        <div className="cta-inner">
+          <div className="cta-badge">🚀 Join 10,000+ job seekers</div>
+          <h2 className="cta-headline">Ready to build your dream resume?</h2>
+          <p className="cta-sub">Start for free — no credit card needed. Takes less than 5 minutes.</p>
+          <button onClick={() => navigate('/register')} className="btn-cta-white">
+            Create My Resume Free →
+          </button>
+        </div>
+      </section>
+
+      {/* ── FOOTER ── */}
+      <footer className="footer">
+        <div className="footer-inner">
+          <div className="footer-brand">
+            <div className="logo-icon sm">R</div>
+            <span className="footer-logo">Resume<span className="logo-accent">AI</span></span>
+          </div>
+          <p className="footer-copy">© 2024 ResumeAI — Made with ❤️ by Rajalok</p>
+          <div className="footer-contact">
+            <span>📞 +91 75418 40606</span>
+            <span>✉️ rajalok957641@gmail.com</span>
+          </div>
+        </div>
+      </footer>
+
+      <style>{`
+        /* ── RESET & BASE ── */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+        .page-root {
+          font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+          background: #0f0c29;
+          color: #e2e8f0;
+          overflow-x: hidden;
+        }
+
+        /* ── NAVBAR ── */
+        .navbar {
+          position: sticky; top: 0; z-index: 100;
+          background: rgba(15, 12, 41, 0.85);
+          backdrop-filter: blur(20px);
+          border-bottom: 1px solid rgba(129,140,248,0.12);
+        }
+        .nav-inner {
+          max-width: 1200px; margin: 0 auto;
+          padding: 14px 24px;
+          display: flex; align-items: center; gap: 32px;
+        }
+        .nav-logo { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .logo-icon {
+          width: 36px; height: 36px; border-radius: 10px;
+          background: linear-gradient(135deg, #818cf8, #6366f1);
+          display: flex; align-items: center; justify-content: center;
+          font-weight: 800; font-size: 16px; color: #fff;
+        }
+        .logo-icon.sm { width: 28px; height: 28px; font-size: 13px; border-radius: 7px; }
+        .logo-text { font-weight: 800; font-size: 20px; color: #f1f5f9; }
+        .logo-accent { color: #818cf8; }
+        .nav-links { display: flex; gap: 28px; flex: 1; }
+        .nav-links button { font-size: 14px; color: #94a3b8; transition: color .2s; font-weight: 500; }
+        .nav-links button:hover { color: #818cf8; }
+        .nav-actions { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+        .btn-admin {
+          display: flex; align-items: center; gap: 6px;
+          background: linear-gradient(135deg, #7c3aed, #6d28d9);
+          color: #fff; font-size: 13px; font-weight: 700;
+          padding: 8px 14px; border-radius: 9px;
+        }
+        .btn-ghost {
+          color: #94a3b8; font-size: 14px; font-weight: 500;
+          padding: 8px 14px; border-radius: 9px; border: 1px solid rgba(255,255,255,0.1);
+          transition: all .2s;
+        }
+        .btn-ghost:hover { color: #fff; border-color: rgba(129,140,248,0.4); }
+        .btn-primary-sm {
+          background: linear-gradient(135deg, #818cf8, #6366f1);
+          color: #fff; font-size: 14px; font-weight: 700;
+          padding: 9px 18px; border-radius: 9px;
+          box-shadow: 0 4px 20px rgba(99,102,241,0.4);
+          transition: opacity .2s;
+        }
+        .btn-primary-sm:hover { opacity: 0.88; }
+
+        /* ── HERO ── */
+        .hero-section {
+          position: relative; overflow: hidden;
+          min-height: 92vh;
+          background: linear-gradient(160deg, #0f0c29 0%, #1a1040 50%, #0f0c29 100%);
+          padding: 80px 24px 0;
+        }
+        .hero-bg-blob {
+          position: absolute; border-radius: 50%;
+          filter: blur(80px); opacity: 0.25; pointer-events: none;
+        }
+        .blob1 { width: 600px; height: 600px; background: #6366f1; top: -150px; right: -100px; }
+        .blob2 { width: 400px; height: 400px; background: #a78bfa; bottom: 0; left: -100px; }
+        .blob3 { width: 300px; height: 300px; background: #38bdf8; top: 40%; right: 30%; }
+
+        .hero-inner {
+          max-width: 1200px; margin: 0 auto;
+          display: flex; align-items: center; gap: 60px;
+          position: relative; z-index: 2;
+        }
+        .fade-up { opacity: 0; transform: translateY(30px); transition: opacity .7s, transform .7s; }
+        .fade-up.in { opacity: 1; transform: translateY(0); }
+        .fade-up.delay { transition-delay: .25s; }
+
+        .hero-left { flex: 1; }
+        .hero-badge {
+          display: inline-flex; align-items: center; gap: 8px;
+          background: rgba(129,140,248,0.12);
+          border: 1px solid rgba(129,140,248,0.25);
+          color: #a5b4fc; font-size: 13px; font-weight: 600;
+          padding: 7px 16px; border-radius: 50px; margin-bottom: 24px;
+        }
+        .badge-dot {
+          width: 8px; height: 8px; border-radius: 50%;
+          background: #818cf8;
+          animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+        .hero-headline {
+          font-size: clamp(36px, 5vw, 64px);
+          font-weight: 900;
+          line-height: 1.1;
+          color: #f8fafc;
+          letter-spacing: -2px;
+          margin-bottom: 20px;
+        }
+        .gradient-text {
+          background: linear-gradient(135deg, #818cf8, #c084fc, #38bdf8);
+          -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero-sub {
+          font-size: 17px; color: #94a3b8; line-height: 1.7;
+          max-width: 480px; margin-bottom: 32px;
+        }
+
+        .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 40px; }
+        .btn-cta {
+          display: flex; align-items: center; gap: 8px;
+          background: linear-gradient(135deg, #818cf8, #6366f1);
+          color: #fff; font-size: 16px; font-weight: 700;
+          padding: 16px 28px; border-radius: 14px;
+          box-shadow: 0 8px 32px rgba(99,102,241,0.45);
+          transition: transform .2s, box-shadow .2s;
+        }
+        .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(99,102,241,0.55); }
+        .btn-outline {
+          color: #cbd5e1; font-size: 16px; font-weight: 600;
+          padding: 16px 28px; border-radius: 14px;
+          border: 2px solid rgba(255,255,255,0.12);
+          transition: all .2s;
+        }
+        .btn-outline:hover { border-color: rgba(129,140,248,0.5); color: #818cf8; }
+
+        .hero-stats { display: flex; gap: 32px; }
+        .stat-item { display: flex; flex-direction: column; gap: 4px; }
+        .stat-val { font-size: 26px; font-weight: 900; }
+        .stat-label { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: .5px; }
+
+        /* ── FLOAT STAGE ── */
+        .hero-right { flex: 1; display: flex; justify-content: center; }
+        .float-stage {
+          position: relative; width: 320px; height: 420px;
+        }
+        .stage-glow {
+          position: absolute; inset: -40px;
+          background: radial-gradient(ellipse, rgba(129,140,248,0.18), transparent 70%);
+          border-radius: 50%;
+        }
+        .card-tilt { transform: rotate(-3deg); position: relative; z-index: 2; }
+
+        /* Resume card */
+        .resume-card {
+          background: rgba(255,255,255,0.97);
+          border-radius: 16px; padding: 18px;
+          width: 280px; color: #1e293b;
+          box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+        }
+        .resume-header {
+          background: linear-gradient(135deg, #6366f1, #818cf8);
+          border-radius: 10px; padding: 14px;
+          display: flex; gap: 10px; align-items: center; margin-bottom: 14px;
+        }
+        .resume-avatar {
+          width: 38px; height: 38px; border-radius: 50%;
+          background: rgba(255,255,255,0.25);
+          display: flex; align-items: center; justify-content: center;
+          font-weight: 800; font-size: 13px; color: #fff; flex-shrink: 0;
+        }
+        .resume-name { font-size: 13px; font-weight: 800; color: #fff; }
+        .resume-title { font-size: 10px; color: rgba(255,255,255,0.75); margin-top: 2px; }
+        .resume-contact { font-size: 9px; color: rgba(255,255,255,0.55); margin-top: 4px; }
+        .resume-body { padding: 0 2px; }
+        .resume-section-label { font-size: 9px; font-weight: 800; color: #6366f1; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+        .resume-job { font-size: 11px; font-weight: 700; color: #1e293b; }
+        .resume-date { font-size: 9px; color: #94a3b8; margin: 2px 0 4px; }
+        .resume-bullet { font-size: 9px; color: #475569; margin-bottom: 2px; }
+        .resume-skills { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+        .skill-tag {
+          font-size: 8px; font-weight: 700;
+          background: #ede9fe; color: #6366f1;
+          padding: 3px 8px; border-radius: 6px;
+        }
+
+        /* Floating badges */
+        .float-badge {
+          position: absolute; background: rgba(30,27,75,0.95);
+          border: 1px solid rgba(129,140,248,0.2);
+          border-radius: 14px; padding: 10px 14px;
+          backdrop-filter: blur(12px);
+          box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+          animation-duration: 3.5s; animation-timing-function: ease-in-out;
+          animation-iteration-count: infinite;
+          z-index: 10;
+        }
+        .ats-badge { top: -20px; right: -30px; min-width: 130px; }
+        .ai-badge { bottom: 20px; left: -40px; max-width: 170px; }
+        .pdf-badge { top: 50%; right: -50px; display: flex; align-items: center; gap: 6px; }
+        .hired-badge { bottom: -20px; right: 0; display: flex; align-items: center; gap: 6px; }
+
+        @keyframes floatA { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+        @keyframes floatB { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-13px)} }
+        @keyframes floatC { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+        .fb-label { font-size: 9px; color: #64748b; margin-bottom: 4px; }
+        .fb-row { display: flex; align-items: center; gap: 6px; }
+        .fb-row.mb4 { margin-bottom: 4px; }
+        .fb-val { font-size: 20px; font-weight: 900; }
+        .fb-val.green { color: #34d399; }
+        .fb-title { font-size: 11px; font-weight: 700; color: #e2e8f0; }
+        .fb-body { font-size: 9px; color: #94a3b8; line-height: 1.4; }
+        .chip { font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 6px; }
+        .chip-green { background: rgba(52,211,153,0.15); color: #34d399; }
+
+        /* Trust bar */
+        .trust-bar {
+          max-width: 1200px; margin: 60px auto 0;
+          display: flex; align-items: center; flex-wrap: wrap; gap: 20px;
+          padding: 24px; border-top: 1px solid rgba(255,255,255,0.06);
+          position: relative; z-index: 2;
+        }
+        .trust-label { font-size: 12px; color: #475569; flex-shrink: 0; }
+        .trust-co {
+          font-size: 13px; font-weight: 700; color: #64748b;
+          transition: color .2s;
+        }
+        .trust-co:hover { color: #818cf8; }
+
+        /* ── SHARED SECTION STYLES ── */
+        .section-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .section-tag {
+          display: inline-block;
+          background: rgba(129,140,248,0.12);
+          border: 1px solid rgba(129,140,248,0.2);
+          color: #818cf8; font-size: 12px; font-weight: 700;
+          padding: 5px 14px; border-radius: 50px; margin-bottom: 16px;
+          letter-spacing: .5px; text-transform: uppercase;
+        }
+        .section-title {
+          font-size: clamp(26px, 3vw, 40px);
+          font-weight: 900; color: #f1f5f9;
+          letter-spacing: -1px; margin-bottom: 12px;
+        }
+        .section-sub { font-size: 16px; color: #64748b; margin-bottom: 40px; }
+
+        /* ── HOW IT WORKS ── */
+        .how-section { padding: 100px 24px; }
+        .steps-grid {
+          display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+          position: relative;
+        }
+        .step-card {
+          background: rgba(255,255,255,0.03);
+          border: 1px solid rgba(255,255,255,0.07);
+          border-radius: 20px; padding: 32px 28px;
+          position: relative;
+          transition: background .3s, border-color .3s;
+        }
+        .step-card:hover { background: rgba(129,140,248,0.06); border-color: rgba(129,140,248,0.2); }
+        .step-number {
+          font-size: 48px; font-weight: 900;
+          color: rgba(129,140,248,0.12); position: absolute; top: 20px; right: 24px;
+          line-height: 1; letter-spacing: -2px;
+        }
+        .step-icon {
+          width: 56px; height: 56px; border-radius: 16px;
+          background: rgba(129,140,248,0.12);
+          display: flex; align-items: center; justify-content: center;
+          color: #818cf8; margin-bottom: 16px;
+        }
+        .step-title { font-size: 18px; font-weight: 800; color: #f1f5f9; margin-bottom: 10px; }
+        .step-desc { font-size: 14px; color: #64748b; line-height: 1.6; }
+        .step-arrow {
+          position: absolute; top: 50%; right: -20px;
+          font-size: 24px; color: rgba(129,140,248,0.3);
+          transform: translateY(-50%); z-index: 3;
+        }
+
+        /* ── TEMPLATES ── */
+        .templates-section {
+          padding: 100px 24px;
+          background: rgba(255,255,255,0.02);
+          border-top: 1px solid rgba(255,255,255,0.05);
+          border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .filter-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; }
+        .filter-btn {
+          padding: 8px 18px; border-radius: 50px;
+          font-size: 13px; font-weight: 600; color: #64748b;
+          border: 1px solid rgba(255,255,255,0.08);
+          transition: all .2s;
+        }
+        .filter-btn:hover, .filter-btn.active {
+          background: rgba(129,140,248,0.12);
+          border-color: rgba(129,140,248,0.3);
+          color: #818cf8;
+        }
+        .templates-grid {
+          display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 16px;
+          margin-bottom: 32px;
+        }
+        .template-card {
+          background: rgba(255,255,255,0.03);
+          border: 2px solid rgba(255,255,255,0.07);
+          border-radius: 16px; overflow: hidden;
+          cursor: pointer;
+          transition: transform .25s, border-color .25s, box-shadow .25s;
+        }
+        .template-card:hover {
+          transform: translateY(-6px);
+          border-color: rgba(129,140,248,0.4);
+          box-shadow: 0 16px 40px rgba(99,102,241,0.2);
+        }
+        .template-preview { height: 150px; padding: 12px; display: flex; flex-direction: column; gap: 6px; }
+        .tp-bar { height: 14px; border-radius: 4px; }
+        .tp-line { height: 7px; border-radius: 3px; }
+        .template-foot {
+          padding: 10px 12px;
+          display: flex; justify-content: space-between; align-items: center;
+          border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .template-name { font-size: 11px; font-weight: 700; color: #cbd5e1; }
+        .template-tag {
+          font-size: 8px; font-weight: 800; color: #fff;
+          padding: 2px 7px; border-radius: 5px;
+        }
+        .center-btn { text-align: center; }
+        .btn-outline-purple {
+          color: #818cf8; font-size: 14px; font-weight: 700;
+          padding: 12px 28px; border-radius: 12px;
+          border: 2px solid rgba(129,140,248,0.3);
+          transition: all .2s;
+        }
+        .btn-outline-purple:hover { background: rgba(129,140,248,0.08); }
+
+        /* ── FEATURES ── */
+        .features-section { padding: 100px 24px; }
+        .features-grid {
+          display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+        }
+        .feature-card {
+          background: rgba(255,255,255,0.03);
+          border: 1px solid rgba(255,255,255,0.07);
+          border-radius: 20px; padding: 28px;
+          transition: all .3s;
+        }
+        .feature-card:hover {
+          background: rgba(255,255,255,0.06);
+          border-color: rgba(129,140,248,0.18);
+          transform: translateY(-3px);
+        }
+        .feat-icon {
+          width: 52px; height: 52px; border-radius: 14px;
+          display: flex; align-items: center; justify-content: center;
+          margin-bottom: 16px;
+        }
+        .feat-title { font-size: 16px; font-weight: 800; color: #f1f5f9; margin-bottom: 8px; }
+        .feat-desc { font-size: 13px; color: #64748b; line-height: 1.6; }
+
+        /* ── SOCIAL PROOF ── */
+        .proof-section {
+          padding: 100px 24px;
+          background: rgba(255,255,255,0.02);
+          border-top: 1px solid rgba(255,255,255,0.05);
+          border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .review-card {
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 20px; padding: 28px;
+          transition: all .3s;
+        }
+        .review-card:hover { border-color: rgba(129,140,248,0.2); }
+        .review-stars { color: #fbbf24; font-size: 14px; margin-bottom: 12px; }
+        .review-text { font-size: 14px; color: #94a3b8; line-height: 1.6; margin-bottom: 20px; font-style: italic; }
+        .reviewer { display: flex; align-items: center; gap: 12px; }
+        .reviewer-avatar {
+          width: 40px; height: 40px; border-radius: 50%;
+          background: linear-gradient(135deg, #818cf8, #6366f1);
+          display: flex; align-items: center; justify-content: center;
+          font-weight: 800; font-size: 15px; color: #fff; flex-shrink: 0;
+        }
+        .reviewer-name { font-size: 13px; font-weight: 700; color: #e2e8f0; }
+        .reviewer-role { font-size: 11px; color: #475569; }
+
+        /* ── PRICING ── */
+        .pricing-section { padding: 100px 24px; }
+        .pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 760px; margin: 0 auto; }
+        .plan-card {
+          background: rgba(255,255,255,0.04);
+          border: 2px solid rgba(255,255,255,0.08);
+          border-radius: 24px; padding: 36px;
+          position: relative;
+        }
+        .plan-pro {
+          background: linear-gradient(160deg, rgba(99,102,241,0.15), rgba(129,140,248,0.08));
+          border-color: rgba(129,140,248,0.3);
+          box-shadow: 0 20px 60px rgba(99,102,241,0.2);
+        }
+        .plan-popular {
+          position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+          background: linear-gradient(135deg, #fbbf24, #f59e0b);
+          color: #78350f; font-size: 10px; font-weight: 800;
+          padding: 5px 16px; border-radius: 50px;
+          white-space: nowrap;
+        }
+        .plan-name { font-size: 22px; font-weight: 800; color: #f1f5f9; margin-bottom: 8px; }
+        .plan-price { font-size: 40px; font-weight: 900; color: #f8fafc; margin-bottom: 6px; }
+        .plan-period { font-size: 16px; font-weight: 500; color: #64748b; }
+        .plan-features { list-style: none; margin: 24px 0 28px; display: flex; flex-direction: column; gap: 12px; }
+        .plan-features li { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #94a3b8; }
+        .check-free { color: #34d399; flex-shrink: 0; }
+        .check-pro { color: #a5b4fc; flex-shrink: 0; }
+        .plan-btn-free {
+          width: 100%; padding: 14px;
+          border: 2px solid rgba(129,140,248,0.3);
+          border-radius: 12px; font-size: 15px; font-weight: 700;
+          color: #818cf8; transition: all .2s;
+        }
+        .plan-btn-free:hover { background: rgba(129,140,248,0.08); }
+        .plan-btn-pro {
+          width: 100%; padding: 14px;
+          background: linear-gradient(135deg, #818cf8, #6366f1);
+          border-radius: 12px; font-size: 15px; font-weight: 700;
+          color: #fff;
+          box-shadow: 0 8px 24px rgba(99,102,241,0.4);
+          transition: opacity .2s;
+        }
+        .plan-btn-pro:hover { opacity: 0.88; }
+
+        /* ── BLOG ── */
+        .blog-section { padding: 100px 24px; }
+        .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .blog-card {
+          background: rgba(255,255,255,0.03);
+          border: 1px solid rgba(255,255,255,0.07);
+          border-radius: 20px; overflow: hidden;
+          cursor: pointer; transition: all .3s;
+        }
+        .blog-card:hover { transform: translateY(-4px); border-color: rgba(129,140,248,0.2); }
+        .blog-thumb { height: 130px; position: relative; display: flex; align-items: flex-end; padding: 12px; }
+        .blog-cat {
+          font-size: 9px; font-weight: 800; color: #fff;
+          padding: 3px 10px; border-radius: 6px;
+          text-transform: uppercase; letter-spacing: .5px;
+        }
+        .blog-body { padding: 16px 18px 20px; }
+        .blog-title { font-size: 14px; font-weight: 700; color: #e2e8f0; line-height: 1.4; margin-bottom: 10px; }
+        .blog-meta { display: flex; justify-content: space-between; font-size: 11px; color: #475569; }
+
+        /* ── CTA ── */
+        .cta-section {
+          margin: 40px 24px;
+          border-radius: 28px;
+          background: linear-gradient(135deg, #4338ca, #6366f1, #818cf8);
+          padding: 80px 24px;
+          text-align: center;
+          position: relative; overflow: hidden;
+        }
+        .cta-glow {
+          position: absolute; inset: 0;
+          background: radial-gradient(ellipse at 60% 30%, rgba(255,255,255,0.15), transparent 60%);
+        }
+        .cta-inner { position: relative; z-index: 2; }
+        .cta-badge {
+          display: inline-block;
+          background: rgba(255,255,255,0.15);
+          color: #e0e7ff; font-size: 13px; font-weight: 700;
+          padding: 6px 16px; border-radius: 50px; margin-bottom: 20px;
+        }
+        .cta-headline {
+          font-size: clamp(28px, 4vw, 48px);
+          font-weight: 900; color: #fff; letter-spacing: -1.5px; margin-bottom: 14px;
+        }
+        .cta-sub { font-size: 17px; color: rgba(255,255,255,0.7); margin-bottom: 32px; }
+        .btn-cta-white {
+          display: inline-block;
+          background: #fff; color: #4338ca;
+          font-size: 17px; font-weight: 800;
+          padding: 18px 36px; border-radius: 14px;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+          transition: transform .2s;
+        }
+        .btn-cta-white:hover { transform: translateY(-3px); }
+
+        /* ── FOOTER ── */
+        .footer {
+          border-top: 1px solid rgba(255,255,255,0.06);
+          padding: 32px 24px;
+        }
+        .footer-inner {
+          max-width: 1200px; margin: 0 auto;
+          display: flex; justify-content: space-between; align-items: center;
+          flex-wrap: wrap; gap: 16px;
+        }
+        .footer-brand { display: flex; align-items: center; gap: 8px; }
+        .footer-logo { font-size: 16px; font-weight: 800; color: #f1f5f9; }
+        .footer-copy { font-size: 13px; color: #475569; }
+        .footer-contact { display: flex; gap: 20px; font-size: 13px; color: #475569; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 900px) {
+          .hero-inner { flex-direction: column; padding-top: 20px; }
+          .hero-right { display: none; }
+          .steps-grid, .features-grid, .reviews-grid, .blog-grid { grid-template-columns: 1fr 1fr; }
+          .step-arrow { display: none; }
+          .pricing-grid { grid-template-columns: 1fr; max-width: 420px; }
+          .nav-links { display: none; }
+        }
+        @media (max-width: 600px) {
+          .steps-grid, .features-grid, .reviews-grid, .blog-grid { grid-template-columns: 1fr; }
+          .templates-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+      `}</style>
+    </div>
+  );
 }
