@@ -262,7 +262,7 @@ export default function Landing() {
               { icon: <Sparkles size={26} />, title: 'AI Writing Assistant', desc: 'Rewrites weak bullet points into compelling, metric-driven impact statements automatically.', color: '#818cf8' },
               { icon: <Zap size={26} />, title: 'Live Preview', desc: 'Every keystroke updates your resume in real-time. What you see is exactly what you get.', color: '#34d399' },
               { icon: <FileText size={26} />, title: 'One-Click PDF', desc: 'Professional, print-ready PDF export in seconds. No watermarks on free plan.', color: '#f472b6' },
-              { icon: <TrendingUp size={26} />, title: 'ATS Score Checker', desc: 'Know your resume's pass rate before applying. Beat the bots that filter candidates.', color: '#fb923c' },
+              { icon: <TrendingUp size={26} />, title: 'ATS Score Checker', desc: "Know your resume's pass rate before applying. Beat the bots that filter candidates.", color: '#fb923c' },
               { icon: <Users size={26} />, title: 'Multiple Resumes', desc: 'Create tailored resumes for different roles. Pro users get unlimited versions.', color: '#38bdf8' },
               { icon: <Award size={26} />, title: 'AI Interview Prep', desc: 'Practice questions generated from your resume. Go into interviews fully prepared.', color: '#a78bfa' },
             ].map(f => (
