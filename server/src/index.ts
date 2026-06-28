@@ -54,7 +54,15 @@ app.get('/', (req, res) => {
   });
 });
 
-// ✅ API routes
+// API routes. The client calls `/api/*`, while the old root paths are kept
+// for backwards compatibility during local testing.
+app.use('/api/auth', authRoutes);
+app.use('/api/resume', resumeRoutes);
+app.use('/api/ai', aiRoutes);
+app.use('/api/payment', paymentRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/ats', atsRoutes);
+
 app.use('/auth', authRoutes);
 app.use('/resume', resumeRoutes);
 app.use('/ai', aiRoutes);
