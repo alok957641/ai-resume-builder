@@ -62,7 +62,11 @@ export default function SkillsForm() {
   return (
     <div className="space-y-5">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold text-gray-800">🛠️ Skills</h2>
+        <div>
+          <div className="inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-black uppercase tracking-wide text-blue-700">Skills</div>
+          <h2 className="mt-3 text-2xl font-black text-slate-950">Skills</h2>
+          <p className="mt-1 text-sm text-slate-500">Add role-specific keywords recruiters and ATS systems look for.</p>
+        </div>
 
         <button
           onClick={getSuggestions}

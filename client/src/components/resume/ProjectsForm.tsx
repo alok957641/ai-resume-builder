@@ -17,9 +17,6 @@ const emptyProject: Project = {
 
 export default function ProjectsForm() {
   const { currentResume, addProject, updateProject, removeProject } = useResumeStore();
-  console.log('🔴 Current Resume in ProjectsForm:', currentResume);
-  console.log('🔴 Projects array:', currentResume?.projects);
-  
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const projects = currentResume?.projects && Array.isArray(currentResume.projects) ? currentResume.projects : [];
 
@@ -33,7 +30,11 @@ export default function ProjectsForm() {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold text-gray-800">🚀 Projects</h2>
+        <div>
+          <div className="inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-black uppercase tracking-wide text-blue-700">Projects</div>
+          <h2 className="mt-3 text-2xl font-black text-slate-950">Projects</h2>
+          <p className="mt-1 text-sm text-slate-500">Showcase practical work, tech stack, links, and measurable outcomes.</p>
+        </div>
         <button
           onClick={handleAddProject}
           className="flex items-center gap-1 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition"
@@ -178,7 +179,7 @@ function ProjectCardForm({ project, onUpdate }: { project: Project; onUpdate: (d
             ) : (
               <>
                 <Sparkles size={12} />
-                AI Improve
+                Improve with AI
               </>
             )}
           </button>
@@ -190,7 +191,7 @@ function ProjectCardForm({ project, onUpdate }: { project: Project; onUpdate: (d
           className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm resize-none"
         />
         <p className="text-xs text-gray-400 mt-1">
-          💡 Tip: Include specific features, technologies used, and measurable outcomes
+          Tip: Include specific features, technologies used, and measurable outcomes.
         </p>
       </div>
       

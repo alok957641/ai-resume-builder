@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Sparkles, Loader } from 'lucide-react';
+import { Sparkles, Loader, UserRound } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
 import { useResumeStore } from '../../store/useResumeStore';
@@ -71,9 +71,13 @@ export default function PersonalInfoForm() {
 
   return (
     <div className="space-y-5">
-      <h2 className="text-xl font-bold text-gray-800">
-        👤 Personal Information
-      </h2>
+      <div>
+        <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-xs font-black uppercase tracking-wide text-blue-700">
+          <UserRound size={14} /> Profile
+        </div>
+        <h2 className="mt-3 text-2xl font-black text-slate-950">Personal information</h2>
+        <p className="mt-1 text-sm text-slate-500">Recruiters see this first, so keep it clean and complete.</p>
+      </div>
 
       {/* Full Name */}
       <div>
@@ -169,7 +173,7 @@ export default function PersonalInfoForm() {
             ) : (
               <>
                 <Sparkles size={12} />
-                AI Improve
+                Improve with AI
               </>
             )}
           </button>
@@ -182,7 +186,7 @@ export default function PersonalInfoForm() {
           className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
         />
         <p className="text-xs text-gray-400 mt-1">
-          💡 Tip: A strong summary helps you stand out to recruiters
+          Tip: A strong summary helps you stand out to recruiters.
         </p>
       </div>
     </div>

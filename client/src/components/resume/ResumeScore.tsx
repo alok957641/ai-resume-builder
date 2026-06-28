@@ -52,13 +52,13 @@ export default function ResumeScore() {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+      <h2 className="text-2xl font-black text-slate-950 flex items-center gap-2">
         <TrendingUp size={20} className="text-indigo-600" />
-        Resume Score
+        Resume score
       </h2>
 
       {/* Big Score Circle */}
-      <div className="bg-white border border-gray-100 rounded-2xl p-6 text-center">
+      <div className="bg-white border border-slate-200 rounded-2xl p-6 text-center shadow-sm">
         <div className="relative w-28 h-28 mx-auto mb-4">
           <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
             <circle cx="50" cy="50" r="40" fill="none" stroke="#f3f4f6" strokeWidth="10"/>
@@ -77,7 +77,7 @@ export default function ResumeScore() {
         </div>
 
         <div className={`inline-block text-2xl font-bold px-4 py-1.5 rounded-full ${gradeColor}`}>
-          Grade: {grade}
+          Grade {grade}
         </div>
 
         <p className="text-gray-500 text-sm mt-2">
@@ -88,7 +88,7 @@ export default function ResumeScore() {
       {/* Breakdown */}
       <div className="space-y-3">
         {breakdown.map((b, i) => (
-          <div key={i} className="bg-white border border-gray-100 rounded-xl p-4">
+          <div key={i} className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm font-semibold text-gray-700">{getEnglishLabel(b.label)}</span>
               <span className="text-sm font-bold text-gray-900">{b.score}/{b.max}</span>

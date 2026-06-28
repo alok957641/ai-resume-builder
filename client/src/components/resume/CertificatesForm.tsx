@@ -29,7 +29,11 @@ export default function CertificatesForm() {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold text-gray-800">📜 Certifications</h2>
+        <div>
+          <div className="inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-black uppercase tracking-wide text-blue-700">Credentials</div>
+          <h2 className="mt-3 text-2xl font-black text-slate-950">Certifications</h2>
+          <p className="mt-1 text-sm text-slate-500">Add licenses, courses, credentials, and verification links.</p>
+        </div>
         <button
           onClick={handleAddCertificate}
           className="flex items-center gap-1 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition"
@@ -147,7 +151,7 @@ function CertificateCardForm({ certificate, onUpdate }: { certificate: Certifica
       </div>
       
       <div className="text-xs text-gray-400 mt-2">
-        💡 Tip: Adding professional certifications can boost your resume credibility
+        Tip: Adding professional certifications can boost your resume credibility.
       </div>
     </div>
   );

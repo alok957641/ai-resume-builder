@@ -2,71 +2,92 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import {
-  Plus, FileText, Trash2, Edit3, Crown, LogOut, Clock,
-  Sparkles, TrendingUp, Target, Palette, Star, Eye, Rocket,
+  Crown,
+  Edit3,
+  Eye,
+  FileText,
+  LayoutTemplate,
+  LogOut,
+  Plus,
+  Sparkles,
+  Target,
+  Trash2,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import api from "../api";
 import { useAuthStore } from "../store/useAuthStore";
 import { useResumeStore } from "../store/useResumeStore";
 import ATSChecker from "../components/ATSChecker";
-import { motion, AnimatePresence } from "framer-motion";
 
-const TEMPLATES = {
-  "modern-blue":    { color: "#6c63ff", name: "Modern Blue",    icon: "🎨", premium: false },
-  "emerald-pro":    { color: "#10B981", name: "Emerald Pro",    icon: "💎", premium: true  },
-  "minimal-clean":  { color: "#6B7280", name: "Minimal Clean",  icon: "✨", premium: false },
-  "slate-dark":     { color: "#334155", name: "Slate Dark",     icon: "🌙", premium: true  },
-  "rose-elegant":   { color: "#F43F5E", name: "Rose Elegant",   icon: "🌹", premium: true  },
-  "violet-bold":    { color: "#8B5CF6", name: "Violet Bold",    icon: "💜", premium: false },
-  "amber-warm":     { color: "#F59E0B", name: "Amber Warm",     icon: "☀️", premium: true  },
-  "executive-pro":  { color: "#1E293B", name: "Executive Pro",  icon: "👔", premium: true  },
-  "creative-split": { color: "#EC4899", name: "Creative Split", icon: "🎭", premium: true  },
-  "tech-modern":    { color: "#06B6D4", name: "Tech Modern",    icon: "⚡", premium: false },
+const TEMPLATE_META: Record<string, { color: string; name: string; premium: boolean }> = {
+  "modern-blue": { color: "#2563eb", name: "Modern Blue", premium: false },
+  "emerald-pro": { color: "#059669", name: "Emerald Pro", premium: false },
+  "minimal-clean": { color: "#64748b", name: "Minimal Clean", premium: false },
+  "ats-classic": { color: "#0f766e", name: "ATS Classic", premium: false },
+  "slate-dark": { color: "#334155", name: "Slate Dark", premium: true },
+  "rose-elegant": { color: "#e11d48", name: "Rose Elegant", premium: true },
+  "violet-bold": { color: "#7c3aed", name: "Violet Bold", premium: true },
+  "amber-warm": { color: "#d97706", name: "Amber Warm", premium: true },
+  "executive-pro": { color: "#111827", name: "Executive Pro", premium: true },
+  "creative-pink": { color: "#db2777", name: "Creative Pink", premium: true },
+  "tech-modern": { color: "#0891b2", name: "Tech Modern", premium: true },
 };
+
+const stats: Array<{ label: string; value: string | number; Icon: LucideIcon }> = [
+  { label: "Total resumes", value: 0, Icon: FileText },
+  { label: "Plan limit", value: "0/2", Icon: Target },
+  { label: "Templates", value: "4 free", Icon: LayoutTemplate },
+];
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
   const { resumes, setResumes, setCurrentResume } = useResumeStore();
   const [isCreating, setIsCreating] = useState(false);
-  const [showTemplateModal, setShowTemplateModal] = useState(false);
-  const [hoveredResume, setHoveredResume] = useState<string | null>(null);
   const isPro = user?.plan === "pro";
 
-  useEffect(() => { fetchResumes(); }, []);
+  useEffect(() => {
+    fetchResumes();
+  }, []);
 
   const fetchResumes = async () => {
     try {
       const res = await api.get("/resume");
       setResumes(res.data);
-    } catch { toast.error("Resumes load nahi hue!"); }
+    } catch {
+      toast.error("Resumes load nahi hue.");
+    }
   };
 
-  const createNewResume = async (template?: string) => {
+  const createNewResume = async () => {
     setIsCreating(true);
     try {
       const res = await api.post("/resume", {
         title: `My Resume ${resumes.length + 1}`,
-        template: template || "modern-blue",
+        template: "ats-classic",
       });
       setCurrentResume(res.data.resume);
       navigate(`/resume/${res.data.resume._id}`);
-      toast.success("Naya resume ban gaya! 🎉");
-      setShowTemplateModal(false);
+      toast.success("New resume created.");
     } catch (error: any) {
-      if (error.response?.data?.upgrade) toast.error("Free plan: sirf 2 resumes! Pro upgrade karo 👑");
-      else toast.error("Resume nahi bana!");
-    } finally { setIsCreating(false); }
+      if (error.response?.data?.upgrade) toast.error("Free plan me 2 resumes allowed hain. Pro upgrade karein.");
+      else toast.error("Resume create nahi hua.");
+    } finally {
+      setIsCreating(false);
+    }
   };
 
   const deleteResume = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!confirm("Resume delete karna chahte ho?")) return;
+    if (!confirm("Is resume ko delete karna hai?")) return;
     try {
       await api.delete(`/resume/${id}`);
-      setResumes(resumes.filter((r) => r._id !== id));
-      toast.success("Delete ho gaya! 🗑️");
-    } catch { toast.error("Delete nahi hua!"); }
+      setResumes(resumes.filter((resume) => resume._id !== id));
+      toast.success("Resume deleted.");
+    } catch {
+      toast.error("Delete nahi hua.");
+    }
   };
 
   const openResume = async (id: string) => {
@@ -74,434 +95,186 @@ export default function Dashboard() {
       const res = await api.get(`/resume/${id}`);
       setCurrentResume(res.data);
       navigate(`/resume/${id}`);
-    } catch { toast.error("Resume nahi khula!"); }
+    } catch {
+      toast.error("Resume open nahi hua.");
+    }
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "linear-gradient(145deg,#f0eeff 0%,#e8e0ff 40%,#f5f0ff 100%)", fontFamily: "'Inter','Segoe UI',system-ui,sans-serif" }}>
+    <main className="min-h-screen bg-slate-100">
+      <nav className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3">
+          <button onClick={() => navigate("/dashboard")} className="flex items-center gap-3 text-left">
+            <span className="grid h-10 w-10 place-items-center rounded-xl bg-slate-950 text-sm font-black text-white">R</span>
+            <span className="text-xl font-black text-slate-950">ResumeAI</span>
+          </button>
 
-      {/* blobs */}
-      <div style={{ position:"fixed", width:500, height:500, borderRadius:"50%", background:"#a78bfa", opacity:0.12, filter:"blur(90px)", top:-100, right:-80, pointerEvents:"none", zIndex:0 }} />
-      <div style={{ position:"fixed", width:350, height:350, borderRadius:"50%", background:"#818cf8", opacity:0.1, filter:"blur(70px)", bottom:0, left:-60, pointerEvents:"none", zIndex:0 }} />
-
-      {/* ── NAVBAR ── */}
-      <motion.nav
-        initial={{ y: -80 }} animate={{ y: 0 }}
-        style={{
-          position:"sticky", top:0, zIndex:100,
-          background:"rgba(255,255,255,0.85)", backdropFilter:"blur(20px)",
-          borderBottom:"1px solid rgba(108,99,255,0.12)",
-          boxShadow:"0 2px 20px rgba(108,99,255,0.08)"
-        }}
-      >
-        <div style={{ maxWidth:1200, margin:"0 auto", padding:"14px 24px", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-          <motion.div whileHover={{ scale:1.05 }}
-            onClick={() => navigate("/dashboard")}
-            style={{ display:"flex", alignItems:"center", gap:10, cursor:"pointer" }}
-          >
-            <div style={{
-              width:38, height:38, borderRadius:11,
-              background:"linear-gradient(135deg,#6c63ff,#a78bfa)",
-              display:"flex", alignItems:"center", justifyContent:"center",
-              boxShadow:"0 4px 16px rgba(108,99,255,0.35)"
-            }}>
-              <Rocket size={18} color="#fff" />
+          <div className="flex items-center gap-2">
+            <div className="hidden rounded-full bg-slate-50 px-3 py-1.5 text-xs font-bold text-slate-600 sm:block">
+              {user?.name || "Job seeker"}
             </div>
-            <span style={{ fontSize:20, fontWeight:800, color:"#0f172a" }}>
-              Resume<span style={{ color:"#6c63ff" }}>AI</span>
-            </span>
-          </motion.div>
-
-          <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-            {/* Plan badge */}
-            <motion.div whileHover={{ scale:1.05 }} style={{
-              display:"flex", alignItems:"center", gap:6,
-              padding:"6px 14px", borderRadius:50, fontSize:13, fontWeight:700,
-              background: isPro ? "linear-gradient(135deg,#f59e0b,#f97316)" : "rgba(108,99,255,0.08)",
-              color: isPro ? "#fff" : "#6c63ff",
-              boxShadow: isPro ? "0 4px 16px rgba(249,115,22,0.3)" : "none"
-            }}>
-              {isPro ? <Crown size={14} /> : <Star size={14} />}
-              {isPro ? "Pro Member" : "Free Member"}
-            </motion.div>
-
-            {/* User chip */}
-            <motion.div whileHover={{ scale:1.05 }} style={{
-              display:"flex", alignItems:"center", gap:8,
-              background:"#fff", border:"1.5px solid rgba(108,99,255,0.15)",
-              padding:"6px 12px", borderRadius:50,
-              boxShadow:"0 2px 10px rgba(108,99,255,0.08)"
-            }}>
-              <div style={{
-                width:28, height:28, borderRadius:"50%",
-                background:"linear-gradient(135deg,#6c63ff,#a78bfa)",
-                display:"flex", alignItems:"center", justifyContent:"center",
-                fontWeight:800, fontSize:12, color:"#fff", flexShrink:0
-              }}>{user?.name?.[0]?.toUpperCase()}</div>
-              <div>
-                <div style={{ fontSize:13, fontWeight:600, color:"#0f172a" }}>{user?.name}</div>
-                <div style={{ fontSize:10, color:"#94a3b8" }}>{user?.email}</div>
-              </div>
-            </motion.div>
-
-            {/* Logout */}
-            <motion.button whileHover={{ scale:1.05 }} whileTap={{ scale:0.95 }}
-              onClick={() => { logout(); navigate("/login"); }}
-              style={{
-                display:"flex", alignItems:"center", gap:6,
-                color:"#94a3b8", background:"none", border:"1.5px solid #e2e8f0",
-                padding:"8px 12px", borderRadius:10, cursor:"pointer", fontSize:13
+            <div className={`flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-bold ${isPro ? "bg-amber-50 text-amber-700" : "bg-blue-50 text-blue-700"}`}>
+              {isPro ? <Crown size={13} /> : <Sparkles size={13} />}
+              {isPro ? "Pro" : "Free"}
+            </div>
+            <button onClick={() => navigate("/templates")} className="grid h-10 w-10 place-items-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50" aria-label="Templates">
+              <LayoutTemplate size={18} />
+            </button>
+            <button
+              onClick={() => {
+                logout();
+                navigate("/login");
               }}
-              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color="#ef4444"; (e.currentTarget as HTMLButtonElement).style.borderColor="#fecaca"; (e.currentTarget as HTMLButtonElement).style.background="#fff5f5"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color="#94a3b8"; (e.currentTarget as HTMLButtonElement).style.borderColor="#e2e8f0"; (e.currentTarget as HTMLButtonElement).style.background="none"; }}
+              className="grid h-10 w-10 place-items-center rounded-lg border border-slate-200 text-slate-600 hover:bg-red-50 hover:text-red-600"
+              aria-label="Log out"
             >
-              <LogOut size={16} />
-            </motion.button>
+              <LogOut size={18} />
+            </button>
           </div>
         </div>
-      </motion.nav>
+      </nav>
 
-      <div style={{ maxWidth:1200, margin:"0 auto", padding:"32px 24px", position:"relative", zIndex:1 }}>
-
-        {/* ── STATS ── */}
-        <motion.div initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }}
-          style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:20, marginBottom:28 }}
-        >
-          {[
-            { val: resumes.length, label:"Total Resumes", icon:<FileText size={22} />, color:"#6c63ff", bg:"#ede9fe" },
-            { val: isPro ? "∞" : `${resumes.length}/2`, label:"Plan Limit", icon:<TrendingUp size={22} />, color:"#10b981", bg:"#d1fae5" },
-            { val: isPro ? "10+" : "3", label:"Templates", icon:<Sparkles size={22} />, color:"#a78bfa", bg:"#f3e8ff" },
-          ].map((s, i) => (
-            <motion.div key={i} whileHover={{ y:-4, boxShadow:"0 16px 40px rgba(108,99,255,0.14)" }}
-              style={{
-                background:"#fff", borderRadius:20, padding:"24px 24px",
-                border:"1.5px solid rgba(108,99,255,0.1)",
-                boxShadow:"0 4px 16px rgba(108,99,255,0.06)",
-                display:"flex", justifyContent:"space-between", alignItems:"center",
-                transition:"all .25s"
-              }}
-            >
-              <div>
-                <div style={{ fontSize:32, fontWeight:900, color:"#0f172a" }}>{s.val}</div>
-                <div style={{ fontSize:13, color:"#64748b", marginTop:4 }}>{s.label}</div>
-              </div>
-              <div style={{ width:50, height:50, borderRadius:14, background:s.bg, display:"flex", alignItems:"center", justifyContent:"center", color:s.color }}>
-                {s.icon}
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* ── PRO BANNER ── */}
-        {!isPro && (
-          <motion.div initial={{ opacity:0, scale:0.97 }} animate={{ opacity:1, scale:1 }}
-            style={{
-              background:"linear-gradient(135deg,#6c63ff,#a78bfa,#ec4899)",
-              borderRadius:20, padding:"24px 28px", marginBottom:28,
-              boxShadow:"0 16px 50px rgba(108,99,255,0.35)",
-              display:"flex", alignItems:"center", justifyContent:"space-between", flexWrap:"wrap", gap:16
-            }}
-          >
-            <div style={{ display:"flex", alignItems:"center", gap:16 }}>
-              <motion.div animate={{ rotate:360 }} transition={{ duration:2, repeat:Infinity, ease:"linear" }}>
-                <Crown size={28} color="#fde68a" />
-              </motion.div>
-              <div>
-                <div style={{ color:"#fff", fontWeight:800, fontSize:18 }}>Unlock Premium Features! 🚀</div>
-                <div style={{ color:"rgba(255,255,255,0.75)", fontSize:13, marginTop:2 }}>Unlimited resumes, 10+ templates, advanced AI</div>
-              </div>
+      <div className="mx-auto max-w-7xl px-4 py-8">
+        <section className="mb-6 grid gap-4 lg:grid-cols-[1fr_340px]">
+          <div className="rounded-2xl bg-slate-950 p-6 text-white shadow-xl shadow-slate-900/10">
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold text-cyan-100">
+              <Target size={14} /> Professional resume workspace
             </div>
-            <motion.button whileHover={{ scale:1.05 }} whileTap={{ scale:0.95 }}
-              onClick={() => navigate("/upgrade")}
-              style={{
-                background:"#fff", color:"#6c63ff", fontWeight:800, fontSize:14,
-                padding:"12px 24px", borderRadius:12, border:"none", cursor:"pointer",
-                boxShadow:"0 4px 16px rgba(0,0,0,0.15)"
-              }}
-            >Upgrade Now → ₹299/month</motion.button>
-          </motion.div>
-        )}
-
-        {/* ── HEADER + BUTTONS ── */}
-        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:28, flexWrap:"wrap", gap:16 }}>
-          <div>
-            <h1 style={{ fontSize:28, fontWeight:900, color:"#0f172a", letterSpacing:-1 }}>My Resumes</h1>
-            <p style={{ fontSize:14, color:"#64748b", marginTop:4 }}>
-              {resumes.length === 0 ? "Create your first professional resume" : `${resumes.length} resume${resumes.length > 1 ? "s" : ""} created`}
+            <h1 className="max-w-2xl text-3xl font-black leading-tight sm:text-5xl">
+              Create, improve, and export resumes that are ready for recruiters.
+            </h1>
+            <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">
+              Manage versions, choose templates, check ATS score, and continue editing from one clean dashboard.
             </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <button onClick={createNewResume} disabled={isCreating} className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-white px-5 text-sm font-black text-slate-950 disabled:opacity-60">
+                <Plus size={18} />
+                {isCreating ? "Creating..." : "New resume"}
+              </button>
+              <button onClick={() => navigate("/templates")} className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-white/20 px-5 text-sm font-bold text-white hover:bg-white/10">
+                <LayoutTemplate size={18} /> Browse templates
+              </button>
+            </div>
           </div>
-          <div style={{ display:"flex", gap:12 }}>
-            <motion.button whileHover={{ scale:1.05 }} whileTap={{ scale:0.95 }}
-              onClick={() => navigate("/templates")}
-              style={{
-                display:"flex", alignItems:"center", gap:8,
-                background:"#fff", border:"2px solid #6c63ff", color:"#6c63ff",
-                padding:"11px 20px", borderRadius:12, fontWeight:700, fontSize:14, cursor:"pointer"
-              }}
-            ><Palette size={16} /> Templates</motion.button>
-            <motion.button whileHover={{ scale:1.05 }} whileTap={{ scale:0.95 }}
-              onClick={() => createNewResume()} disabled={isCreating}
-              style={{
-                display:"flex", alignItems:"center", gap:8,
-                background:"linear-gradient(135deg,#6c63ff,#a78bfa)",
-                color:"#fff", padding:"11px 22px", borderRadius:12,
-                fontWeight:700, fontSize:14, border:"none", cursor:"pointer",
-                boxShadow:"0 6px 24px rgba(108,99,255,0.4)", opacity: isCreating ? 0.6 : 1
-              }}
-            ><Plus size={16} /> {isCreating ? "Creating..." : "New Resume"}</motion.button>
+
+          <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
+            {stats.map(({ label, Icon }) => {
+              const value =
+                label === "Total resumes" ? resumes.length :
+                label === "Plan limit" ? (isPro ? "Unlimited" : `${resumes.length}/2`) :
+                isPro ? "10+" : "4 free";
+              return (
+              <div key={label} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <Icon className="mb-4 text-blue-600" size={22} />
+                <div className="text-2xl font-black text-slate-950">{value}</div>
+                <div className="mt-1 text-sm font-semibold text-slate-500">{label}</div>
+              </div>
+            )})}
           </div>
-        </div>
+        </section>
 
-        {/* ── RESUME GRID ── */}
-        {resumes.length === 0 ? (
-          <motion.div initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }}
-            style={{
-              textAlign:"center", padding:"80px 24px",
-              background:"#fff", borderRadius:24,
-              border:"2px dashed rgba(108,99,255,0.2)",
-              boxShadow:"0 4px 20px rgba(108,99,255,0.05)"
-            }}
-          >
-            <motion.div animate={{ y:[0,-10,0] }} transition={{ duration:2, repeat:Infinity }}
-              style={{
-                width:72, height:72, borderRadius:20,
-                background:"linear-gradient(135deg,#ede9fe,#f3e8ff)",
-                display:"flex", alignItems:"center", justifyContent:"center",
-                margin:"0 auto 20px"
-              }}
-            ><FileText size={32} color="#6c63ff" /></motion.div>
-            <h3 style={{ fontSize:22, fontWeight:800, color:"#0f172a", marginBottom:8 }}>No Resumes Yet</h3>
-            <p style={{ fontSize:15, color:"#94a3b8", marginBottom:28 }}>Click "New Resume" to start your journey! 🚀</p>
-            <motion.button whileHover={{ scale:1.05 }} whileTap={{ scale:0.95 }}
-              onClick={() => createNewResume()}
-              style={{
-                background:"linear-gradient(135deg,#6c63ff,#a78bfa)",
-                color:"#fff", padding:"14px 32px", borderRadius:14,
-                fontWeight:800, fontSize:15, border:"none", cursor:"pointer",
-                boxShadow:"0 8px 28px rgba(108,99,255,0.4)"
-              }}
-            >+ Create First Resume</motion.button>
-          </motion.div>
-        ) : (
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))", gap:24 }}>
-            <AnimatePresence>
-              {resumes.map((resume, idx) => {
-                const template = TEMPLATES[resume.template as keyof typeof TEMPLATES] || TEMPLATES["modern-blue"];
-                const color = template.color;
-                return (
-                  <motion.div key={resume._id}
-                    initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }}
-                    transition={{ delay: idx * 0.08 }}
-                    whileHover={{ y:-8 }}
-                    onHoverStart={() => setHoveredResume(resume._id)}
-                    onHoverEnd={() => setHoveredResume(null)}
-                    onClick={() => openResume(resume._id)}
-                    style={{ cursor:"pointer" }}
-                  >
-                    <div style={{
-                      background:"#fff", borderRadius:20, overflow:"hidden",
-                      border:"1.5px solid rgba(108,99,255,0.1)",
-                      boxShadow:"0 4px 20px rgba(108,99,255,0.07)",
-                      transition:"box-shadow .3s"
-                    }}>
-                      {/* Preview */}
-                      <div style={{ position:"relative", height:148, overflow:"hidden" }}>
-                        <div style={{
-                          width:"100%", height:"100%",
-                          background:`linear-gradient(135deg,${color}dd,${color}88)`,
-                          transition:"transform .4s"
-                        }}>
-                          <div style={{ position:"absolute", inset:0, padding:18 }}>
-                            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
-                              <div>
-                                <div style={{ width:44, height:44, background:"rgba(255,255,255,0.2)", borderRadius:12, marginBottom:10 }} />
-                                <div style={{ width:110, height:6, background:"rgba(255,255,255,0.45)", borderRadius:4, marginBottom:6 }} />
-                                <div style={{ width:80, height:6, background:"rgba(255,255,255,0.3)", borderRadius:4 }} />
-                              </div>
-                              <motion.div animate={{ rotate: hoveredResume === resume._id ? 360 : 0 }}
-                                style={{ width:36, height:36, background:"rgba(255,255,255,0.2)", borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center" }}
-                              >
-                                {template.premium && <Crown size={14} color="#fde68a" />}
-                              </motion.div>
-                            </div>
-                            <div style={{ position:"absolute", bottom:16, left:18, right:18, display:"flex", gap:6 }}>
-                              {[1,2,3].map(i => (
-                                <div key={i} style={{ height:4, borderRadius:3, background:"rgba(255,255,255,0.35)", width: 12+i*10 }} />
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                        {/* Template badge */}
-                        <div style={{
-                          position:"absolute", top:10, left:10,
-                          background:"rgba(255,255,255,0.92)", backdropFilter:"blur(8px)",
-                          borderRadius:8, padding:"4px 10px",
-                          fontSize:11, fontWeight:700, color
-                        }}>{template.icon} {template.name}</div>
-                      </div>
-
-                      {/* Info */}
-                      <div style={{ padding:"16px 18px" }}>
-                        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:10 }}>
-                          <div>
-                            <h3 style={{ fontSize:16, fontWeight:800, color:"#0f172a", marginBottom:4 }}>{resume.title}</h3>
-                            <div style={{ display:"flex", alignItems:"center", gap:5 }}>
-                              <Clock size={10} color="#94a3b8" />
-                              <span style={{ fontSize:11, color:"#94a3b8" }}>Updated {new Date(resume.updatedAt).toLocaleDateString()}</span>
-                            </div>
-                          </div>
-                          <motion.button whileHover={{ scale:1.1 }} whileTap={{ scale:0.9 }}
-                            onClick={(e) => deleteResume(resume._id, e)}
-                            style={{
-                              padding:"6px 8px", borderRadius:10, border:"none", cursor:"pointer",
-                              background:"transparent", color:"#cbd5e1"
-                            }}
-                            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background="#fff5f5"; (e.currentTarget as HTMLButtonElement).style.color="#ef4444"; }}
-                            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background="transparent"; (e.currentTarget as HTMLButtonElement).style.color="#cbd5e1"; }}
-                          ><Trash2 size={15} /></motion.button>
-                        </div>
-
-                        {resume.skills?.length > 0 && (
-                          <div style={{ display:"flex", flexWrap:"wrap", gap:6, marginBottom:14 }}>
-                            {resume.skills.slice(0,3).map((skill: any, i: number) => (
-                              <span key={i} style={{ fontSize:10, padding:"3px 9px", borderRadius:50, background:"rgba(108,99,255,0.08)", color:"#6c63ff", fontWeight:600 }}>{skill.name}</span>
-                            ))}
-                            {resume.skills.length > 3 && (
-                              <span style={{ fontSize:10, padding:"3px 9px", borderRadius:50, background:"#f1f5f9", color:"#94a3b8" }}>+{resume.skills.length-3}</span>
-                            )}
-                          </div>
-                        )}
-
-                        <div style={{ display:"flex", gap:8 }}>
-                          <motion.button whileHover={{ scale:1.02 }} whileTap={{ scale:0.98 }}
-                            onClick={() => openResume(resume._id)}
-                            style={{
-                              flex:1, display:"flex", alignItems:"center", justifyContent:"center", gap:6,
-                              padding:"9px 0", borderRadius:10, fontSize:13, fontWeight:700,
-                              background:"rgba(108,99,255,0.08)", color:"#6c63ff",
-                              border:"none", cursor:"pointer", transition:"all .2s"
-                            }}
-                            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background="linear-gradient(135deg,#6c63ff,#a78bfa)"; (e.currentTarget as HTMLButtonElement).style.color="#fff"; }}
-                            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background="rgba(108,99,255,0.08)"; (e.currentTarget as HTMLButtonElement).style.color="#6c63ff"; }}
-                          ><Edit3 size={13} /> Edit</motion.button>
-                          <motion.button whileHover={{ scale:1.02 }} whileTap={{ scale:0.98 }}
-                            style={{
-                              display:"flex", alignItems:"center", gap:6,
-                              padding:"9px 14px", borderRadius:10, fontSize:13, fontWeight:700,
-                              background:"transparent", color:"#64748b",
-                              border:"1.5px solid #e2e8f0", cursor:"pointer"
-                            }}
-                            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor="#6c63ff"; (e.currentTarget as HTMLButtonElement).style.color="#6c63ff"; }}
-                            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor="#e2e8f0"; (e.currentTarget as HTMLButtonElement).style.color="#64748b"; }}
-                          ><Eye size={13} /> Preview</motion.button>
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </AnimatePresence>
-          </div>
+        {!isPro && (
+          <section className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-blue-100 bg-blue-50 p-5">
+            <div>
+              <h2 className="font-black text-slate-950">Upgrade for unlimited resume versions</h2>
+              <p className="mt-1 text-sm text-slate-600">Premium templates, advanced AI, public links, and priority support.</p>
+            </div>
+            <button onClick={() => navigate("/upgrade")} className="inline-flex min-h-10 items-center gap-2 rounded-lg bg-blue-600 px-4 text-sm font-bold text-white">
+              <Crown size={16} /> Upgrade
+            </button>
+          </section>
         )}
 
-        {/* ── ATS CHECKER ── */}
-        <motion.div initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.3 }}
-          style={{ marginTop:60, paddingTop:40, borderTop:"1px solid rgba(108,99,255,0.15)" }}
-        >
-          <div style={{ textAlign:"center", maxWidth:600, margin:"0 auto" }}>
-            <div style={{ display:"flex", justifyContent:"center", marginBottom:16 }}>
-              <motion.div
-                animate={{ rotate:[0,10,-10,0], scale:[1,1.05,1] }}
-                transition={{ duration:2, repeat:Infinity }}
-                style={{
-                  width:60, height:60, borderRadius:18,
-                  background:"linear-gradient(135deg,#6c63ff,#38bdf8)",
-                  display:"flex", alignItems:"center", justifyContent:"center",
-                  boxShadow:"0 8px 28px rgba(108,99,255,0.35)"
-                }}
-              ><Target size={26} color="#fff" /></motion.div>
+        <section className="mb-10">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="text-2xl font-black text-slate-950">My resumes</h2>
+              <p className="text-sm text-slate-500">Open a resume to edit content, templates, score, and PDF export.</p>
             </div>
-            <div style={{ display:"inline-block", background:"rgba(108,99,255,0.1)", border:"1px solid rgba(108,99,255,0.2)", color:"#6c63ff", fontSize:12, fontWeight:700, padding:"5px 14px", borderRadius:50, marginBottom:12, letterSpacing:.5, textTransform:"uppercase" }}>AI Powered</div>
-            <h2 style={{ fontSize:28, fontWeight:900, color:"#0f172a", letterSpacing:-1, marginBottom:8 }}>ATS Score Checker</h2>
-            <p style={{ fontSize:15, color:"#64748b", marginBottom:28 }}>Upload your resume and get AI-powered ATS score with improvement suggestions</p>
-            <div style={{ display:"flex", justifyContent:"center" }}>
-              <div style={{ width:"100%", maxWidth:520 }}>
-                <ATSChecker />
-              </div>
-            </div>
+            <button onClick={createNewResume} disabled={isCreating} className="inline-flex min-h-10 items-center gap-2 rounded-lg bg-slate-950 px-4 text-sm font-bold text-white disabled:opacity-60">
+              <Plus size={16} /> New resume
+            </button>
           </div>
-        </motion.div>
-      </div>
 
-      {/* ── TEMPLATE MODAL ── */}
-      {showTemplateModal && (
-        <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }}
-          style={{
-            position:"fixed", inset:0, background:"rgba(15,12,41,0.6)",
-            backdropFilter:"blur(8px)", zIndex:200,
-            display:"flex", alignItems:"center", justifyContent:"center", padding:20
-          }}
-          onClick={() => setShowTemplateModal(false)}
-        >
-          <motion.div initial={{ scale:0.9, opacity:0 }} animate={{ scale:1, opacity:1 }} exit={{ scale:0.9, opacity:0 }}
-            onClick={e => e.stopPropagation()}
-            style={{
-              background:"#fff", borderRadius:24, maxWidth:820, width:"100%",
-              maxHeight:"82vh", overflowY:"auto",
-              boxShadow:"0 32px 80px rgba(108,99,255,0.3)"
-            }}
-          >
-            <div style={{ position:"sticky", top:0, background:"#fff", borderBottom:"1px solid rgba(108,99,255,0.1)", padding:"20px 28px" }}>
-              <h2 style={{ fontSize:22, fontWeight:900, color:"#0f172a" }}>Choose a Template</h2>
-              <p style={{ fontSize:14, color:"#64748b", marginTop:4 }}>Select the perfect design for your resume</p>
+          {resumes.length === 0 ? (
+            <div className="rounded-2xl border-2 border-dashed border-slate-300 bg-white p-10 text-center">
+              <FileText className="mx-auto mb-4 text-slate-400" size={42} />
+              <h3 className="text-xl font-black text-slate-950">No resumes yet</h3>
+              <p className="mt-2 text-sm text-slate-500">Start with an ATS classic template and customize it in the builder.</p>
+              <button onClick={createNewResume} className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-lg bg-blue-600 px-5 text-sm font-bold text-white">
+                <Plus size={18} /> Create first resume
+              </button>
             </div>
-            <div style={{ padding:"24px 28px" }}>
-              <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(160px,1fr))", gap:16 }}>
-                {Object.entries(TEMPLATES).map(([key, template]) => (
-                  <motion.button key={key}
-                    whileHover={{ scale:1.05 }} whileTap={{ scale:0.95 }}
-                    onClick={() => createNewResume(key)}
-                    disabled={!isPro && template.premium}
-                    style={{ position:"relative", background:"none", border:"none", cursor: !isPro && template.premium ? "not-allowed" : "pointer", padding:0 }}
-                  >
-                    <div style={{
-                      aspectRatio:"3/4", borderRadius:14, overflow:"hidden",
-                      border:"2px solid rgba(108,99,255,0.15)",
-                      background:`linear-gradient(135deg,${template.color}dd,${template.color}88)`
-                    }}>
-                      <div style={{ padding:14 }}>
-                        <div style={{ fontSize:32, marginBottom:12 }}>{template.icon}</div>
-                        <div style={{ height:4, background:"rgba(255,255,255,0.4)", borderRadius:3, marginBottom:6 }} />
-                        <div style={{ height:4, background:"rgba(255,255,255,0.3)", borderRadius:3, width:"75%" }} />
-                      </div>
-                    </div>
-                    <div style={{ marginTop:8, textAlign:"center" }}>
-                      <div style={{ fontSize:12, fontWeight:700, color:"#0f172a" }}>{template.name}</div>
-                      {template.premium && (
-                        <div style={{ fontSize:10, color:"#f59e0b", display:"flex", alignItems:"center", justifyContent:"center", gap:3, marginTop:2 }}>
-                          <Crown size={10} /> Premium
+          ) : (
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              <AnimatePresence>
+                {resumes.map((resume, index) => {
+                  const template = TEMPLATE_META[resume.template] || TEMPLATE_META["modern-blue"];
+                  return (
+                    <motion.article
+                      key={resume._id}
+                      initial={{ opacity: 0, y: 14 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.04 }}
+                      onClick={() => openResume(resume._id)}
+                      className="group cursor-pointer overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+                    >
+                      <div className="relative h-44 p-5" style={{ background: `linear-gradient(135deg, ${template.color}, ${template.color}99)` }}>
+                        <div className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-xs font-black" style={{ color: template.color }}>
+                          {template.name}
                         </div>
-                      )}
-                    </div>
-                    {!isPro && template.premium && (
-                      <div style={{
-                        position:"absolute", inset:0, background:"rgba(15,12,41,0.6)",
-                        borderRadius:14, display:"flex", alignItems:"center", justifyContent:"center",
-                        backdropFilter:"blur(4px)"
-                      }}>
-                        <div style={{ textAlign:"center", color:"#fff" }}>
-                          <Crown size={22} style={{ margin:"0 auto 4px" }} />
-                          <div style={{ fontSize:11, fontWeight:700 }}>Pro Only</div>
+                        {template.premium && (
+                          <div className="absolute right-4 top-4 rounded-full bg-amber-100 px-2 py-1 text-xs font-black text-amber-700">Pro</div>
+                        )}
+                        <div className="mt-12 h-8 w-32 rounded-lg bg-white/25" />
+                        <div className="mt-4 grid gap-2">
+                          <span className="h-2 w-3/4 rounded-full bg-white/50" />
+                          <span className="h-2 w-2/3 rounded-full bg-white/35" />
+                          <span className="h-2 w-5/6 rounded-full bg-white/35" />
                         </div>
                       </div>
-                    )}
-                  </motion.button>
-                ))}
-              </div>
+                      <div className="p-5">
+                        <div className="mb-4 flex items-start justify-between gap-3">
+                          <div className="min-w-0">
+                            <h3 className="truncate text-lg font-black text-slate-950">{resume.title}</h3>
+                            <p className="text-xs font-semibold text-slate-500">
+                              Updated {new Date(resume.updatedAt).toLocaleDateString()}
+                            </p>
+                          </div>
+                          <button onClick={(event) => deleteResume(resume._id, event)} className="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-slate-400 hover:bg-red-50 hover:text-red-600">
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                        <div className="flex gap-2">
+                          <button onClick={(event) => { event.stopPropagation(); openResume(resume._id); }} className="inline-flex min-h-10 flex-1 items-center justify-center gap-2 rounded-lg bg-blue-50 text-sm font-bold text-blue-700">
+                            <Edit3 size={15} /> Edit
+                          </button>
+                          <button className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-slate-200 px-3 text-sm font-bold text-slate-600">
+                            <Eye size={15} /> Preview
+                          </button>
+                        </div>
+                      </div>
+                    </motion.article>
+                  );
+                })}
+              </AnimatePresence>
             </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </div>
+          )}
+        </section>
+
+        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="mx-auto mb-5 max-w-2xl text-center">
+            <div className="mx-auto mb-3 grid h-12 w-12 place-items-center rounded-2xl bg-emerald-50 text-emerald-700">
+              <Target size={24} />
+            </div>
+            <h2 className="text-2xl font-black text-slate-950">ATS score checker</h2>
+            <p className="mt-2 text-sm text-slate-500">Upload a resume and get improvement suggestions before applying.</p>
+          </div>
+          <div className="mx-auto max-w-xl">
+            <ATSChecker />
+          </div>
+        </section>
+      </div>
+    </main>
   );
 }

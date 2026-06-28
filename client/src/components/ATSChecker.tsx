@@ -51,13 +51,13 @@ export default function ATSChecker() {
     : '#2563eb';
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
       <div className="flex items-center gap-3 mb-5">
         <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center">
           <Target size={20} className="text-blue-600" />
         </div>
         <div>
-          <h3 className="font-bold text-gray-900">ATS Score Checker</h3>
+          <h3 className="font-black text-slate-950">ATS score checker</h3>
           <p className="text-xs text-gray-400">Upload your resume — AI will check the score</p>
         </div>
       </div>
@@ -65,7 +65,7 @@ export default function ATSChecker() {
       {!result ? (
         <div className="space-y-4">
           <div>
-            <label className="text-xs font-semibold text-gray-600 block mb-1.5">Job Role / Title *</label>
+            <label className="text-xs font-black uppercase tracking-wide text-slate-500 block mb-1.5">Job role / title *</label>
             <input
               value={jobRole}
               onChange={e => setJobRole(e.target.value)}
@@ -75,7 +75,7 @@ export default function ATSChecker() {
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-gray-600 block mb-1.5">Upload Resume (PDF) *</label>
+            <label className="text-xs font-black uppercase tracking-wide text-slate-500 block mb-1.5">Upload resume *</label>
             <div
               onClick={() => fileRef.current?.click()}
               className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition"
@@ -100,7 +100,7 @@ export default function ATSChecker() {
             disabled={loading}
             className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-xl font-bold hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 transition shadow-md"
           >
-            {loading ? <><Loader size={16} className="animate-spin" /> Checking...</> : <><Target size={16} /> Check ATS Score</>}
+            {loading ? <><Loader size={16} className="animate-spin" /> Checking...</> : <><Target size={16} /> Check ATS score</>}
           </button>
         </div>
       ) : (
@@ -152,7 +152,7 @@ export default function ATSChecker() {
 
           <button onClick={() => { setResult(null); setFileName(''); }}
             className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-200 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-50 transition">
-            <RefreshCw size={14} /> Check Again
+            <RefreshCw size={14} /> Check again
           </button>
         </div>
       )}

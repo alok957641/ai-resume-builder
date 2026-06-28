@@ -37,15 +37,15 @@ export default function ShareResume() {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+      <h2 className="text-2xl font-black text-slate-950 flex items-center gap-2">
         <Globe size={20} className="text-indigo-600" />
-        Share Resume
+        Share resume
       </h2>
 
-      <div className="bg-white border border-gray-100 rounded-2xl p-5">
+      <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <p className="font-semibold text-gray-800">Public Link</p>
+            <p className="font-black text-slate-950">Public link</p>
             <p className="text-sm text-gray-400">
               {currentResume.isPublic ? 'Anyone can view your resume' : 'Only you can view this resume'}
             </p>

@@ -1,205 +1,216 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Lock, ArrowRight, Crown } from 'lucide-react';
-import { toast } from 'react-hot-toast';
-import api from '../api';
-import { useAuthStore } from '../store/useAuthStore';
-import { useResumeStore } from '../store/useResumeStore';
-
-// Import templates
-import { 
-  TemplateModernBlue, 
-  TemplateEmerald, 
-  TemplateMinimal,
+import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft, Check, Crown, Filter, Lock, Search, Sparkles } from "lucide-react";
+import { toast } from "react-hot-toast";
+import api from "../api";
+import { useAuthStore } from "../store/useAuthStore";
+import { useResumeStore } from "../store/useResumeStore";
+import {
   TemplateATS,
-  TemplateDark, 
-  TemplateRose, 
-  TemplateViolet,
-  TemplateAmber, 
-  TemplateCyan, 
+  TemplateAmber,
+  TemplateCyan,
+  TemplateDark,
+  TemplateEmerald,
+  TemplateMinimal,
+  TemplateModernBlue,
+  TemplateNavy,
   TemplatePink,
-  TemplateNavy 
-} from '../components/resume/templates/AllTemplates';
+  TemplateRose,
+  TemplateViolet,
+} from "../components/resume/templates/AllTemplates";
 
-// Simple preview data
 const PREVIEW_DATA = {
-  personalInfo: { fullName: 'Your Name', email: 'you@example.com', phone: '+91 98765 43210' },
-  experience: [{ 
-    position: 'Software Engineer', 
-    company: 'Tech Corp',
-    startDate: '2020',
-    endDate: 'Present',
-    description: 'Worked on awesome projects'
-  }],
-  education: [{ 
-    degree: 'B.Tech',
-    institution: 'University',
-    startDate: '2016',
-    endDate: '2020'
-  }],
-  skills: [{ name: 'JavaScript' }, { name: 'React' }, { name: 'Node.js' }],
+  _id: "preview",
+  title: "Preview Resume",
+  personalInfo: {
+    fullName: "Saanvi Patel",
+    email: "saanvi@email.com",
+    phone: "+91 98765 43210",
+    location: "Mumbai, India",
+    linkedin: "linkedin.com/in/saanvi",
+    github: "",
+    website: "",
+    summary: "Customer-focused professional with experience improving operations, reporting, and team outcomes.",
+  },
+  experience: [
+    {
+      company: "Northstar Solutions",
+      position: "Senior Sales Associate",
+      startDate: "2021",
+      endDate: "Present",
+      current: true,
+      description: "Improved weekly reporting accuracy by 35% and trained 8 new team members on customer workflows.",
+    },
+  ],
+  education: [
+    {
+      school: "Delhi University",
+      degree: "Bachelor of Arts",
+      field: "Business Administration",
+      startDate: "2017",
+      endDate: "2020",
+      grade: "8.2 CGPA",
+    },
+  ],
+  skills: [
+    { name: "Customer service", level: "expert" },
+    { name: "Reporting", level: "intermediate" },
+    { name: "Team training", level: "intermediate" },
+  ],
   projects: [],
-  certificates: []
-};
+  certificates: [],
+  template: "modern-blue",
+  isPublic: false,
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+} as any;
 
 const TEMPLATES = [
-  { id: 'modern-blue', name: 'Modern Blue', tag: 'Popular', free: true, Component: TemplateModernBlue },
-  { id: 'minimal-clean', name: 'Minimal Clean', tag: null, free: true, Component: TemplateMinimal },
-  { id: 'ats-classic', name: 'ATS Classic', tag: 'ATS ✓', free: true, Component: TemplateATS },
-  { id: 'emerald-pro', name: 'Emerald Pro', tag: 'New', free: true, Component: TemplateEmerald },
-  { id: 'slate-dark', name: 'Slate Dark', tag: 'PRO', free: false, Component: TemplateDark },
-  { id: 'rose-elegant', name: 'Rose Elegant', tag: 'PRO', free: false, Component: TemplateRose },
-  { id: 'violet-bold', name: 'Violet Bold', tag: 'PRO', free: false, Component: TemplateViolet },
-  { id: 'amber-warm', name: 'Amber Warm', tag: 'PRO', free: false, Component: TemplateAmber },
-  { id: 'tech-modern', name: 'Tech Modern', tag: 'PRO', free: false, Component: TemplateCyan },
-  { id: 'creative-pink', name: 'Creative Pink', tag: 'PRO', free: false, Component: TemplatePink },
-  { id: 'executive-pro', name: 'Navy Executive', tag: 'PRO', free: false, Component: TemplateNavy },
+  { id: "modern-blue", name: "Modern Blue", free: true, ats: true, style: "Professional", Component: TemplateModernBlue, colors: ["#0f5d7c", "#166534", "#7c3aed", "#d97706", "#1e3a8a"] },
+  { id: "minimal-clean", name: "Minimal Clean", free: true, ats: true, style: "Simple", Component: TemplateMinimal, colors: ["#111827", "#9f1239", "#0f766e", "#334155", "#ca8a04"] },
+  { id: "ats-classic", name: "ATS Classic", free: true, ats: true, style: "Traditional", Component: TemplateATS, colors: ["#111827", "#1d4ed8", "#0f766e", "#64748b", "#7c2d12"] },
+  { id: "emerald-pro", name: "Emerald Pro", free: true, ats: true, style: "Modern", Component: TemplateEmerald, colors: ["#059669", "#0284c7", "#9333ea", "#dc2626", "#111827"] },
+  { id: "slate-dark", name: "Slate Dark", free: false, ats: false, style: "Modern", Component: TemplateDark, colors: ["#111827", "#334155", "#0f766e", "#7c3aed", "#dc2626"] },
+  { id: "rose-elegant", name: "Rose Elegant", free: false, ats: false, style: "Creative", Component: TemplateRose, colors: ["#be123c", "#9f1239", "#7c2d12", "#1d4ed8", "#111827"] },
+  { id: "violet-bold", name: "Violet Bold", free: false, ats: false, style: "Creative", Component: TemplateViolet, colors: ["#7c3aed", "#4f46e5", "#0f766e", "#d97706", "#111827"] },
+  { id: "amber-warm", name: "Amber Warm", free: false, ats: true, style: "Traditional", Component: TemplateAmber, colors: ["#d97706", "#92400e", "#334155", "#0f766e", "#9f1239"] },
+  { id: "tech-modern", name: "Tech Modern", free: false, ats: true, style: "Modern", Component: TemplateCyan, colors: ["#0284c7", "#2563eb", "#0f766e", "#111827", "#7c3aed"] },
+  { id: "creative-pink", name: "Creative Pink", free: false, ats: false, style: "Creative", Component: TemplatePink, colors: ["#db2777", "#be123c", "#7c3aed", "#0f766e", "#111827"] },
+  { id: "navy-exec", name: "Navy Executive", free: false, ats: true, style: "Professional", Component: TemplateNavy, colors: ["#1e3a8a", "#111827", "#0f766e", "#64748b", "#d97706"] },
 ];
 
-interface Template {
-  id: string;
-  name: string;
-  tag: string | null;
-  free: boolean;
-  Component: React.ComponentType<any>;
-}
+const styles = ["All", "ATS", "Traditional", "Modern", "Creative", "Professional", "Simple"];
 
 export default function TemplateChooser() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
   const { setCurrentResume } = useResumeStore();
-  const [loading, setLoading] = useState<string>('');
-  
-  const isPro = user?.plan === 'pro';
+  const [loading, setLoading] = useState("");
+  const [selectedStyle, setSelectedStyle] = useState("All");
+  const [query, setQuery] = useState("");
+  const isPro = user?.plan === "pro";
+
+  const filteredTemplates = useMemo(() => {
+    return TEMPLATES.filter((template) => {
+      const styleMatch = selectedStyle === "All" || (selectedStyle === "ATS" ? template.ats : template.style === selectedStyle);
+      const searchMatch = template.name.toLowerCase().includes(query.toLowerCase());
+      return styleMatch && searchMatch;
+    });
+  }, [query, selectedStyle]);
 
   const handleSelect = async (templateId: string, isFree: boolean) => {
     if (!isFree && !isPro) {
-      toast.error('Pro feature! Upgrade to unlock 👑');
-      navigate('/upgrade');
+      toast.error("Pro template hai. Upgrade karke unlock karein.");
+      navigate("/upgrade");
       return;
     }
-    
+
     setLoading(templateId);
-    
     try {
-      const res = await api.post('/resume', {
-        title: 'My Resume',
+      const res = await api.post("/resume", {
+        title: "My Resume",
         template: templateId,
       });
-      
       setCurrentResume(res.data.resume);
-      const templateName = TEMPLATES.find(t => t.id === templateId)?.name;
-      toast.success(`✨ ${templateName} template selected!`);
+      toast.success("Template selected. Builder open ho raha hai.");
       navigate(`/resume/${res.data.resume._id}`);
-      
     } catch (error: any) {
       if (error.response?.data?.upgrade) {
-        toast.error('Free plan: Only 2 resumes! Upgrade to Pro 👑');
-        navigate('/upgrade');
+        toast.error("Free plan me 2 resumes allowed hain. Pro upgrade karein.");
+        navigate("/upgrade");
       } else {
-        toast.error(error.response?.data?.message || 'Something went wrong!');
+        toast.error(error.response?.data?.message || "Template select nahi hua.");
       }
-    } finally { 
-      setLoading(''); 
+    } finally {
+      setLoading("");
     }
-  };
-
-  const getTagStyle = (tag: string | null): string => {
-    if (!tag) return '';
-    if (tag === 'PRO') return 'bg-gradient-to-r from-indigo-600 to-purple-600';
-    if (tag === 'ATS ✓') return 'bg-green-600';
-    if (tag === 'New') return 'bg-pink-600';
-    return 'bg-yellow-500';
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-white border-b sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-8">
-            <span className="text-xl font-bold">
-              Resume<span className="text-indigo-600">AI</span>
-            </span>
-            <button 
-              onClick={() => navigate('/dashboard')} 
-              className="text-gray-400 hover:text-gray-600 text-sm transition flex items-center gap-1"
-            >
-              ← Dashboard
-            </button>
+    <main className="template-page">
+      <header className="template-topbar">
+        <button onClick={() => navigate("/dashboard")} className="template-back">
+          <ArrowLeft size={18} />
+          Dashboard
+        </button>
+        <div>
+          <h1>Choose your favorite template design</h1>
+          <p>You can always change your template later.</p>
+        </div>
+        {!isPro && <button onClick={() => navigate("/upgrade")} className="template-upgrade"><Crown size={16} /> Upgrade</button>}
+      </header>
+
+      <div className="template-layout">
+        <aside className="template-filters">
+          <div className="filter-title"><Filter size={16} /> Filters</div>
+          <label className="template-search">
+            <Search size={15} />
+            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search templates" />
+          </label>
+          <div className="filter-group">
+            <strong>Style</strong>
+            {styles.map((style) => (
+              <button key={style} className={selectedStyle === style ? "active" : ""} onClick={() => setSelectedStyle(style)}>
+                {style}
+              </button>
+            ))}
           </div>
-          {!isPro && (
-            <div className="flex items-center gap-2 text-xs bg-yellow-50 px-3 py-1.5 rounded-full">
-              <Crown size={12} className="text-yellow-600" />
-              <span className="text-yellow-700">Free: 4 templates</span>
-            </div>
-          )}
-        </div>
-      </div>
+          <div className="filter-group">
+            <strong>Plan</strong>
+            <span>{TEMPLATES.filter((template) => template.free).length} free templates</span>
+            <span>{TEMPLATES.filter((template) => !template.free).length} pro templates</span>
+          </div>
+        </aside>
 
-      <div className="text-center py-12">
-        <h1 className="text-4xl font-bold text-gray-900">Choose Your Template</h1>
-        <p className="text-gray-500 mt-3">Select a professional template to get started</p>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-6 pb-20">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {TEMPLATES.map((template: Template) => {
-            const TemplateComponent = template.Component;
-            const isLocked = !template.free && !isPro;
-            
-            return (
-              <div 
-                key={template.id} 
-                className="group bg-white rounded-2xl overflow-hidden border-2 border-gray-100 hover:border-indigo-400 transition-all duration-300 hover:shadow-xl cursor-pointer"
-              >
-                <div className="relative overflow-hidden bg-gray-100" style={{ height: 220 }}>
-                  <div className="scale-[0.4] origin-top-left pointer-events-none" style={{ width: 400 }}>
-                    <TemplateComponent resume={PREVIEW_DATA} />
-                  </div>
-
-                  {template.tag && (
-                    <div className={`absolute top-2 right-2 text-xs font-bold px-2 py-0.5 rounded-full text-white shadow-sm ${getTagStyle(template.tag)}`}>
-                      {template.tag}
+        <section className="template-results">
+          <div className="template-count">
+            <span>{filteredTemplates.length} templates</span>
+            <span>ATS-friendly and PDF-ready</span>
+          </div>
+          <div className="template-gallery">
+            {filteredTemplates.map((template) => {
+              const TemplateComponent = template.Component;
+              const locked = !template.free && !isPro;
+              return (
+                <article className={`resume-template-card ${locked ? "locked" : ""}`} key={template.id}>
+                  <div className="resume-template-preview">
+                    <div className="preview-scale">
+                      <TemplateComponent resume={{ ...PREVIEW_DATA, template: template.id }} />
                     </div>
-                  )}
-
-                  {isLocked && (
-                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-                      <div className="bg-white rounded-lg px-3 py-2 flex items-center gap-2 text-sm font-semibold text-indigo-600">
-                        <Lock size={14} /> Pro Feature
-                      </div>
-                    </div>
-                  )}
-
-                  {!isLocked && (
-                    <div className="absolute inset-0 bg-indigo-600/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleSelect(template.id, template.free);
-                        }}
-                        disabled={loading === template.id}
-                        className="bg-white text-indigo-600 rounded-lg px-4 py-2 flex items-center gap-2 text-sm font-semibold hover:bg-gray-100 disabled:opacity-50"
-                      >
-                        {loading === template.id ? (
-                          <div className="w-4 h-4 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin" />
-                        ) : (
-                          <>Use Template <ArrowRight size={14} /></>
-                        )}
+                    {template.ats && <span className="recommended-badge">ATS</span>}
+                    {locked && <div className="locked-layer"><Lock size={18} /> Pro</div>}
+                    {!locked && (
+                      <button onClick={() => handleSelect(template.id, template.free)} disabled={loading === template.id} className="use-template">
+                        {loading === template.id ? "Creating..." : "Use this template"}
                       </button>
+                    )}
+                  </div>
+                  <div className="template-card-foot">
+                    <div>
+                      <strong>{template.name}</strong>
+                      <span>{template.style}</span>
                     </div>
-                  )}
-                </div>
-
-                <div className="p-3 flex items-center justify-between border-t border-gray-100">
-                  <span className="text-sm font-semibold text-gray-800">{template.name}</span>
-                  {!template.free && <span className="text-xs text-yellow-600 flex items-center gap-1"><Crown size={10} /> Pro</span>}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+                    <div className="swatches">
+                      {template.colors.map((color) => <i key={color} style={{ background: color }} />)}
+                      <i className="rainbow" />
+                    </div>
+                  </div>
+                  <div className="template-tags">
+                    <span>{template.free ? "Free" : "Pro"}</span>
+                    {template.ats && <span><Check size={12} /> ATS</span>}
+                    {!template.free && <span><Sparkles size={12} /> Premium</span>}
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
       </div>
-    </div>
+
+      <div className="template-sticky-action">
+        <button onClick={() => navigate("/dashboard")} className="secondary-button">Choose later</button>
+        <button onClick={() => handleSelect("ats-classic", true)} className="primary-button">Use ATS Classic</button>
+      </div>
+    </main>
   );
 }

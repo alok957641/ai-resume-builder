@@ -17,7 +17,11 @@ export default function EducationForm() {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold text-gray-800">🎓 Education</h2>
+        <div>
+          <div className="inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-black uppercase tracking-wide text-blue-700">Education</div>
+          <h2 className="mt-3 text-2xl font-black text-slate-950">Education</h2>
+          <p className="mt-1 text-sm text-slate-500">Add degrees, schools, dates, grades, and relevant academic details.</p>
+        </div>
         <button
           onClick={() => { addEducation(emptyEdu); setOpenIndex(educations.length); }}
           className="flex items-center gap-1 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition"
@@ -147,7 +151,7 @@ function EducationCardForm({ edu, onUpdate }: { edu: Education; onUpdate: (d: Ed
       </div>
       
       <div className="text-xs text-gray-400 mt-2">
-        💡 Tip: Include relevant coursework or academic achievements
+        Tip: Include relevant coursework or academic achievements.
       </div>
     </div>
   );

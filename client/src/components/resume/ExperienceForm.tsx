@@ -20,7 +20,11 @@ export default function ExperienceForm() {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold text-gray-800">💼 Work Experience</h2>
+        <div>
+          <div className="inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-black uppercase tracking-wide text-blue-700">Experience</div>
+          <h2 className="mt-3 text-2xl font-black text-slate-950">Work experience</h2>
+          <p className="mt-1 text-sm text-slate-500">Add roles, measurable impact, and strong achievement bullets.</p>
+        </div>
         <button
           onClick={() => { addExperience(emptyExp); setOpenIndex(experiences.length); }}
           className="flex items-center gap-1 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition"
@@ -153,17 +157,17 @@ function ExperienceCard({ exp, index, isOpen, onToggle, onUpdate, onRemove }: {
               >
                 {isImproving
                   ? <><Loader size={12} className="animate-spin" /> AI Improving...</>
-                  : <><Sparkles size={12} /> AI Improve</>
+                  : <><Sparkles size={12} /> Improve with AI</>
                 }
               </button>
             </div>
             <textarea
               {...register('description')} rows={4}
-              placeholder="Describe your responsibilities, achievements, and impact. Then click AI Improve for professional wording!"
+              placeholder="Describe responsibilities, achievements, metrics, and business impact."
               className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm resize-none"
             />
             <p className="text-xs text-gray-400 mt-1">
-              💡 Tip: Include metrics and action verbs for better impact
+              Tip: Include metrics and action verbs for better impact.
             </p>
           </div>
         </div>

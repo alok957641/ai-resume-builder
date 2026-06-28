@@ -92,16 +92,16 @@ export interface Certificate {
 // ✅ Template types - UPDATE KARO (saare 11 templates ke liye)
 export type TemplateType =
   | "modern-blue"
-  | "emerald"
-  | "minimal"
-  | "ats"
-  | "dark"
-  | "rose"
-  | "violet"
-  | "amber"
-  | "cyan"
-  | "pink"
-  | "navy";
+  | "emerald-pro"
+  | "minimal-clean"
+  | "ats-classic"
+  | "slate-dark"
+  | "rose-elegant"
+  | "violet-bold"
+  | "amber-warm"
+  | "tech-modern"
+  | "creative-pink"
+  | "navy-exec";
 
 // ✅ Resume (main type) - ADDED projects
 // ✅ Resume (main type)

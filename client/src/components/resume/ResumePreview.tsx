@@ -5,7 +5,7 @@ import { TemplateRenderer } from './templates';
 import { exportToPDF } from '../../utils/exportPDF';
 import { toast } from 'react-hot-toast';
 
-export default function ResumePreview() {
+export default function ResumePreview({ inline = false }: { inline?: boolean }) {
   const { currentResume } = useResumeStore();
   const resumeRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
@@ -67,7 +67,7 @@ export default function ResumePreview() {
   );
 
   // Desktop View
-  if (!isMobile) {
+  if (!isMobile || inline) {
     return (
       <div className="space-y-4">
         <PDFButton />
